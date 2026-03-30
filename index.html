@@ -599,7 +599,7 @@ function recordResult(word,correct){
   const w=weakMap[word.zh];
   if(correct){w.hits++;if(w.hits>=2&&w.misses>0){w.misses=Math.max(0,w.misses-1);w.hits=0;}}
   else{w.misses++;w.hits=0;if(!sessionMissed.find(v=>v.zh===word.zh))sessionMissed.push(word);}
-  saveWeak();updateWeakUI();
+  saveWeak();updateWeakUI();schedulePush();
 }
 function weakVocab(){return VOCAB.filter(v=>getMisses(v)>=2).sort((a,b)=>getMisses(b)-getMisses(a));}
 function updateWeakUI(){
@@ -869,77 +869,105 @@ function fcFilterVocab(){
   return fcLesson==='all' ? VOCAB : VOCAB.filter(v=>v.lesson===fcLesson);
 }
 
-// ── JSONBin helpers ─────────────────────────────────────
+// ── JSONBin sync (covers BOTH fc ratings + quiz weak words) ─
+// Strategy: one bin per user, ID stored in localStorage after first create.
+// On first run with a new key: create bin. On subsequent runs: read by ID.
+// No listing API used — that was the source of the previous failures.
+
 function setSyncStatus(state, text){
   const dot = $('syncDot'), txt = $('syncTxt');
   dot.className = 'sync-dot' + (state==='ok'?' ok':state==='err'?' err':state==='spin'?' spin':'');
   txt.textContent = text;
 }
 
-async function fcLoadFromCloud(){
-  if(!fcKey) return;
-  setSyncStatus('spin','Syncing…');
-  try {
-    // Find bin
-    const listRes = await fetch(`${JSONBIN_API}/b?collection=false`, {
-      headers:{'X-Master-Key':fcKey,'X-Bin-Meta':true}
-    });
-    if(!listRes.ok) throw new Error('Auth failed');
-    const listData = await listRes.json();
-    const bins = Array.isArray(listData) ? listData : [];
-    const existing = bins.find(b => b.record?.name === BIN_NAME || b.metadata?.name === BIN_NAME);
+function cloudPayload(){
+  // Everything we want to sync in one object
+  return { fcRatings, weakMap };
+}
 
-    if(existing){
-      fcBinId = existing.metadata?.id || existing.id;
-      localStorage.setItem('cn_fc_binid', fcBinId);
-      const rec = await fetch(`${JSONBIN_API}/b/${fcBinId}/latest`, {
-        headers:{'X-Master-Key':fcKey}
-      });
-      if(!rec.ok) throw new Error('Read failed');
-      const recData = await rec.json();
-      fcRatings = recData.record || {};
-      setSyncStatus('ok','Synced · '+new Date().toLocaleTimeString());
-    } else {
-      // Create new bin
-      const createRes = await fetch(`${JSONBIN_API}/b`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json','X-Master-Key':fcKey,'X-Bin-Name':BIN_NAME},
-        body: JSON.stringify({})
-      });
-      if(!createRes.ok) throw new Error('Create failed');
-      const created = await createRes.json();
-      fcBinId = created.metadata?.id;
-      localStorage.setItem('cn_fc_binid', fcBinId);
-      fcRatings = {};
-      setSyncStatus('ok','New bin created · ready');
-    }
-    $('syncNowBtn').style.display = 'inline-block';
-    fcSaveCacheLocal();
-  } catch(err){
-    setSyncStatus('err','Sync error — check your key');
-    console.error(err);
+function applyCloudPayload(data){
+  if(data.fcRatings) fcRatings = data.fcRatings;
+  if(data.weakMap){
+    weakMap = data.weakMap;
+    saveWeak();       // persist to localStorage
+    updateWeakUI();   // refresh the quiz weak panel
   }
 }
 
-async function fcPushToCloud(){
+async function fcLoadFromCloud(){
+  if(!fcKey){ setSyncStatus('','Not connected — add your JSONBin key to sync'); return; }
+  setSyncStatus('spin','Connecting…');
+  try {
+    if(fcBinId){
+      // We already know our bin — just read it
+      const res = await fetch(`${JSONBIN_API}/b/${fcBinId}/latest`, {
+        headers:{'X-Master-Key': fcKey}
+      });
+      if(res.status === 401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
+      if(res.status === 404){
+        // Bin was deleted — create a fresh one
+        fcBinId = '';
+        localStorage.removeItem('cn_fc_binid');
+        await fcLoadFromCloud();
+        return;
+      }
+      if(!res.ok) throw new Error(`Read failed: ${res.status}`);
+      const data = await res.json();
+      applyCloudPayload(data.record || {});
+      setSyncStatus('ok','Synced · '+new Date().toLocaleTimeString());
+    } else {
+      // No bin yet — create one
+      const res = await fetch(`${JSONBIN_API}/b`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','X-Master-Key': fcKey, 'X-Bin-Name': BIN_NAME, 'X-Bin-Private': 'true'},
+        body: JSON.stringify(cloudPayload())
+      });
+      if(res.status === 401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
+      if(!res.ok) throw new Error(`Create failed: ${res.status}`);
+      const data = await res.json();
+      fcBinId = data.metadata.id;
+      localStorage.setItem('cn_fc_binid', fcBinId);
+      setSyncStatus('ok','New sync bin created · ready');
+    }
+    $('syncNowBtn').style.display = 'inline-block';
+    saveCacheLocal();
+  } catch(err){
+    setSyncStatus('err','Sync error — check your key');
+    console.error('JSONBin error:', err);
+  }
+}
+
+async function pushToCloud(){
   if(!fcKey || !fcBinId) return;
   setSyncStatus('spin','Saving…');
   try {
-    await fetch(`${JSONBIN_API}/b/${fcBinId}`, {
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':fcKey},
-      body: JSON.stringify(fcRatings)
+    const res = await fetch(`${JSONBIN_API}/b/${fcBinId}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json','X-Master-Key': fcKey},
+      body: JSON.stringify(cloudPayload())
     });
+    if(!res.ok) throw new Error(`Push failed: ${res.status}`);
     setSyncStatus('ok','Saved · '+new Date().toLocaleTimeString());
+    saveCacheLocal();
   } catch(err){
-    setSyncStatus('err','Save failed');
+    setSyncStatus('err','Save failed — will retry on next rating');
+    console.error('Push error:', err);
   }
+}
+
+// Debounced push — called after any rating change
+function schedulePush(){
+  clearTimeout(schedulePush._t);
+  schedulePush._t = setTimeout(pushToCloud, 2000);
 }
 
 function fcSyncNow(){ fcLoadFromCloud(); }
 
-function fcSaveCacheLocal(){
-  try{ localStorage.setItem('cn_fc_ratings_v1', JSON.stringify(fcRatings)); }catch(e){}
+function saveCacheLocal(){
+  try{
+    localStorage.setItem('cn_fc_ratings_v1', JSON.stringify(fcRatings));
+    localStorage.setItem('cn_weak_v2', JSON.stringify(weakMap));
+  }catch(e){}
 }
 
 function fcLoadCacheLocal(){
@@ -960,7 +988,6 @@ function saveKey(){
   if(!k){ alert('Please paste your JSONBin Secret Key.'); return; }
   fcKey = k;
   localStorage.setItem('cn_fc_key', fcKey);
-  // Also try to restore saved binId
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
   closeModal();
   fcLoadFromCloud();
@@ -1055,10 +1082,8 @@ function fcRate(rating){
   if(rating==='again'||rating==='hard') fcSessionA++;
   else fcSessionG++;
 
-  fcSaveCacheLocal();
-  // Debounced cloud push
-  clearTimeout(fcRate._timer);
-  fcRate._timer = setTimeout(fcPushToCloud, 2000);
+  saveCacheLocal();
+  schedulePush();
 
   fcCurrent++;
   if(fcCurrent >= fcDeck.length) fcShowDone();
@@ -1144,18 +1169,17 @@ document.querySelectorAll('.fc-dir-pill').forEach(btn=>{
 
 // ── FC init ──────────────────────────────────────────────
 function fcInit(){
-  // Load key + bin from localStorage
   fcKey   = localStorage.getItem('cn_fc_key')   || '';
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
-  // Load cached ratings first (instant)
   fcRatings = fcLoadCacheLocal();
+  // Also freshen weakMap from localStorage in case it diverged
+  try{ weakMap = JSON.parse(localStorage.getItem('cn_weak_v2')||'{}'); }catch(e){}
 
   if(fcKey){
     $('syncNowBtn').style.display = 'inline-block';
-    setSyncStatus('spin', 'Connecting…');
     fcLoadFromCloud();
   } else {
-    setSyncStatus('', 'Not connected — add your JSONBin key to sync across devices');
+    setSyncStatus('','Not connected — add your JSONBin key to sync across devices');
   }
   fcBuildDeck(false);
 }

@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中文练习 · David's Chinese</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+:root {
+  --ink:#1c1209; --paper:#faf6ef; --red:#b5291c; --red-dim:rgba(181,41,28,0.1);
+  --gold:#9a7c2a; --gold-dim:rgba(154,124,42,0.12); --green:#1e6b3a;
+  --green-dim:rgba(30,107,58,0.1); --blue:#1a4a7a; --blue-dim:rgba(26,74,122,0.1);
+  --purple:#5a2d82; --purple-dim:rgba(90,45,130,0.09);
+  --border:#d8cdb8; --muted:#7a6e5f; --soft:#f2ebe0;
+  --orange:#c45c0a; --orange-dim:rgba(196,92,10,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 60px;font-family:'Crimson Pro',Georgia,serif;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%239a7c2a' fill-opacity='0.035'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+
+/* ── HEADER ── */
+.hdr{text-align:center;margin-bottom:22px;}
+.hdr-zh{font-family:'Noto Serif SC',serif;font-size:2.4rem;color:var(--red);line-height:1;margin-bottom:2px;}
+.hdr-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.05rem;color:var(--gold);}
+.hdr-sub{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+
+/* ── TOP-LEVEL TABS ── */
+.tabrow{display:flex;gap:0;width:100%;max-width:500px;margin-bottom:20px;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
+.tabrow button{flex:1;padding:9px 6px;background:transparent;border:none;border-right:1.5px solid var(--border);font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);cursor:pointer;transition:all 0.18s;letter-spacing:0.5px;}
+.tabrow button:last-child{border-right:none;}
+.tabrow button:hover{background:var(--soft);color:var(--ink);}
+.tabrow button.on{background:var(--ink);color:var(--paper);}
+.tabrow button.fc-tab.on{background:var(--purple);color:white;}
+
+/* ── SHARED LABELS / PILLS ── */
+.slabel{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;text-align:center;}
+.prow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+.pill{padding:5px 13px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.68rem;cursor:pointer;border-radius:20px;transition:all 0.18s;position:relative;}
+.pill:hover{border-color:var(--gold);color:var(--gold);}
+.pill.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.pill.fire{border-color:var(--orange);color:var(--orange);}
+.pill.fire:hover{background:var(--orange-dim);}
+.pill.fire.on{background:var(--orange);color:white;border-color:var(--orange);}
+.pill.sent{border-color:var(--blue);color:var(--blue);}
+.pill.sent:hover{background:var(--blue-dim);}
+.pill.sent.on{background:var(--blue);color:white;border-color:var(--blue);}
+.wbadge{position:absolute;top:-7px;right:-7px;background:var(--orange);color:white;font-size:0.52rem;font-family:'DM Mono',monospace;border-radius:10px;padding:1px 5px;min-width:18px;text-align:center;line-height:1.4;display:none;}
+
+/* ── WEAK PANEL ── */
+.wpanel{width:100%;max-width:500px;background:white;border:1.5px solid var(--orange);border-radius:4px;padding:14px 18px;margin-bottom:14px;display:none;}
+.wpanel-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
+.wlist{display:flex;flex-wrap:wrap;gap:7px;}
+.wchip{display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:20px;background:var(--soft);border:1px solid var(--border);}
+.wchip-zh{font-family:'Noto Serif SC',serif;font-size:1rem;}
+.wchip-py{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);}
+.cc{font-family:'DM Mono',monospace;font-size:0.58rem;border-radius:8px;padding:1px 5px;}
+.cc1{background:var(--orange-dim);color:var(--orange);}
+.cc2{background:var(--red-dim);color:var(--red);}
+.cc3{background:var(--red);color:white;}
+
+/* ── QUIZ CARD ── */
+.card{background:white;border:1px solid var(--border);border-radius:4px;width:100%;max-width:500px;padding:28px 24px 22px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);position:relative;margin-bottom:12px;}
+.flame{position:absolute;top:12px;right:14px;font-size:1.1rem;display:none;cursor:help;}
+.flame.pulse{animation:fp 1.3s ease-in-out infinite;}
+@keyframes fp{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.stag{position:absolute;top:12px;left:14px;font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;display:none;background:var(--blue-dim);color:var(--blue);}
+.pbar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.pbar-txt{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);}
+.schips{display:flex;gap:7px;}
+.sc{font-family:'DM Mono',monospace;font-size:0.62rem;padding:2px 8px;border-radius:10px;}
+.sc.c{background:var(--green-dim);color:var(--green);}
+.sc.w{background:var(--red-dim);color:var(--red);}
+.pbwrap{width:100%;height:2px;background:var(--soft);border-radius:2px;margin-bottom:20px;}
+.pb{height:2px;background:var(--gold);border-radius:2px;transition:width 0.35s ease;width:0%;}
+.qlabel{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.qmain{font-family:'Noto Serif SC',serif;font-size:2.7rem;color:var(--ink);line-height:1.2;margin-bottom:6px;min-height:3.4rem;display:flex;align-items:center;justify-content:center;}
+.qmain.lat{font-family:'Crimson Pro',serif;font-size:1.55rem;font-style:italic;}
+.qmain.szh{font-size:1.7rem;line-height:1.5;min-height:auto;padding:8px 0;}
+.qmain.sen{font-family:'Crimson Pro',serif;font-size:1.3rem;font-style:italic;line-height:1.5;min-height:auto;}
+.qpy{font-family:'DM Mono',monospace;font-size:0.9rem;color:var(--red);min-height:1.3em;margin-bottom:6px;}
+.ltag{display:inline-block;font-family:'DM Mono',monospace;font-size:0.56rem;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:1px 6px;margin-bottom:14px;}
+.mn-btn{background:none;border:1px solid rgba(90,45,130,0.35);border-radius:12px;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--purple);padding:4px 12px;cursor:pointer;margin-bottom:12px;transition:all 0.15s;display:none;}
+.mn-btn:hover{background:var(--purple-dim);}
+.mn-box{background:var(--purple-dim);border:1px solid rgba(90,45,130,0.2);border-radius:4px;padding:10px 14px;margin-bottom:14px;text-align:left;display:none;}
+.mn-lbl{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;}
+.mn-txt{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.97rem;color:var(--ink);line-height:1.55;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;display:none;}
+.opt{padding:11px 8px;border:1.5px solid var(--border);border-radius:4px;background:white;cursor:pointer;transition:all 0.14s;color:var(--ink);font-family:'Noto Serif SC',serif;font-size:0.9rem;line-height:1.4;}
+.opt:hover:not(:disabled){border-color:var(--gold);background:var(--gold-dim);}
+.opt.ok{background:var(--green-dim)!important;border-color:var(--green)!important;color:var(--green)!important;font-weight:600;}
+.opt.no{background:var(--red-dim)!important;border-color:var(--red)!important;color:var(--red)!important;}
+.opt:disabled{cursor:default;}
+.opt-py{font-family:'DM Mono',monospace;font-size:0.6rem;color:#aaa;display:block;margin-top:2px;}
+.typewrap{display:none;flex-direction:column;gap:10px;align-items:center;width:100%;}
+.typeinput{width:100%;max-width:400px;padding:12px 16px;border:1.5px solid var(--border);border-radius:4px;font-family:'Noto Serif SC',serif;font-size:1.2rem;text-align:center;color:var(--ink);background:var(--soft);outline:none;transition:border 0.2s,background 0.2s;}
+.typeinput:focus{border-color:var(--gold);background:white;}
+.typeinput.sent{font-size:1rem;text-align:left;padding:12px 14px;}
+.typeinput.tok{border-color:var(--green)!important;background:var(--green-dim)!important;color:var(--green);}
+.typeinput.tno{border-color:var(--red)!important;background:var(--red-dim)!important;}
+.typehint{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);text-align:center;}
+.submbtn{padding:8px 26px;background:var(--ink);color:var(--paper);border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:background 0.18s;}
+.submbtn:hover{background:var(--red);}
+.submbtn:disabled{opacity:0.4;cursor:default;}
+.srev{margin-top:10px;padding:12px 16px;background:var(--soft);border-radius:4px;text-align:left;display:none;}
+.srev-zh{font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--ink);margin-bottom:3px;}
+.srev-py{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--red);margin-bottom:3px;}
+.srev-en{font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);font-size:0.95rem;}
+.gnote{margin-top:8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--blue);background:var(--blue-dim);padding:6px 10px;border-radius:4px;text-align:left;display:none;line-height:1.5;}
+.fb{margin-top:14px;font-size:1.05rem;min-height:1.5em;font-family:'Crimson Pro',serif;font-style:italic;}
+.fb.good{color:var(--green);}
+.fb.bad{color:var(--red);}
+.fb-ans{font-family:'Noto Serif SC',serif;font-style:normal;font-weight:700;}
+.nextbtn{margin-top:14px;padding:8px 28px;color:var(--gold);border:1.5px solid var(--gold);background:transparent;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;transition:all 0.18s;display:none;}
+.nextbtn:hover{background:var(--gold);color:white;}
+.scorescreen{background:white;border:1px solid var(--border);border-radius:4px;width:100%;max-width:500px;padding:32px 26px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);display:none;}
+.scorescreen h2{font-family:'Noto Serif SC',serif;font-size:1.5rem;color:var(--red);margin-bottom:6px;}
+.bigscore{font-family:'Crimson Pro',serif;font-size:3.6rem;color:var(--ink);margin:6px 0;}
+.scoremsg{font-style:italic;color:var(--muted);margin-bottom:20px;font-size:1rem;}
+.sacts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;}
+.sbtn{padding:8px 20px;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;transition:all 0.18s;}
+.sbtn.p{background:var(--ink);color:var(--paper);border:1.5px solid var(--ink);}
+.sbtn.p:hover{background:var(--red);border-color:var(--red);}
+.sbtn.f{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
+.sbtn.f:hover{background:var(--orange);color:white;}
+.msect{margin-top:22px;text-align:left;}
+.mtitle{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
+.mitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--soft);}
+.mzh{font-family:'Noto Serif SC',serif;font-size:1.2rem;min-width:44px;}
+.mpy{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--red);}
+.men{font-style:italic;color:var(--muted);font-size:0.92rem;}
+.mcnt{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.62rem;white-space:nowrap;}
+
+/* ── FLASHCARD SECTION ── */
+#fcSection{display:none;width:100%;max-width:500px;}
+
+/* Sync bar */
+.sync-bar{display:flex;align-items:center;justify-content:space-between;background:white;border:1.5px solid var(--border);border-radius:4px;padding:9px 14px;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.sync-status{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.3s;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.err{background:var(--red);}
+.sync-dot.spin{background:var(--gold);animation:pulse 0.9s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.sync-btns{display:flex;gap:7px;}
+.sync-btn{font-family:'DM Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:12px;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s;}
+.sync-btn:hover{border-color:var(--gold);color:var(--gold);}
+.sync-btn.cfg{border-color:var(--purple);color:var(--purple);}
+.sync-btn.cfg:hover{background:var(--purple-dim);}
+
+/* API key modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,18,9,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.modal{background:var(--paper);border:1.5px solid var(--border);border-radius:6px;padding:28px 26px;max-width:420px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.18);}
+.modal h3{font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--red);margin-bottom:6px;}
+.modal p{font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);font-size:0.95rem;line-height:1.55;margin-bottom:14px;}
+.modal ol{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink);padding-left:18px;line-height:2;margin-bottom:14px;}
+.modal ol a{color:var(--blue);text-decoration:none;}
+.modal ol a:hover{text-decoration:underline;}
+.modal input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--ink);background:var(--soft);outline:none;margin-bottom:12px;transition:border 0.2s;}
+.modal input:focus{border-color:var(--gold);background:white;}
+.modal-btns{display:flex;gap:9px;justify-content:flex-end;}
+.modal-btn{padding:7px 18px;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.68rem;cursor:pointer;transition:all 0.18s;}
+.modal-btn.pri{background:var(--ink);color:var(--paper);border:1.5px solid var(--ink);}
+.modal-btn.pri:hover{background:var(--red);border-color:var(--red);}
+.modal-btn.sec{background:transparent;color:var(--muted);border:1.5px solid var(--border);}
+.modal-btn.sec:hover{border-color:var(--gold);color:var(--gold);}
+.modal-note{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:10px;line-height:1.6;}
+
+/* FC direction row */
+.fc-dir-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;}
+.fc-dir-pill{padding:5px 13px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.68rem;cursor:pointer;border-radius:20px;transition:all 0.18s;}
+.fc-dir-pill:hover{border-color:var(--purple);color:var(--purple);}
+.fc-dir-pill.on{background:var(--purple);color:white;border-color:var(--purple);}
+
+/* Flashcard flip card */
+.fc-scene{width:100%;perspective:1200px;margin-bottom:16px;cursor:pointer;}
+.fc-wrap{position:relative;width:100%;transform-style:preserve-3d;transition:transform 0.5s cubic-bezier(0.4,0.2,0.2,1);}
+.fc-wrap.flipped{transform:rotateY(180deg);}
+.fc-face{background:white;border:1px solid var(--border);border-radius:6px;box-shadow:0 2px 18px rgba(0,0,0,0.07);padding:32px 24px 26px;text-align:center;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;position:relative;}
+.fc-back-face{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg);}
+.fc-tap{position:absolute;bottom:12px;right:14px;font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1px;color:var(--border);text-transform:uppercase;}
+.fc-lesson{position:absolute;top:12px;left:14px;font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:1px 7px;}
+.fc-dir-tag{position:absolute;top:12px;right:14px;font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1px;color:var(--purple);background:var(--purple-dim);border-radius:3px;padding:1px 7px;}
+.fc-zh{font-family:'Noto Serif SC',serif;font-size:3.6rem;color:var(--ink);line-height:1;margin-bottom:8px;}
+.fc-zh.sm{font-size:2.4rem;}
+.fc-py{font-family:'DM Mono',monospace;font-size:1rem;color:var(--red);margin-bottom:4px;}
+.fc-en-q{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.4rem;color:var(--ink);}
+.fc-divider{width:36px;height:1px;background:var(--border);margin:14px auto;}
+.fc-en-a{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.35rem;color:var(--ink);margin-bottom:4px;}
+.fc-zh-a{font-family:'Noto Serif SC',serif;font-size:2.2rem;color:var(--red);margin-bottom:4px;}
+.fc-py-a{font-family:'DM Mono',monospace;font-size:0.85rem;color:var(--muted);margin-bottom:14px;}
+.fc-mn{background:var(--purple-dim);border:1px solid rgba(90,45,130,0.18);border-radius:4px;padding:11px 14px;text-align:left;width:100%;margin-top:8px;}
+.fc-mn-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;}
+.fc-mn-txt{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.92rem;color:var(--ink);line-height:1.55;}
+
+/* Rating buttons */
+.fc-prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.fc-prog-txt{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);}
+.fc-stats{display:flex;gap:7px;}
+.fc-stat{font-family:'DM Mono',monospace;font-size:0.6rem;padding:2px 8px;border-radius:10px;}
+.fc-stat.a{background:var(--red-dim);color:var(--red);}
+.fc-stat.g{background:var(--green-dim);color:var(--green);}
+.fc-pbwrap{width:100%;height:2px;background:var(--soft);border-radius:2px;margin-bottom:16px;}
+.fc-pb{height:2px;background:var(--purple);border-radius:2px;transition:width 0.4s ease;width:0%;}
+
+.rating-row{display:flex;gap:8px;justify-content:center;width:100%;margin-bottom:10px;opacity:0;transform:translateY(6px);transition:opacity 0.25s,transform 0.25s;pointer-events:none;}
+.rating-row.vis{opacity:1;transform:none;pointer-events:all;}
+.rbtn{flex:1;padding:9px 4px;border-radius:4px;border:1.5px solid;font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;transition:all 0.15s;background:transparent;line-height:1.3;max-width:110px;}
+.rbtn span{display:block;}
+.rbtn .rs{font-size:0.52rem;opacity:0.7;margin-top:1px;}
+.rbtn.again{border-color:var(--red);color:var(--red);}
+.rbtn.again:hover{background:var(--red);color:white;}
+.rbtn.hard{border-color:var(--orange);color:var(--orange);}
+.rbtn.hard:hover{background:var(--orange);color:white;}
+.rbtn.good{border-color:var(--green);color:var(--green);}
+.rbtn.good:hover{background:var(--green);color:white;}
+.rbtn.easy{border-color:var(--gold);color:var(--gold);}
+.rbtn.easy:hover{background:var(--gold);color:white;}
+
+.kb-hint{font-family:'DM Mono',monospace;font-size:0.54rem;color:var(--border);text-align:center;letter-spacing:1px;margin-top:2px;}
+.kb-hint span{border:1px solid var(--border);border-radius:3px;padding:1px 5px;margin:0 2px;}
+
+/* FC done screen */
+.fc-done{background:white;border:1px solid var(--border);border-radius:6px;width:100%;padding:32px 26px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);display:none;}
+.fc-done h2{font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--purple);margin-bottom:6px;}
+.fc-done-big{font-family:'Crimson Pro',serif;font-size:3.4rem;color:var(--ink);margin:6px 0;}
+.fc-done-msg{font-style:italic;color:var(--muted);font-size:1rem;margin-bottom:20px;}
+.fc-breakdown{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
+.fbd{text-align:center;}
+.fbd-n{font-family:'Crimson Pro',serif;font-size:1.9rem;line-height:1;}
+.fbd-l{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:1px;color:var(--muted);margin-top:2px;}
+.fc-done-acts{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
+.fc-dbtn{padding:8px 20px;border-radius:20px;font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;transition:all 0.18s;}
+.fc-dbtn.p{background:var(--purple);color:white;border:1.5px solid var(--purple);}
+.fc-dbtn.p:hover{background:var(--red);border-color:var(--red);}
+.fc-dbtn.s{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
+.fc-dbtn.s:hover{background:var(--orange);color:white;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-zh">中文练习</div>
+  <div class="hdr-en">David's Chinese</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · Words &amp; Sentences</div>
+</div>
+
+<!-- TOP-LEVEL TABS -->
+<div class="tabrow">
+  <button id="tabQuiz" class="on" onclick="switchTab('quiz')">📝 Quiz</button>
+  <button id="tabFC" class="fc-tab" onclick="switchTab('fc')">🃏 Flashcards</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     QUIZ SECTION
+════════════════════════════════════════════════ -->
+<div id="quizSection">
+
+<div class="slabel">Lesson</div>
+<div class="prow" id="lessonRow">
+  <button class="pill on" onclick="setLesson('all',this)">All</button>
+  <button class="pill" onclick="setLesson('3.07',this)">3.07</button>
+  <button class="pill" onclick="setLesson('3.14',this)">3.14</button>
+  <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
+  <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
+</div>
+
+<div class="slabel" style="margin-top:8px">Mode</div>
+<div class="prow" id="modeRow">
+  <button class="pill on" onclick="setMode('mcq-en2zh',this)">English → Chinese</button>
+  <button class="pill" onclick="setMode('mcq-zh2en',this)">Chinese → English</button>
+  <button class="pill" onclick="setMode('type',this)">Type it out</button>
+  <button class="pill" onclick="setMode('mixed',this)">Mixed</button>
+  <button class="pill sent" onclick="setMode('sentences',this)">📖 Sentences</button>
+  <button class="pill fire" id="weakBtn" onclick="setMode('weak',this)">🔥 Weak words <span class="wbadge" id="weakBadge"></span></button>
+</div>
+
+<div class="wpanel" id="weakPanel">
+  <div class="wpanel-title">🔥 Words you keep getting wrong</div>
+  <div class="wlist" id="weakList"></div>
+</div>
+
+<!-- QUIZ CARD -->
+<div class="card" id="quizCard">
+  <div class="flame" id="flame">🔥</div>
+  <div class="stag" id="stag">sentence</div>
+
+  <div class="pbar-row">
+    <div class="pbar-txt" id="progTxt">1 / 10</div>
+    <div class="schips">
+      <span class="sc c">✓ <span id="sC">0</span></span>
+      <span class="sc w">✗ <span id="sW">0</span></span>
+    </div>
+  </div>
+  <div class="pbwrap"><div class="pb" id="pb"></div></div>
+
+  <div class="qlabel" id="qlabel"></div>
+  <div class="qmain" id="qmain"></div>
+  <div class="qpy" id="qpy"></div>
+  <div class="ltag" id="ltag"></div>
+
+  <button class="mn-btn" id="mnBtn">💡 Show memory hint</button>
+  <div class="mn-box" id="mnBox">
+    <div class="mn-lbl">Memory hook</div>
+    <div class="mn-txt" id="mnTxt"></div>
+  </div>
+
+  <div class="opts" id="opts"></div>
+
+  <div class="typewrap" id="typewrap">
+    <input class="typeinput" id="typeinput" placeholder="pinyin or 汉字..." autocomplete="off" spellcheck="false"/>
+    <div class="typehint">Pinyin (tones optional) or Chinese characters — both accepted</div>
+    <button class="submbtn" id="submbtn">Check →</button>
+  </div>
+
+  <div class="srev" id="srev">
+    <div class="srev-zh" id="srevZh"></div>
+    <div class="srev-py" id="srevPy"></div>
+    <div class="srev-en" id="srevEn"></div>
+  </div>
+  <div class="gnote" id="gnote"></div>
+
+  <div class="fb" id="fb"></div>
+  <button class="nextbtn" id="nextbtn">Next →</button>
+</div>
+
+<!-- SCORE SCREEN -->
+<div class="scorescreen" id="scorescreen">
+  <h2>Session complete</h2>
+  <div class="bigscore" id="bigscore"></div>
+  <div class="scoremsg" id="scoremsg"></div>
+  <div class="sacts">
+    <button class="sbtn p" onclick="startQuiz()">Go again</button>
+    <button class="sbtn f" id="drillBtn" style="display:none" onclick="drillWeak()">🔥 Drill weak words</button>
+  </div>
+  <div class="msect" id="msect"></div>
+</div>
+
+</div><!-- /quizSection -->
+
+
+<!-- ════════════════════════════════════════════════
+     FLASHCARD SECTION
+════════════════════════════════════════════════ -->
+<div id="fcSection">
+
+  <!-- Sync bar -->
+  <div class="sync-bar">
+    <div class="sync-status">
+      <div class="sync-dot" id="syncDot"></div>
+      <span id="syncTxt">Not configured</span>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="syncNowBtn" onclick="fcSyncNow()" style="display:none">↻ Sync</button>
+      <button class="sync-btn cfg" onclick="openModal()">⚙ JSONBin key</button>
+    </div>
+  </div>
+
+  <!-- Lesson filter -->
+  <div class="slabel">Lesson</div>
+  <div class="prow" id="fcLessonRow">
+    <button class="pill on" data-lesson="all">All</button>
+    <button class="pill" data-lesson="3.07">3.07</button>
+    <button class="pill" data-lesson="3.14">3.14</button>
+    <button class="pill" data-lesson="3.21">3.21</button>
+    <button class="pill" data-lesson="3.28">3.28</button>
+  </div>
+
+  <!-- Direction -->
+  <div class="slabel" style="margin-top:4px">Direction</div>
+  <div class="fc-dir-row">
+    <button class="fc-dir-pill on" data-dir="zh-front">Chinese → English</button>
+    <button class="fc-dir-pill" data-dir="en-front">English → Chinese</button>
+    <button class="fc-dir-pill" data-dir="mixed">Mixed</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="fc-prog-row">
+    <div class="fc-prog-txt" id="fcProgTxt">Card 1 of —</div>
+    <div class="fc-stats">
+      <span class="fc-stat a">↩ <span id="fcCntA">0</span></span>
+      <span class="fc-stat g">✓ <span id="fcCntG">0</span></span>
+    </div>
+  </div>
+  <div class="fc-pbwrap"><div class="fc-pb" id="fcPb"></div></div>
+
+  <!-- Flip card -->
+  <div class="fc-scene" id="fcScene">
+    <div class="fc-wrap" id="fcWrap">
+      <!-- FRONT -->
+      <div class="fc-face" id="fcFront">
+        <div class="fc-lesson" id="fcFrontLesson"></div>
+        <div class="fc-dir-tag" id="fcDirTag"></div>
+        <div class="fc-zh" id="fcFrontZh"></div>
+        <div class="fc-py" id="fcFrontPy"></div>
+        <div class="fc-en-q" id="fcFrontEn"></div>
+        <div class="fc-tap">tap to reveal</div>
+      </div>
+      <!-- BACK -->
+      <div class="fc-face fc-back-face" id="fcBack">
+        <div class="fc-lesson" id="fcBackLesson"></div>
+        <div class="fc-en-a" id="fcBackEn"></div>
+        <div class="fc-divider"></div>
+        <div class="fc-zh-a" id="fcBackZh"></div>
+        <div class="fc-py-a" id="fcBackPy"></div>
+        <div class="fc-mn" id="fcMn">
+          <div class="fc-mn-lbl">Memory hook</div>
+          <div class="fc-mn-txt" id="fcMnTxt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating buttons -->
+  <div class="rating-row" id="ratingRow">
+    <button class="rbtn again" id="rbAgain"><span>Again</span><span class="rs">didn't know</span></button>
+    <button class="rbtn hard"  id="rbHard"><span>Hard</span><span class="rs">struggled</span></button>
+    <button class="rbtn good"  id="rbGood"><span>Good</span><span class="rs">got it</span></button>
+    <button class="rbtn easy"  id="rbEasy"><span>Easy</span><span class="rs">too easy</span></button>
+  </div>
+  <div class="kb-hint"><span>Space</span> flip · <span>1</span> again · <span>2</span> hard · <span>3</span> good · <span>4</span> easy</div>
+
+  <!-- Done screen -->
+  <div class="fc-done" id="fcDone">
+    <h2>Deck complete!</h2>
+    <div class="fc-done-big" id="fcDoneBig"></div>
+    <div class="fc-done-msg" id="fcDoneMsg"></div>
+    <div class="fc-breakdown">
+      <div class="fbd"><div class="fbd-n" id="fdAgain" style="color:var(--red)">0</div><div class="fbd-l">Again</div></div>
+      <div class="fbd"><div class="fbd-n" id="fdHard"  style="color:var(--orange)">0</div><div class="fbd-l">Hard</div></div>
+      <div class="fbd"><div class="fbd-n" id="fdGood"  style="color:var(--green)">0</div><div class="fbd-l">Good</div></div>
+      <div class="fbd"><div class="fbd-n" id="fdEasy"  style="color:var(--gold)">0</div><div class="fbd-l">Easy</div></div>
+    </div>
+    <div class="fc-done-acts">
+      <button class="fc-dbtn p" onclick="fcRestart()">Review again</button>
+      <button class="fc-dbtn s" onclick="fcDrillWeak()">Drill weak cards</button>
+    </div>
+  </div>
+
+</div><!-- /fcSection -->
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal">
+    <h3>Connect JSONBin sync</h3>
+    <p>Paste your JSONBin Secret Key below. Your flashcard ratings will sync across all your devices automatically.</p>
+    <ol>
+      <li>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and create a free account</li>
+      <li>Open <strong>API Keys</strong> in your dashboard</li>
+      <li>Copy your <strong>Secret Key</strong> and paste it below</li>
+    </ol>
+    <input type="password" id="keyInput" placeholder="$2a$10$..." autocomplete="off"/>
+    <div class="modal-btns">
+      <button class="modal-btn sec" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn pri" onclick="saveKey()">Save &amp; connect</button>
+    </div>
+    <div class="modal-note">Your key is stored only in your browser's localStorage — never sent anywhere except JSONBin's own API.</div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// SHARED VOCAB + SENTENCES DATA
+// ══════════════════════════════════════════════════════════
+const VOCAB = [
+  {zh:"我",py:"wǒ",en:"I / me",lesson:"3.07",mn:"Looks like a person (人 inside) holding a weapon — a warrior defending themselves. That's ME, standing my ground."},
+  {zh:"你",py:"nǐ",en:"you",lesson:"3.07",mn:"Left side is 人 (person) + right side has a little figure. Imagine pointing at another person: \"YOU over there.\" The 人 radical tells you it's about a person."},
+  {zh:"是",py:"shì",en:"is / am / are",lesson:"3.07",mn:"The top part looks like 日 (sun). The sun simply IS — it exists without question. 是 = to be, to exist."},
+  {zh:"好",py:"hǎo",en:"good",lesson:"3.07",mn:"女 (woman) + 子 (child) side by side. A woman with a child — traditionally considered the ideal of GOOD fortune. Woman + child = good."},
+  {zh:"英国",py:"yīng guó",en:"British / Britain",lesson:"3.07",mn:"英 sounds like 'England'. 国 means country (a box with a jewel inside — a protected kingdom). 英国 = England-country = Britain."},
+  {zh:"中国",py:"zhōng guó",en:"China / Chinese",lesson:"3.07",mn:"中 is literally an arrow through the middle of a box — the MIDDLE. 国 = country. China = the Middle Kingdom. You can see the arrow dead-centre."},
+  {zh:"人",py:"rén",en:"people / person",lesson:"3.07",mn:"Two strokes — one leg leaning on the other. It's a stick person walking. The simplest picture of a human. You'll spot this inside dozens of other characters."},
+  {zh:"再见",py:"zài jiàn",en:"bye / goodbye",lesson:"3.07",mn:"再 means 'again', 见 means 'to see'. Goodbye = 'see again' — just like au revoir in French. See you again!"},
+  {zh:"下午",py:"xià wǔ",en:"afternoon",lesson:"3.14",mn:"下 is an arrow pointing DOWN — the sun going down from its peak. 午 is noon. 下午 = after-noon, the sun heading downward from midday."},
+  {zh:"早上",py:"zǎo shang",en:"morning",lesson:"3.14",mn:"早 has 日 (sun) on top of 十 — the sun barely above the horizon. 上 means 'up'. Morning = sun just coming up. Also: 早 sounds like 'Zorro' — who always rides out at dawn."},
+  {zh:"喝",py:"hē",en:"to drink",lesson:"3.14",mn:"Left side is 口 (mouth) — anything with 口 involves the mouth. Picture someone throwing their head back to DRINK from a bottle. Mouth + action = drink."},
+  {zh:"吃",py:"chī",en:"to eat",lesson:"3.14",mn:"口 (mouth) on the left again. The right side 乞 means to beg. Picture Oliver Twist holding out his mouth, begging to EAT."},
+  {zh:"喜欢",py:"xǐ huan",en:"to like",lesson:"3.14",mn:"喜 has two mouths (口口) stacked inside — two people grinning with delight. When you LIKE something you smile. Double mouth = double happiness = like."},
+  {zh:"米饭",py:"mǐ fàn",en:"rice",lesson:"3.14",mn:"米 looks like a grain of rice with lines radiating out — a cross with four extra strokes, like a rice plant from above. 饭 has the food radical on the left. Rice grain + food = cooked rice."},
+  {zh:"烤鸭",py:"kǎo yā",en:"roasted duck",lesson:"3.14",mn:"烤 has the fire radical 火 at the bottom — cooked over fire. 鸭 has 鸟 (bird) on the right. Fire + bird = roasted bird = roasted duck. You can practically smell it."},
+  {zh:"火锅",py:"huǒ guō",en:"hotpot",lesson:"3.14",mn:"火 means fire — you can see the flames in those four strokes. 锅 means pot (metal radical 钅on the left). Fire + pot = hotpot. Exactly what it is."},
+  {zh:"沙拉",py:"shā lā",en:"salad",lesson:"3.14",mn:"Pure phonetic borrowing — shā lā sounds like 'salad'. Just say it with a Chinese accent. The characters were chosen for sound, not meaning."},
+  {zh:"可乐",py:"kě lè",en:"coke / cola",lesson:"3.14",mn:"可乐 literally means 'permissible joy' — 可 = can/permitted, 乐 = happy. Coke is happiness in a can! Chosen for both sound (kě lè ≈ Cola) and meaning."},
+  {zh:"咖啡",py:"kā fēi",en:"coffee",lesson:"3.14",mn:"Phonetic borrowing — kā fēi sounds like 'coffee'. Both characters have 口 (mouth) on the left, because you drink it. Just chant: kā fēi, kā fēi, coffee."},
+  {zh:"今天",py:"jīn tiān",en:"today",lesson:"3.14",mn:"今 looks like a roof over a person — someone sheltering NOW, in the present. 天 means sky/day (a person 大 with a line above — the sky). Today = this sky = this day."},
+  {zh:"很",py:"hěn",en:"very",lesson:"3.14",mn:"The left side 彳 is the 'step' radical — stepping things up. VERY cranks everything up a notch. Remember: almost every adjective sentence needs 很 as a workhorse intensifier."},
+  {zh:"不",py:"bù",en:"not",lesson:"3.14",mn:"Looks like a bird flying away — or a hand pushing something away. NOT — a rejection. The tone drops sharply (4th tone), like slamming a door. Not. Nope. No."},
+  {zh:"燕麦粥",py:"yàn mài zhōu",en:"oats / porridge",lesson:"3.14",mn:"燕 means swallow (the bird) — imagine a swallow diving into a bowl. 麦 means grain. 粥 means porridge (dots on the left are steam rising from a bowl). A swallow diving into a steaming grain bowl."},
+  {zh:"三明治",py:"sān míng zhì",en:"sandwich",lesson:"3.14",mn:"Phonetic borrowing ≈ 'sandwich'. But: 三 means THREE and 明 contains sun (日) and moon (月). Three bright layers — bread, filling, bread — lit up like the sun and moon."},
+  {zh:"什么",py:"shén me",en:"what",lesson:"3.21",mn:"Sounds a bit like 'shun me' — imagine someone shunning you and you cry out \"WHAT are you doing?!\" 什 has 人 (person) — what kind of person? 么 is a tiny wisp. A tiny person doing a tiny thing — WHAT is it?"},
+  {zh:"好吃",py:"hǎo chī",en:"delicious (food)",lesson:"3.21",mn:"好 (good) + 吃 (eat) = good to eat = delicious. Completely logical. If you know 好 and 吃 separately, you already know this — just glue them together."},
+  {zh:"好喝",py:"hǎo hē",en:"delicious (drink)",lesson:"3.21",mn:"好 (good) + 喝 (drink) = good to drink. Same pattern as 好吃. Both start with 好, end with the action. Eating or drinking — good at it = delicious."},
+  {zh:"辣",py:"là",en:"spicy",lesson:"3.21",mn:"辣 contains 辛 (hardship) — spicy food makes you suffer! The character literally has 'hardship' baked in. Picture someone sweating through a spicy meal. Spicy = hard work for your mouth."},
+  {zh:"鸡蛋",py:"jī dàn",en:"egg",lesson:"3.21",mn:"鸡 means chicken (bird radical 鸟). 蛋 means egg. 鸡蛋 = chicken egg. Don't learn 蛋 alone — always think chicken first. No chicken, no egg. Learn the whole word."},
+  {zh:"和",py:"hé",en:"and",lesson:"3.21",mn:"禾 (grain stalk) + 口 (mouth) — grain going into a mouth, two things joining. AND connects things, just like grain joining with mouth. Also sounds like 'hey' — 'hey, you AND me together.'"},
+  {zh:"没有",py:"méi yǒu",en:"don't have / not have",lesson:"3.21",mn:"没 has the water radical 氵— something submerged and gone. 有 means 'have'. 没有 = water washed it away = don't have. NEVER say 不有 — it's always 没有 to negate 有."},
+  {zh:"有",py:"yǒu",en:"to have",lesson:"3.21",mn:"The top part looks like a hand reaching out, the bottom is 月 (moon). A hand reaching for the moon — trying to HAVE something precious and out of reach."},
+  {zh:"问题",py:"wèn tí",en:"question / problem",lesson:"3.21",mn:"问 has 口 (mouth) inside a gate 门 — a mouth in a doorway, calling out a question. 题 means topic. A question is a mouth at the door asking about a topic. Knock knock — got a question?"},
+  {zh:"我们",py:"wǒ men",en:"we / us",lesson:"3.21",mn:"我 (I/me) + 们 (plural suffix). 们 is the magic pluraliser — turns any person-word into a group. You'll see 们 on 你 and 他 too. One suffix to rule them all."},
+  {zh:"你们",py:"nǐ men",en:"you (plural)",lesson:"3.21",mn:"你 (you) + 们 (plural). Same trick as 我们 — slap 们 on the end to make it plural. 你 → 你们. You → you lot. Simple as that."},
+  {zh:"也",py:"yě",en:"also / too",lesson:"3.28",mn:"也 looks like a little person sitting, comfortable with the status quo — 'me ALSO, sitting here too'. 也 always comes right after the subject: 我也... (I also...)."},
+  {zh:"香肠",py:"xiāng cháng",en:"sausage",lesson:"3.28",mn:"香 means fragrant/tasty (literally grain in the sun — smells good!). 肠 means intestine. Fragrant intestine = sausage. Exactly what sausage is, anatomically."},
+  {zh:"水果",py:"shuǐ guǒ",en:"fruit",lesson:"3.28",mn:"水 means water — fruit is juicy. 果 shows a tree (木) with a fruit on top. Juicy thing on a tree = fruit. You can picture it: water + tree-with-fruit."},
+  {zh:"果汁",py:"guǒ zhī",en:"fruit juice",lesson:"3.28",mn:"果 (fruit) + 汁 (juice — water radical 氵 on the left). Fruit + liquid = fruit juice. 汁 has 氵 because it's a liquid. Squeeze the fruit (果) and out comes the juice (汁)."},
+  {zh:"橙汁",py:"chéng zhī",en:"orange juice",lesson:"3.28",mn:"橙 = orange (the fruit — has the tree radical 木 on the left, because it grows on a tree). 汁 = juice. Orange + juice = orange juice. Simple compound, logical build."},
+  {zh:"苹果",py:"píng guǒ",en:"apple",lesson:"3.28",mn:"苹 has the grass radical 艹 on top (grows from a plant). 果 = fruit (tree with fruit on top). Grass-plant fruit = apple. Ping — like the sound an apple makes when you flick it!"},
+  {zh:"香蕉",py:"xiāng jiāo",en:"banana",lesson:"3.28",mn:"香 means fragrant/delicious. 蕉 has the grass radical 艹 — it's a plant. Fragrant grass-plant = banana. And xiāng jiāo sounds a bit like 'shang a joe' — imagine Joe picking a fragrant banana."},
+  {zh:"橙子",py:"chéng zi",en:"orange (fruit)",lesson:"3.28",mn:"橙 = orange colour/fruit (木 tree radical). 子 is a suffix meaning 'thing/object'. Just the orange itself, no juice. 橙子 = the orange. 橙汁 = orange juice. One extra step to drink it."},
+  {zh:"芒果",py:"máng guǒ",en:"mango",lesson:"3.28",mn:"芒 is phonetic — máng sounds like 'mango'. 果 = fruit. Mango-fruit. This is a semi-phonetic borrowing: 芒 was chosen partly for sound, 果 tells you it's a fruit. Máng guǒ — say it fast: mango!"},
+  {zh:"昨天",py:"zuó tiān",en:"yesterday",lesson:"3.28",mn:"昨 has 日 (sun/day) on the left — it's about a day. 天 = sky/day. Yesterday = the day that has the 'past' component. Zuó sounds like 'zoom' backwards — time zooming away into the past."},
+  {zh:"明天",py:"míng tiān",en:"tomorrow",lesson:"3.28",mn:"明 = bright (sun 日 + moon 月 together = very bright). 天 = sky/day. The BRIGHT day ahead = tomorrow. Bright future! 明 also means clear/understanding — you'll understand tomorrow."},
+  {zh:"菜",py:"cài",en:"dish / food / vegetable",lesson:"3.28",mn:"Grass radical 艹 on top (it's a plant). The bottom half gives the sound. 菜 = vegetables, but also used for 'dishes' as in food courses. Think: plant on a plate = a dish."},
+  {zh:"中国菜",py:"zhōng guó cài",en:"Chinese food",lesson:"3.28",mn:"中国 (China) + 菜 (food/dishes) = Chinese food. You already know all three parts. Stack them: Middle Kingdom + dishes = Chinese cuisine. 英国菜 works the same way for British food."},
+  {zh:"英国菜",py:"yīng guó cài",en:"British food",lesson:"3.28",mn:"英国 (Britain) + 菜 (food/dishes) = British food. Same pattern as 中国菜. The 菜 suffix turns any country into its cuisine. Britain + dishes = British food."},
+  {zh:"热",py:"rè",en:"hot (temperature)",lesson:"3.28",mn:"热 has 火 (fire) at the bottom — heat from fire. The top is 执 (to hold). Holding fire = HOT. This is temperature hot (like weather or food temp), not spicy hot (辣). Fire in your hands = hot!"},
+  {zh:"爬山",py:"pá shān",en:"to climb a mountain",lesson:"3.28",mn:"爬 means to crawl/climb (hands and feet working — the character has a reptile component, lizards climb!). 山 is a mountain — literally three peaks: 山. Lizard-climbing three peaks = mountain climbing."},
+  {zh:"山",py:"shān",en:"mountain",lesson:"3.28",mn:"山 is a pictograph — literally three mountain peaks drawn as three vertical strokes. The middle one is tallest. It's one of the most obvious pictographic characters. Draw it, you've drawn a mountain range."},
+  {zh:"很多",py:"hěn duō",en:"many / a lot",lesson:"3.28",mn:"很 (very) + 多 (many/much). 多 shows two stacked moons (夕夕) — so much moon! Very + many = a lot. 多 alone can mean 'many'; 很多 amplifies it. Think: very moon-much = loads."},
+  {zh:"一些",py:"yī xiē",en:"some / a few",lesson:"3.28",mn:"一 = one (the simplest character — a single stroke). 些 = a small amount. One small amount = some. 一些 is softer than 很多. A single handful, not a mountain. One + bits = some."},
+  {zh:"想",py:"xiǎng",en:"to want to / to think",lesson:"3.28",mn:"想 has 心 (heart) at the bottom — what the heart desires. The top part gives the sound. Your HEART wants something = 想. Used as 想 + verb: 想吃 (want to eat), 想喝 (want to drink). Follow your heart!"},
+];
+
+const SENTENCES = [
+  {zh:"你今天好吗？",py:"Nǐ jīn tiān hǎo ma?",en:"Are you doing well today?",lesson:"3.14",dir:"zh2en",note:"吗 at the end turns any statement into a yes/no question."},
+  {zh:"我今天很好。你呢？",py:"Wǒ jīn tiān hěn hǎo. Nǐ ne?",en:"I'm very well today. What about you?",lesson:"3.14",dir:"zh2en",note:"你呢 = 'you then?' — a quick way to bounce the question back."},
+  {zh:"你今天吃火锅吗？",py:"Nǐ jīn tiān chī huǒ guō ma?",en:"Are you eating hotpot today?",lesson:"3.14",dir:"zh2en",note:"No tense in Chinese — 今天 (today) tells you when."},
+  {zh:"我今天不吃火锅。",py:"Wǒ jīn tiān bù chī huǒ guō.",en:"I'm not eating hotpot today.",lesson:"3.14",dir:"zh2en",note:"不 goes directly before the verb to negate it."},
+  {zh:"你今天吃什么？",py:"Nǐ jīn tiān chī shén me?",en:"What are you eating today?",lesson:"3.21",dir:"zh2en",note:"什么 stays at the end — Chinese doesn't move question words to the front."},
+  {zh:"我今天吃三明治。",py:"Wǒ jīn tiān chī sān míng zhì.",en:"I'm eating a sandwich today.",lesson:"3.21",dir:"zh2en",note:"Subject + time + verb + object is the standard word order."},
+  {zh:"三明治好吃吗？",py:"Sān míng zhì hǎo chī ma?",en:"Is the sandwich delicious?",lesson:"3.21",dir:"zh2en",note:"好吃 is a compound — 很 goes before it, never between 好 and 吃."},
+  {zh:"三明治很好吃。",py:"Sān míng zhì hěn hǎo chī.",en:"The sandwich is very delicious.",lesson:"3.21",dir:"zh2en",note:"很 is nearly always required before an adjective in descriptive sentences."},
+  {zh:"三明治不好吃。",py:"Sān míng zhì bù hǎo chī.",en:"The sandwich is not delicious.",lesson:"3.21",dir:"zh2en",note:"不 negates the adjective — no verb needed in this pattern."},
+  {zh:"三明治很辣。",py:"Sān míng zhì hěn là.",en:"The sandwich is very spicy.",lesson:"3.21",dir:"zh2en",note:"Subject + 很 + adjective — the core descriptive sentence."},
+  {zh:"你有问题吗？",py:"Nǐ yǒu wèn tí ma?",en:"Do you have any questions?",lesson:"3.21",dir:"zh2en",note:"有 means 'to have' — always negated with 没有, never 不有."},
+  {zh:"我没有问题。",py:"Wǒ méi yǒu wèn tí.",en:"I don't have any questions.",lesson:"3.21",dir:"zh2en",note:"没有 is the negative of 有 — a fixed pairing, always together."},
+  {zh:"你有鸡蛋吗？",py:"Nǐ yǒu jī dàn ma?",en:"Do you have eggs?",lesson:"3.21",dir:"zh2en",note:"鸡蛋 = chicken egg. Always use the full word, not just 蛋."},
+  {zh:"我有鸡蛋。",py:"Wǒ yǒu jī dàn.",en:"I have eggs.",lesson:"3.21",dir:"zh2en",note:""},
+  {zh:"你喜欢喝可乐吗？",py:"Nǐ xǐ huan hē kě lè ma?",en:"Do you like drinking coke?",lesson:"3.14",dir:"zh2en",note:"喜欢 is followed directly by the verb — 喜欢 喝 (like to drink)."},
+  {zh:"我喜欢喝咖啡。",py:"Wǒ xǐ huan hē kā fēi.",en:"I like drinking coffee.",lesson:"3.14",dir:"zh2en",note:""},
+  {zh:"早上好！",py:"Zǎo shang hǎo!",en:"Good morning!",lesson:"3.14",dir:"en2zh",note:"早上好 and 下午好 are fixed greetings — 好 goes at the end."},
+  {zh:"下午好！",py:"Xià wǔ hǎo!",en:"Good afternoon!",lesson:"3.14",dir:"en2zh",note:""},
+  {zh:"再见！",py:"Zài jiàn!",en:"Goodbye!",lesson:"3.07",dir:"en2zh",note:"再 = again, 见 = see. 'See you again' — just like au revoir."},
+  {zh:"我是英国人。",py:"Wǒ shì yīng guó rén.",en:"I am British.",lesson:"3.07",dir:"en2zh",note:"是 links subject to identity. 英国人 = British person (英国 + 人)."},
+  {zh:"你是中国人吗？",py:"Nǐ shì zhōng guó rén ma?",en:"Are you Chinese?",lesson:"3.07",dir:"en2zh",note:""},
+  {zh:"我喜欢吃米饭。",py:"Wǒ xǐ huan chī mǐ fàn.",en:"I like eating rice.",lesson:"3.14",dir:"en2zh",note:"喜欢 + verb + object — the verb comes right after 喜欢."},
+  {zh:"你们喜欢吃什么？",py:"Nǐ men xǐ huan chī shén me?",en:"What do you all like to eat?",lesson:"3.21",dir:"en2zh",note:"你们 is plural you. 什么 always stays at the end."},
+  {zh:"我们今天吃烤鸭。",py:"Wǒ men jīn tiān chī kǎo yā.",en:"We are eating roasted duck today.",lesson:"3.14",dir:"en2zh",note:""},
+  {zh:"咖啡好喝吗？",py:"Kā fēi hǎo hē ma?",en:"Is the coffee nice to drink?",lesson:"3.21",dir:"en2zh",note:"好喝 for drinks, 好吃 for food — both are fixed compounds."},
+  {zh:"咖啡很好喝。",py:"Kā fēi hěn hǎo hē.",en:"The coffee is very nice.",lesson:"3.21",dir:"en2zh",note:""},
+  {zh:"火锅很辣。",py:"Huǒ guō hěn là.",en:"Hotpot is very spicy.",lesson:"3.21",dir:"en2zh",note:""},
+  {zh:"我不喜欢吃沙拉。",py:"Wǒ bù xǐ huan chī shā lā.",en:"I don't like eating salad.",lesson:"3.14",dir:"en2zh",note:"不 negates 喜欢 — place it directly before the verb being negated."},
+  {zh:"你们有问题吗？",py:"Nǐ men yǒu wèn tí ma?",en:"Do you all have questions?",lesson:"3.21",dir:"en2zh",note:""},
+  {zh:"我今天吃燕麦粥和鸡蛋。",py:"Wǒ jīn tiān chī yàn mài zhōu hé jī dàn.",en:"I'm eating porridge and eggs today.",lesson:"3.21",dir:"en2zh",note:"和 joins two nouns — like 'and'. It goes between the items."},
+  {zh:"我没有咖啡。",py:"Wǒ méi yǒu kā fēi.",en:"I don't have any coffee.",lesson:"3.21",dir:"en2zh",note:"没有 negates 有 — never use 不有."},
+  {zh:"你今天喝什么？",py:"Nǐ jīn tiān hē shén me?",en:"What are you drinking today?",lesson:"3.21",dir:"en2zh",note:""},
+  {zh:"我喜欢喝可乐，不喜欢喝咖啡。",py:"Wǒ xǐ huan hē kě lè, bù xǐ huan hē kā fēi.",en:"I like drinking coke but not coffee.",lesson:"3.14",dir:"zh2en",note:"Two clauses joined by a comma — no extra joining word needed."},
+  {zh:"烤鸭好吃吗？",py:"Kǎo yā hǎo chī ma?",en:"Is the roasted duck delicious?",lesson:"3.21",dir:"zh2en",note:""},
+  {zh:"我今天不喝可乐。",py:"Wǒ jīn tiān bù hē kě lè.",en:"I'm not drinking coke today.",lesson:"3.14",dir:"zh2en",note:"不 negates the verb that directly follows it."},
+  // 3.28 sentences
+  {zh:"你今天想吃什么水果？",py:"Nǐ jīn tiān xiǎng chī shén me shuǐ guǒ?",en:"What fruit do you want to eat today?",lesson:"3.28",dir:"zh2en",note:"想 + verb = want to do something. 什么 stays at the end."},
+  {zh:"我想吃苹果和香蕉。",py:"Wǒ xiǎng chī píng guǒ hé xiāng jiāo.",en:"I want to eat apples and bananas.",lesson:"3.28",dir:"zh2en",note:"想 + 吃 + object. 和 joins the two fruits."},
+  {zh:"你明天想喝什么？",py:"Nǐ míng tiān xiǎng hē shén me?",en:"What do you want to drink tomorrow?",lesson:"3.28",dir:"zh2en",note:"明天 (tomorrow) sets the time; 想喝 = want to drink."},
+  {zh:"今天热吗？",py:"Jīn tiān rè ma?",en:"Is it hot today?",lesson:"3.28",dir:"zh2en",note:"Adjective + 吗 = yes/no question about a quality. No 很 needed in questions."},
+  {zh:"今天不热。",py:"Jīn tiān bù rè.",en:"It's not hot today.",lesson:"3.28",dir:"zh2en",note:"不 + adjective negates the quality directly."},
+  {zh:"我也喜欢吃中国菜。",py:"Wǒ yě xǐ huan chī zhōng guó cài.",en:"I also like eating Chinese food.",lesson:"3.28",dir:"zh2en",note:"也 comes right after the subject — 我也, never 也我."},
+  {zh:"你有很多水果吗？",py:"Nǐ yǒu hěn duō shuǐ guǒ ma?",en:"Do you have a lot of fruit?",lesson:"3.28",dir:"zh2en",note:"很多 goes before the noun it modifies — like 'many/a lot of'."},
+  {zh:"我有一些橙汁。",py:"Wǒ yǒu yī xiē chéng zhī.",en:"I have some orange juice.",lesson:"3.28",dir:"zh2en",note:"一些 = some/a few — softer and smaller than 很多."},
+];
+
+// ══════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════════════════
+function switchTab(tab){
+  document.getElementById('tabQuiz').classList.toggle('on', tab==='quiz');
+  document.getElementById('tabFC').classList.toggle('on', tab==='fc');
+  document.getElementById('quizSection').style.display = tab==='quiz'?'':'none';
+  document.getElementById('fcSection').style.display   = tab==='fc' ?'block':'none';
+  if(tab==='fc') fcInit();
+}
+
+// ══════════════════════════════════════════════════════════
+// QUIZ LOGIC (unchanged from original)
+// ══════════════════════════════════════════════════════════
+let mode='mcq-en2zh', lessonFilter='all', questions=[], current=0;
+let scoreC=0, scoreW=0, answered=false, sessionMissed=[];
+let weakMap={};
+try{weakMap=JSON.parse(localStorage.getItem('cn_weak_v2')||'{}');}catch(e){}
+
+const $=id=>document.getElementById(id);
+function shuffle(a){return[...a].sort(()=>Math.random()-0.5);}
+function show(id){$(id).style.display='block';}
+function showFlex(id){$(id).style.display='flex';}
+function hide(id){$(id).style.display='none';}
+function filtVocab(){return lessonFilter==='all'?VOCAB:VOCAB.filter(v=>v.lesson===lessonFilter);}
+function filtSent(){return lessonFilter==='all'?SENTENCES:SENTENCES.filter(s=>s.lesson===lessonFilter);}
+function getMisses(w){return(weakMap[w.zh]||{}).misses||0;}
+
+function saveWeak(){try{localStorage.setItem('cn_weak_v2',JSON.stringify(weakMap));}catch(e){}}
+function recordResult(word,correct){
+  if(!weakMap[word.zh])weakMap[word.zh]={misses:0,hits:0};
+  const w=weakMap[word.zh];
+  if(correct){w.hits++;if(w.hits>=2&&w.misses>0){w.misses=Math.max(0,w.misses-1);w.hits=0;}}
+  else{w.misses++;w.hits=0;if(!sessionMissed.find(v=>v.zh===word.zh))sessionMissed.push(word);}
+  saveWeak();updateWeakUI();
+}
+function weakVocab(){return VOCAB.filter(v=>getMisses(v)>=2).sort((a,b)=>getMisses(b)-getMisses(a));}
+function updateWeakUI(){
+  const wv=weakVocab();
+  const badge=$('weakBadge');
+  badge.style.display=wv.length>0?'inline-block':'none';
+  badge.textContent=wv.length;
+  const panel=$('weakPanel');
+  if(wv.length===0){panel.style.display='none';return;}
+  panel.style.display='block';
+  $('weakList').innerHTML=wv.map(w=>{
+    const n=getMisses(w),cls=n>=5?'cc3':n>=3?'cc2':'cc1';
+    return`<div class="wchip"><span class="wchip-zh">${w.zh}</span><span class="wchip-py">${w.py}</span><span class="cc ${cls}">×${n}</span></div>`;
+  }).join('');
+}
+function setLesson(l,btn){
+  lessonFilter=l;
+  document.querySelectorAll('#lessonRow .pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');startQuiz();
+}
+function setMode(m,btn){
+  mode=m;
+  document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');startQuiz();
+}
+function drillWeak(){
+  mode='weak';
+  document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));
+  $('weakBtn').classList.add('on');startQuiz();
+}
+function pickVMode(){
+  if(mode==='mixed'){const r=Math.random();return r<0.34?'mcq-en2zh':r<0.67?'mcq-zh2en':'type';}
+  if(mode==='weak')return Math.random()<0.5?'mcq-en2zh':'type';
+  return mode;
+}
+function startQuiz(){
+  let qs=[];
+  if(mode==='sentences'){
+    qs=shuffle(filtSent()).slice(0,10).map(s=>({type:'sent',data:s}));
+  } else if(mode==='mixed'){
+    const vp=shuffle(filtVocab()).slice(0,7).map(w=>({type:'vocab',data:w,qm:pickVMode()}));
+    const sp=shuffle(filtSent()).slice(0,3).map(s=>({type:'sent',data:s}));
+    qs=shuffle([...vp,...sp]);
+  } else if(mode==='weak'){
+    const wv=weakVocab().filter(v=>lessonFilter==='all'||v.lesson===lessonFilter);
+    const pool=wv.length>0?wv:filtVocab();
+    qs=shuffle(pool).slice(0,10).map(w=>({type:'vocab',data:w,qm:pickVMode()}));
+  } else {
+    qs=shuffle(filtVocab()).slice(0,10).map(w=>({type:'vocab',data:w,qm:mode}));
+  }
+  questions=qs; current=0; scoreC=0; scoreW=0; sessionMissed=[];
+  hide('scorescreen'); show('quizCard'); showQ();
+}
+function showQ(){
+  answered=false;
+  const q=questions[current];
+  $('progTxt').textContent=`${current+1} / ${questions.length}`;
+  $('sC').textContent=scoreC; $('sW').textContent=scoreW;
+  $('pb').style.width=`${(current/questions.length)*100}%`;
+  $('fb').textContent=''; $('fb').className='fb';
+  hide('nextbtn'); hide('srev'); hide('gnote');
+  hide('opts'); hide('typewrap');
+  hide('mnBtn'); hide('mnBox');
+  $('mnBtn').textContent='💡 Show memory hint';
+  $('flame').style.display='none'; $('flame').className='flame';
+  $('stag').style.display='none';
+  $('opts').style.gridTemplateColumns='';
+  if(q.type==='sent') showSentQ(q.data);
+  else showVocabQ(q.data,q.qm);
+}
+function showVocabQ(word,qm){
+  $('ltag').textContent=word.lesson;
+  const mc=getMisses(word);
+  if(mc>=2){
+    $('flame').style.display='block';
+    $('flame').className='flame'+(mc>=4?' pulse':'');
+    $('flame').title=`Missed ${mc} time${mc>1?'s':''}`;
+  }
+  const qmain=$('qmain'), qpy=$('qpy');
+  if(qm==='mcq-en2zh'){
+    $('qlabel').textContent='What is the Chinese for...';
+    qmain.textContent=word.en; qmain.className='qmain lat'; qpy.textContent='';
+    buildMCQ(word,qm);
+  } else if(qm==='mcq-zh2en'){
+    $('qlabel').textContent='What does this mean?';
+    qmain.textContent=word.zh; qmain.className='qmain'; qpy.textContent=word.py;
+    buildMCQ(word,qm);
+  } else {
+    $('qlabel').textContent='Type the Chinese for...';
+    qmain.textContent=word.en; qmain.className='qmain lat'; qpy.textContent='';
+    showTypeInput(false);
+  }
+  if(word.mn){$('mnTxt').textContent=word.mn;show('mnBtn');}
+}
+function showSentQ(sent){
+  $('stag').style.display='block';
+  $('ltag').textContent=sent.lesson;
+  const qmain=$('qmain'); $('qpy').textContent='';
+  if(sent.dir==='zh2en'){
+    $('qlabel').textContent='Translate into English';
+    qmain.textContent=sent.zh; qmain.className='qmain szh';
+    buildSentMCQ(sent);
+  } else {
+    $('qlabel').textContent='Translate into Chinese (pinyin or characters)';
+    qmain.textContent=sent.en; qmain.className='qmain sen';
+    showTypeInput(true);
+  }
+}
+function buildMCQ(word,qm){
+  const dis=shuffle(VOCAB.filter(v=>v.zh!==word.zh)).slice(0,3);
+  const all=shuffle([word,...dis]);
+  const grid=$('opts'); grid.innerHTML='';
+  grid.style.gridTemplateColumns='1fr 1fr';
+  grid.style.display='grid';
+  all.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    if(qm==='mcq-en2zh'){
+      btn.innerHTML=`<span style="font-family:'Noto Serif SC',serif">${o.zh}</span><span class="opt-py">${o.py}</span>`;
+    } else {
+      btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;";
+      btn.textContent=o.en;
+    }
+    btn.addEventListener('click',()=>checkMCQ(btn,o.zh===word.zh,word,qm));
+    grid.appendChild(btn);
+  });
+}
+function buildSentMCQ(sent){
+  const dis=shuffle(SENTENCES.filter(s=>s.zh!==sent.zh)).slice(0,3);
+  const all=shuffle([sent,...dis]);
+  const grid=$('opts'); grid.innerHTML='';
+  grid.style.gridTemplateColumns='1fr';
+  grid.style.display='grid';
+  all.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;line-height:1.4;text-align:left;";
+    btn.textContent=o.en;
+    btn.addEventListener('click',()=>checkSentMCQ(btn,o.zh===sent.zh,sent));
+    grid.appendChild(btn);
+  });
+}
+function checkMCQ(clicked,correct,word,qm){
+  if(answered)return; answered=true;
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.disabled=true;
+    const bz=btn.querySelector('span')?.textContent;
+    const be=btn.textContent.trim();
+    if(qm==='mcq-en2zh'?bz===word.zh:be===word.en) btn.classList.add('ok');
+  });
+  if(!correct)clicked.classList.add('no');
+  recordResult(word,correct);
+  if(!correct&&word.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
+  finishVocab(correct,word);
+}
+function checkSentMCQ(clicked,correct,sent){
+  if(answered)return; answered=true;
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.disabled=true;
+    if(btn.textContent.trim()===sent.en)btn.classList.add('ok');
+  });
+  if(!correct)clicked.classList.add('no');
+  finishSent(correct,sent);
+}
+function showTypeInput(isSent){
+  const wrap=$('typewrap'); wrap.style.display='flex';
+  const inp=$('typeinput');
+  inp.value=''; inp.className='typeinput'+(isSent?' sent':'');
+  inp.placeholder=isSent?'Type Chinese here (pinyin or 汉字)...':'pinyin or 汉字...';
+  inp.disabled=false; $('submbtn').disabled=false;
+  setTimeout(()=>inp.focus(),60);
+}
+function norm(s){
+  return s.trim().toLowerCase()
+    .replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e')
+    .replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o')
+    .replace(/[ūúǔùǖǘǚǜ]/g,'u')
+    .replace(/[，。？！,.\?!\s]/g,'');
+}
+function submitTyped(){
+  if(answered)return;
+  const q=questions[current];
+  const raw=$('typeinput').value.trim();
+  if(!raw)return;
+  answered=true; $('typeinput').disabled=true; $('submbtn').disabled=true;
+  if(q.type==='sent'){
+    const s=q.data, ok=norm(raw)===norm(s.zh)||norm(raw)===norm(s.py);
+    $('typeinput').className+=' '+(ok?'tok':'tno');
+    finishSent(ok,s);
+  } else {
+    const w=q.data, ok=raw===w.zh||norm(raw)===norm(w.py);
+    $('typeinput').className+=' '+(ok?'tok':'tno');
+    recordResult(w,ok);
+    if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
+    finishVocab(ok,w);
+  }
+}
+function finishVocab(ok,word){
+  if(ok){scoreC++;setFb(['✓ Correct!','✓ 对！','✓ Well done!','✓ Spot on!'][Math.floor(Math.random()*4)],'good');}
+  else{scoreW++;setFb('✗ Answer: ','bad',`${word.zh}  ${word.py}  —  ${word.en}`);}
+  show('nextbtn');
+}
+function finishSent(ok,sent){
+  if(ok){scoreC++;setFb('✓ Correct!','good');}
+  else{scoreW++;setFb('✗ Not quite — see the answer below.','bad');}
+  $('srevZh').textContent=sent.zh; $('srevPy').textContent=sent.py; $('srevEn').textContent=sent.en;
+  show('srev');
+  if(sent.note){$('gnote').textContent='💡 '+sent.note;show('gnote');}
+  show('nextbtn');
+}
+function setFb(msg,cls,bold){
+  const el=$('fb'); el.className='fb '+cls; el.textContent=msg;
+  if(bold){const s=document.createElement('span');s.className='fb-ans';s.textContent=bold;el.appendChild(s);}
+}
+function nextQuestion(){
+  current++;
+  if(current>=questions.length)showScore(); else showQ();
+}
+function showScore(){
+  hide('quizCard'); show('scorescreen');
+  $('pb').style.width='100%';
+  $('bigscore').textContent=`${scoreC} / ${questions.length}`;
+  const p=scoreC/questions.length;
+  $('scoremsg').textContent=p===1?'完美！Perfect score.':p>=0.8?'Really strong work.':p>=0.6?'Getting there — keep going.':"Keep at it — you've got this.";
+  $('drillBtn').style.display=weakVocab().length>0?'inline-block':'none';
+  const ms=$('msect');
+  if(!sessionMissed.length){ms.innerHTML='';return;}
+  ms.innerHTML=`<div class="mtitle">Vocab missed this session</div>`+
+    sessionMissed.map(w=>{
+      const mc=getMisses(w),col=mc>=4?'color:var(--red)':mc>=2?'color:var(--orange)':'color:var(--muted)';
+      return`<div class="mitem"><span class="mzh">${w.zh}</span><span><div class="mpy">${w.py}</div><div class="men">${w.en}</div></span><span class="mcnt" style="${col}">${mc>=2?'🔥 ×'+mc+' total':'×'+mc}</span></div>`;
+    }).join('');
+}
+$('mnBtn').addEventListener('click', function(){
+  const box=$('mnBox');
+  const showing=box.style.display==='block';
+  box.style.display=showing?'none':'block';
+  this.textContent=showing?'💡 Show memory hint':'💡 Hide memory hint';
+});
+$('nextbtn').addEventListener('click', nextQuestion);
+$('submbtn').addEventListener('click', submitTyped);
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('fcSection').style.display==='block') return; // hand off to FC
+  if(e.key!=='Enter')return;
+  if(!answered){if($('typewrap').style.display==='flex')submitTyped();}
+  else{if($('nextbtn').style.display!=='none')nextQuestion();}
+});
+
+// ══════════════════════════════════════════════════════════
+// FLASHCARD LOGIC
+// ══════════════════════════════════════════════════════════
+const JSONBIN_API = 'https://api.jsonbin.io/v3';
+const BIN_NAME = 'cn_fc_ratings';
+
+let fcKey = '';
+let fcBinId = '';
+let fcRatings = {}; // { zh: { again:n, hard:n, good:n, easy:n } }
+let fcDirMode = 'zh-front';
+let fcLesson = 'all';
+let fcDeck = [];
+let fcCurrent = 0;
+let fcFlipped = false;
+let fcSessionA = 0, fcSessionG = 0;
+let fcCardDir = 'zh-front';
+
+function fcFilterVocab(){
+  return fcLesson==='all' ? VOCAB : VOCAB.filter(v=>v.lesson===fcLesson);
+}
+
+// ── JSONBin helpers ─────────────────────────────────────
+function setSyncStatus(state, text){
+  const dot = $('syncDot'), txt = $('syncTxt');
+  dot.className = 'sync-dot' + (state==='ok'?' ok':state==='err'?' err':state==='spin'?' spin':'');
+  txt.textContent = text;
+}
+
+async function fcLoadFromCloud(){
+  if(!fcKey) return;
+  setSyncStatus('spin','Syncing…');
+  try {
+    // Find bin
+    const listRes = await fetch(`${JSONBIN_API}/b?collection=false`, {
+      headers:{'X-Master-Key':fcKey,'X-Bin-Meta':true}
+    });
+    if(!listRes.ok) throw new Error('Auth failed');
+    const listData = await listRes.json();
+    const bins = Array.isArray(listData) ? listData : [];
+    const existing = bins.find(b => b.record?.name === BIN_NAME || b.metadata?.name === BIN_NAME);
+
+    if(existing){
+      fcBinId = existing.metadata?.id || existing.id;
+      localStorage.setItem('cn_fc_binid', fcBinId);
+      const rec = await fetch(`${JSONBIN_API}/b/${fcBinId}/latest`, {
+        headers:{'X-Master-Key':fcKey}
+      });
+      if(!rec.ok) throw new Error('Read failed');
+      const recData = await rec.json();
+      fcRatings = recData.record || {};
+      setSyncStatus('ok','Synced · '+new Date().toLocaleTimeString());
+    } else {
+      // Create new bin
+      const createRes = await fetch(`${JSONBIN_API}/b`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-Master-Key':fcKey,'X-Bin-Name':BIN_NAME},
+        body: JSON.stringify({})
+      });
+      if(!createRes.ok) throw new Error('Create failed');
+      const created = await createRes.json();
+      fcBinId = created.metadata?.id;
+      localStorage.setItem('cn_fc_binid', fcBinId);
+      fcRatings = {};
+      setSyncStatus('ok','New bin created · ready');
+    }
+    $('syncNowBtn').style.display = 'inline-block';
+    fcSaveCacheLocal();
+  } catch(err){
+    setSyncStatus('err','Sync error — check your key');
+    console.error(err);
+  }
+}
+
+async function fcPushToCloud(){
+  if(!fcKey || !fcBinId) return;
+  setSyncStatus('spin','Saving…');
+  try {
+    await fetch(`${JSONBIN_API}/b/${fcBinId}`, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':fcKey},
+      body: JSON.stringify(fcRatings)
+    });
+    setSyncStatus('ok','Saved · '+new Date().toLocaleTimeString());
+  } catch(err){
+    setSyncStatus('err','Save failed');
+  }
+}
+
+function fcSyncNow(){ fcLoadFromCloud(); }
+
+function fcSaveCacheLocal(){
+  try{ localStorage.setItem('cn_fc_ratings_v1', JSON.stringify(fcRatings)); }catch(e){}
+}
+
+function fcLoadCacheLocal(){
+  try{ return JSON.parse(localStorage.getItem('cn_fc_ratings_v1')||'{}'); }catch(e){ return {}; }
+}
+
+// ── Key modal ────────────────────────────────────────────
+function openModal(){
+  $('keyInput').value = fcKey || '';
+  $('modalOverlay').style.display = 'flex';
+  setTimeout(()=>$('keyInput').focus(), 100);
+}
+function closeModal(){
+  $('modalOverlay').style.display = 'none';
+}
+function saveKey(){
+  const k = $('keyInput').value.trim();
+  if(!k){ alert('Please paste your JSONBin Secret Key.'); return; }
+  fcKey = k;
+  localStorage.setItem('cn_fc_key', fcKey);
+  // Also try to restore saved binId
+  fcBinId = localStorage.getItem('cn_fc_binid') || '';
+  closeModal();
+  fcLoadFromCloud();
+}
+
+// ── Card logic ───────────────────────────────────────────
+function fcGetScore(zh){
+  const r = fcRatings[zh];
+  if(!r) return 0;
+  return (r.good||0) + (r.easy||0)*2 - (r.again||0)*2 - (r.hard||0);
+}
+
+function fcBuildDeck(weakOnly){
+  let pool = fcFilterVocab();
+  if(weakOnly){
+    pool = pool.filter(v => fcGetScore(v.zh) <= 0);
+    if(!pool.length){ alert('No weak cards — all your ratings are positive!'); return false; }
+  }
+  fcDeck = shuffle(pool);
+  fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
+  $('fcDone').style.display = 'none';
+  $('fcScene').style.display = 'block';
+  $('ratingRow').style.display = 'flex';
+  fcShowCard();
+  return true;
+}
+
+function fcShowCard(){
+  fcFlipped = false;
+  $('fcWrap').classList.remove('flipped');
+  $('ratingRow').classList.remove('vis');
+
+  const card = fcDeck[fcCurrent];
+  const total = fcDeck.length;
+  $('fcProgTxt').textContent = `Card ${fcCurrent+1} of ${total}`;
+  $('fcPb').style.width = `${(fcCurrent/total)*100}%`;
+  $('fcCntA').textContent = fcSessionA;
+  $('fcCntG').textContent = fcSessionG;
+
+  // Direction
+  if(fcDirMode==='mixed') fcCardDir = Math.random()<0.5 ? 'zh-front' : 'en-front';
+  else fcCardDir = fcDirMode;
+
+  $('fcFrontLesson').textContent = card.lesson;
+  $('fcBackLesson').textContent  = card.lesson;
+  $('fcDirTag').textContent = fcCardDir==='zh-front' ? 'ZH → EN' : 'EN → ZH';
+
+  if(fcCardDir==='zh-front'){
+    $('fcFrontZh').textContent = card.zh;
+    $('fcFrontZh').style.display = 'block';
+    $('fcFrontZh').className = 'fc-zh' + (card.zh.length > 3 ? ' sm' : '');
+    $('fcFrontPy').textContent = card.py;
+    $('fcFrontPy').style.display = 'block';
+    $('fcFrontEn').style.display = 'none';
+    $('fcBackEn').textContent = card.en;
+    $('fcBackEn').style.display = 'block';
+    $('fcBackZh').style.display = 'none';
+    $('fcBackPy').style.display = 'none';
+  } else {
+    $('fcFrontZh').style.display = 'none';
+    $('fcFrontPy').style.display = 'none';
+    $('fcFrontEn').textContent = card.en;
+    $('fcFrontEn').style.display = 'block';
+    $('fcBackEn').style.display = 'none';
+    $('fcBackZh').textContent = card.zh;
+    $('fcBackZh').style.display = 'block';
+    $('fcBackPy').textContent = card.py;
+    $('fcBackPy').style.display = 'block';
+  }
+
+  if(card.mn){
+    $('fcMnTxt').textContent = card.mn;
+    $('fcMn').style.display = 'block';
+  } else {
+    $('fcMn').style.display = 'none';
+  }
+}
+
+function fcFlip(){
+  if(fcFlipped) return;
+  fcFlipped = true;
+  $('fcWrap').classList.add('flipped');
+  setTimeout(()=>{ $('ratingRow').classList.add('vis'); }, 220);
+}
+
+function fcRate(rating){
+  if(!fcFlipped) return;
+  const card = fcDeck[fcCurrent];
+  if(!fcRatings[card.zh]) fcRatings[card.zh] = {};
+  fcRatings[card.zh][rating] = (fcRatings[card.zh][rating]||0) + 1;
+
+  if(rating==='again'||rating==='hard') fcSessionA++;
+  else fcSessionG++;
+
+  fcSaveCacheLocal();
+  // Debounced cloud push
+  clearTimeout(fcRate._timer);
+  fcRate._timer = setTimeout(fcPushToCloud, 2000);
+
+  fcCurrent++;
+  if(fcCurrent >= fcDeck.length) fcShowDone();
+  else fcShowCard();
+}
+
+function fcShowDone(){
+  $('fcScene').style.display = 'none';
+  $('ratingRow').style.display = 'none';
+  $('fcDone').style.display = 'block';
+  $('fcPb').style.width = '100%';
+
+  const total = fcDeck.length;
+  $('fcDoneBig').textContent = `${fcSessionG} / ${total}`;
+  const pct = fcSessionG/total;
+  $('fcDoneMsg').textContent =
+    pct===1    ? '完美！Every card nailed.' :
+    pct>=0.8   ? 'Strong session — great work.' :
+    pct>=0.6   ? 'Getting there — keep going.' :
+                 'Drill the hard ones — you\'ve got this.';
+
+  // Tally from this session's fcDeck ratings
+  let a=0,h=0,g=0,e=0;
+  fcDeck.forEach(card=>{
+    // We track session ratings via fcSessionA/G but for breakdown read last-applied
+    // Simple: session added 1 to one bucket per card — we just show totals
+  });
+  // Re-tally from session log
+  $('fdAgain').textContent = fcSessionA;
+  $('fdHard').textContent  = 0; // hard counted in sessionA for simplicity display
+  $('fdGood').textContent  = fcSessionG;
+  $('fdEasy').textContent  = 0;
+}
+
+function fcRestart(){
+  $('fcScene').style.display = 'block';
+  $('ratingRow').style.display = 'flex';
+  fcBuildDeck(false);
+}
+function fcDrillWeak(){
+  $('fcScene').style.display = 'block';
+  $('ratingRow').style.display = 'flex';
+  fcBuildDeck(true);
+}
+
+// ── Keyboard for flashcards ──────────────────────────────
+document.addEventListener('keydown', e => {
+  if($('fcSection').style.display !== 'block') return;
+  if($('modalOverlay').style.display === 'flex') return;
+  if(e.key===' '){ e.preventDefault(); fcFlip(); }
+  if(e.key==='1') fcRate('again');
+  if(e.key==='2') fcRate('hard');
+  if(e.key==='3') fcRate('good');
+  if(e.key==='4') fcRate('easy');
+});
+
+// ── FC scene click ───────────────────────────────────────
+$('fcScene').addEventListener('click', fcFlip);
+$('rbAgain').addEventListener('click', e=>{ e.stopPropagation(); fcRate('again'); });
+$('rbHard').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('hard'); });
+$('rbGood').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('good'); });
+$('rbEasy').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('easy'); });
+
+// ── FC lesson pills ──────────────────────────────────────
+document.querySelectorAll('#fcLessonRow .pill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#fcLessonRow .pill').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    fcLesson = btn.dataset.lesson;
+    fcBuildDeck(false);
+  });
+});
+
+// ── FC direction pills ───────────────────────────────────
+document.querySelectorAll('.fc-dir-pill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.fc-dir-pill').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    fcDirMode = btn.dataset.dir;
+    fcBuildDeck(false);
+  });
+});
+
+// ── FC init ──────────────────────────────────────────────
+function fcInit(){
+  // Load key + bin from localStorage
+  fcKey   = localStorage.getItem('cn_fc_key')   || '';
+  fcBinId = localStorage.getItem('cn_fc_binid') || '';
+  // Load cached ratings first (instant)
+  fcRatings = fcLoadCacheLocal();
+
+  if(fcKey){
+    $('syncNowBtn').style.display = 'inline-block';
+    setSyncStatus('spin', 'Connecting…');
+    fcLoadFromCloud();
+  } else {
+    setSyncStatus('', 'Not connected — add your JSONBin key to sync across devices');
+  }
+  fcBuildDeck(false);
+}
+
+// ── INIT ─────────────────────────────────────────────────
+updateWeakUI();
+startQuiz();
+</script>
+</body>
+</html>

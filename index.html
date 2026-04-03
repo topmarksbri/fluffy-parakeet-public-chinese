@@ -229,7 +229,8 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-done h2{font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--purple);margin-bottom:6px;}
 .fc-done-big{font-family:'Crimson Pro',serif;font-size:3.4rem;color:var(--ink);margin:6px 0;}
 .fc-done-msg{font-style:italic;color:var(--muted);font-size:1rem;margin-bottom:20px;}
-.fc-breakdown{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
+.fc-breakdown{display:flex;gap:14px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+.fc-done-next{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--blue);background:var(--blue-dim);padding:7px 14px;border-radius:4px;margin-bottom:18px;display:none;}
 .fbd{text-align:center;}
 .fbd-n{font-family:'Crimson Pro',serif;font-size:1.9rem;line-height:1;}
 .fbd-l{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:1px;color:var(--muted);margin-top:2px;}
@@ -239,6 +240,13 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-dbtn.p:hover{background:var(--red);border-color:var(--red);}
 .fc-dbtn.s{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
 .fc-dbtn.s:hover{background:var(--orange);color:white;}
+
+/* FC queue status */
+.fc-queue-status{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+.fc-qs{font-family:'DM Mono',monospace;font-size:0.62rem;padding:4px 11px;border-radius:20px;background:var(--soft);border:1px solid var(--border);color:var(--muted);}
+.fc-qs.due{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+.fc-qs.new{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.fc-qs.sched{background:var(--green-dim);border-color:var(--green);color:var(--green);}
 </style>
 </head>
 <body>
@@ -388,6 +396,16 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="fc-dir-pill" data-dir="mixed">Mixed</button>
   </div>
 
+  <!-- Queue mode -->
+  <div class="slabel" style="margin-top:4px">Queue</div>
+  <div class="prow" id="fcQueueRow">
+    <button class="pill on" data-queue="due" onclick="fcSetQueue('due',this)">Due now</button>
+    <button class="pill" data-queue="all" onclick="fcSetQueue('all',this)">All cards</button>
+  </div>
+
+  <!-- Queue status -->
+  <div class="fc-queue-status" id="fcQueueStatus"></div>
+
   <!-- Progress -->
   <div class="fc-prog-row">
     <div class="fc-prog-txt" id="fcProgTxt">Card 1 of —</div>
@@ -445,9 +463,19 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
       <div class="fbd"><div class="fbd-n" id="fdGood"  style="color:var(--green)">0</div><div class="fbd-l">Good</div></div>
       <div class="fbd"><div class="fbd-n" id="fdEasy"  style="color:var(--gold)">0</div><div class="fbd-l">Easy</div></div>
     </div>
+    <div class="fc-done-next" id="fcDoneNext"></div>
     <div class="fc-done-acts">
       <button class="fc-dbtn p" onclick="fcRestart()">Review again</button>
-      <button class="fc-dbtn s" onclick="fcDrillWeak()">Drill weak cards</button>
+      <button class="fc-dbtn s" onclick="fcDrillWeak()">🔥 Drill weak cards</button>
+    </div>
+  </div>
+
+  <!-- All-clear screen (nothing due) -->
+  <div class="fc-done" id="fcAllClear" style="display:none">
+    <h2 style="color:var(--green)">All caught up! 🎉</h2>
+    <div class="fc-done-msg" id="fcAllClearMsg"></div>
+    <div class="fc-done-acts">
+      <button class="fc-dbtn p" onclick="fcSetQueue('all', document.querySelector('[data-queue=all]'))">Review all cards anyway</button>
     </div>
   </div>
 
@@ -1123,6 +1151,87 @@ function fcDueCount(pool){
   return pool.filter(v=>{ const d=srsGet(v.zh); return d.due<=t; }).length;
 }
 
+// ── Queue mode ───────────────────────────────────────────
+let fcQueueMode = 'due'; // 'due' | 'all'
+
+function fcSetQueue(mode, btn){
+  fcQueueMode = mode;
+  document.querySelectorAll('[data-queue]').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  fcStartSession();
+}
+
+function fcGetQueueCounts(){
+  const pool = fcFilterVocab();
+  const t = today();
+  const due  = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
+  const newC = pool.filter(v=>srsGet(v.zh).reps===0);
+  const sched= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
+  return { due, newC, sched };
+}
+
+function fcUpdateQueueStatus(){
+  const { due, newC, sched } = fcGetQueueCounts();
+  const parts = [];
+  if(due.length)  parts.push(`<span class="fc-qs due">${due.length} due</span>`);
+  if(newC.length) parts.push(`<span class="fc-qs new">${newC.length} new</span>`);
+  if(sched.length)parts.push(`<span class="fc-qs sched">${sched.length} scheduled</span>`);
+  $('fcQueueStatus').innerHTML = parts.length ? parts.join('') : '<span class="fc-qs">No cards yet</span>';
+}
+
+function fcNextDueText(){
+  // Find the soonest upcoming card
+  const pool = fcFilterVocab();
+  const t = today();
+  const future = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
+  if(!future.length) return null;
+  future.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
+  const daysUntil = srsGet(future[0].zh).due - t;
+  return daysUntil===1 ? 'Next cards due tomorrow' : `Next cards due in ${daysUntil} days`;
+}
+
+function fcStartSession(){
+  fcUpdateQueueStatus();
+  const { due, newC, sched } = fcGetQueueCounts();
+
+  // In 'due' mode, only show due + new cards
+  // In 'all' mode, show everything
+  let pool;
+  if(fcQueueMode === 'due'){
+    pool = [...due, ...newC];
+    if(!pool.length){
+      // Nothing due — show all-clear screen
+      $('fcScene').style.display = 'none';
+      $('ratingRow').style.display = 'none';
+      $('fcDone').style.display = 'none';
+      $('fcAllClear').style.display = 'block';
+      const nextTxt = fcNextDueText();
+      $('fcAllClearMsg').textContent = nextTxt
+        ? `You\'re all caught up for now. ${nextTxt}.`
+        : `Rate some cards first and they\'ll be scheduled for review.`;
+      return;
+    }
+  } else {
+    // All mode: due first, then new, then future
+    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
+    pool = [...shuffle(due), ...shuffle(newC), ...shuffle(sched)];
+  }
+
+  // Shuffle within each group but keep due → new order
+  if(fcQueueMode==='due'){
+    pool = [...shuffle(due), ...shuffle(newC)];
+  }
+
+  fcDeck = pool;
+  fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
+  fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
+  $('fcDone').style.display = 'none';
+  $('fcAllClear').style.display = 'none';
+  $('fcScene').style.display = 'block';
+  $('ratingRow').style.display = 'flex';
+  fcShowCard();
+}
+
 // ── Card logic ───────────────────────────────────────────
 function fcGetScore(zh){
   const r = fcRatings[zh];
@@ -1131,28 +1240,20 @@ function fcGetScore(zh){
 }
 
 function fcBuildDeck(weakOnly){
-  let pool = fcFilterVocab();
-  const t = today();
   if(weakOnly){
-    // Weak = again/hard heavy cards: use old rating score for compatibility
-    pool = pool.filter(v => fcGetScore(v.zh) <= 0);
+    const pool = fcFilterVocab().filter(v => fcGetScore(v.zh) <= 0);
     if(!pool.length){ alert('No weak cards — all ratings are positive!'); return false; }
     fcDeck = shuffle(pool);
-  } else {
-    // Sort: due first (overdue → today), then new cards (no SRS data), then future
-    const due   = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
-    const newC  = pool.filter(v=>srsGet(v.zh).reps===0);
-    const future= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
-    // Sort due by most overdue first
-    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
-    fcDeck = [...shuffle(due), ...shuffle(newC), ...shuffle(future)];
+    fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
+    fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
+    $('fcDone').style.display = 'none';
+    $('fcAllClear').style.display = 'none';
+    $('fcScene').style.display = 'block';
+    $('ratingRow').style.display = 'flex';
+    fcShowCard();
+    return true;
   }
-  fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
-  fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
-  $('fcDone').style.display = 'none';
-  $('fcScene').style.display = 'block';
-  $('ratingRow').style.display = 'flex';
-  fcShowCard();
+  fcStartSession();
   return true;
 }
 
@@ -1254,37 +1355,41 @@ function fcRate(rating){
   if(rating==='again'||rating==='hard') fcSessionA++;
   else fcSessionG++;
 
+  // If 'Again' — reinsert card ~3 positions ahead so it comes back soon this session
+  if(rating==='again'){
+    const reinsertAt = Math.min(fcCurrent + 3, fcDeck.length);
+    fcDeck.splice(reinsertAt, 0, card);
+  }
+
   saveCacheLocal();
   schedulePush();
+  fcUpdateQueueStatus();
 
   // FIX for peek bug:
-  // Start flipping back immediately. Mark animating=true.
-  // Only populate the next card's DOM content AFTER the flip animation completes.
   fcCurrent++;
   if(fcCurrent >= fcDeck.length){
-    // No next card — just show done after animation
     setTimeout(fcShowDone, 520);
     return;
   }
 
-  // Flip back: remove flipped class (animates back to front)
+  // Flip back — populate DOM only after animation completes
   fcFlipped = false;
   $('fcWrap').classList.remove('flipped');
   $('ratingRow').classList.remove('vis');
   fcAnimating = true;
 
-  // After the 500ms CSS transition, populate and reset
   setTimeout(()=>{
     fcAnimating = false;
     _fcPopulateCard();
     if(fcPendingCard){ fcPendingCard=false; _fcPopulateCard(); }
-  }, 520); // slightly over the 500ms transition
+  }, 520);
 }
 
 function fcShowDone(){
   $('fcScene').style.display = 'none';
   $('ratingRow').style.display = 'none';
   $('fcDone').style.display = 'block';
+  $('fcAllClear').style.display = 'none';
   $('fcPb').style.width = '100%';
 
   const total = fcDeck.length;
@@ -1300,12 +1405,23 @@ function fcShowDone(){
   $('fdHard').textContent  = fcSessionBreakdown.hard;
   $('fdGood').textContent  = fcSessionBreakdown.good;
   $('fdEasy').textContent  = fcSessionBreakdown.easy;
+
+  // Show when next cards are due
+  const nextTxt = fcNextDueText();
+  if(nextTxt){
+    $('fcDoneNext').textContent = '📅 ' + nextTxt;
+    $('fcDoneNext').style.display = 'block';
+  } else {
+    $('fcDoneNext').style.display = 'none';
+  }
+
+  fcUpdateQueueStatus();
 }
 
 function fcRestart(){
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
-  fcBuildDeck(false);
+  fcStartSession();
 }
 function fcDrillWeak(){
   $('fcScene').style.display = 'block';
@@ -1337,7 +1453,7 @@ document.querySelectorAll('#fcLessonRow .pill').forEach(btn=>{
     document.querySelectorAll('#fcLessonRow .pill').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
     fcLesson = btn.dataset.lesson;
-    fcBuildDeck(false);
+    fcStartSession();
   });
 });
 
@@ -1347,7 +1463,7 @@ document.querySelectorAll('.fc-dir-pill').forEach(btn=>{
     document.querySelectorAll('.fc-dir-pill').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
     fcDirMode = btn.dataset.dir;
-    fcBuildDeck(false);
+    fcStartSession();
   });
 });
 
@@ -1356,7 +1472,7 @@ function fcInit(){
   fcKey   = localStorage.getItem('cn_fc_key')   || '';
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
   fcRatings = fcLoadCacheLocal();
-  // Also freshen weakMap from localStorage in case it diverged
+  try{ fcSRS = JSON.parse(localStorage.getItem('cn_srs_v1')||'{}'); }catch(e){}
   try{ weakMap = JSON.parse(localStorage.getItem('cn_weak_v2')||'{}'); }catch(e){}
 
   if(fcKey){
@@ -1365,7 +1481,7 @@ function fcInit(){
   } else {
     setSyncStatus('','Not connected — add your JSONBin key to sync across devices');
   }
-  fcBuildDeck(false);
+  fcStartSession();
 }
 
 // ── INIT ─────────────────────────────────────────────────

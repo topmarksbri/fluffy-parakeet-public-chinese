@@ -45,6 +45,12 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .pill.sent.on{background:var(--blue);color:white;border-color:var(--blue);}
 .wbadge{position:absolute;top:-7px;right:-7px;background:var(--orange);color:white;font-size:0.52rem;font-family:'DM Mono',monospace;border-radius:10px;padding:1px 5px;min-width:18px;text-align:center;line-height:1.4;display:none;}
 
+/* ── TYPE DIRECTION TOGGLE ── */
+#typeDirRow{display:none;width:100%;max-width:500px;margin-bottom:4px;}
+.type-dir-pill{padding:4px 11px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.64rem;cursor:pointer;border-radius:20px;transition:all 0.16s;}
+.type-dir-pill:hover{border-color:var(--blue);color:var(--blue);}
+.type-dir-pill.on{background:var(--blue);color:white;border-color:var(--blue);}
+
 /* ── WEAK PANEL ── */
 .wpanel{width:100%;max-width:500px;background:white;border:1.5px solid var(--orange);border-radius:4px;padding:14px 18px;margin-bottom:14px;display:none;}
 .wpanel-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
@@ -273,6 +279,16 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill fire" id="weakBtn" onclick="setMode('weak',this)">🔥 Weak words <span class="wbadge" id="weakBadge"></span></button>
 </div>
 
+<!-- Type direction toggle: only visible in 'type' mode -->
+<div id="typeDirRow">
+  <div class="slabel" style="margin-top:4px">Answer in</div>
+  <div class="prow">
+    <button class="type-dir-pill on" data-tdir="pinyin" onclick="setTypeDir('pinyin',this)">Pinyin</button>
+    <button class="type-dir-pill" data-tdir="chars" onclick="setTypeDir('chars',this)">Characters 汉字</button>
+    <button class="type-dir-pill" data-tdir="english" onclick="setTypeDir('english',this)">English (ZH→EN)</button>
+  </div>
+</div>
+
 <div class="wpanel" id="weakPanel">
   <div class="wpanel-title">🔥 Words you keep getting wrong</div>
   <div class="wlist" id="weakList"></div>
@@ -307,7 +323,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 
   <div class="typewrap" id="typewrap">
     <input class="typeinput" id="typeinput" placeholder="pinyin or 汉字..." autocomplete="off" spellcheck="false"/>
-    <div class="typehint">Pinyin (tones optional) or Chinese characters — both accepted</div>
+    <div class="typehint" id="typehint">Pinyin (tones optional) or Chinese characters — both accepted</div>
     <button class="submbtn" id="submbtn">Check →</button>
   </div>
 
@@ -581,6 +597,7 @@ function switchTab(tab){
 // ══════════════════════════════════════════════════════════
 let mode='mcq-en2zh', lessonFilter='all', questions=[], current=0;
 let scoreC=0, scoreW=0, answered=false, sessionMissed=[];
+let typeDir='pinyin'; // 'pinyin' | 'chars' | 'english'
 let weakMap={};
 try{weakMap=JSON.parse(localStorage.getItem('cn_weak_v2')||'{}');}catch(e){}
 
@@ -623,7 +640,15 @@ function setLesson(l,btn){
 function setMode(m,btn){
   mode=m;
   document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');startQuiz();
+  btn.classList.add('on');
+  $('typeDirRow').style.display = (m==='type') ? 'block' : 'none';
+  startQuiz();
+}
+function setTypeDir(d,btn){
+  typeDir=d;
+  document.querySelectorAll('[data-tdir]').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  startQuiz();
 }
 function drillWeak(){
   mode='weak';
@@ -688,8 +713,25 @@ function showVocabQ(word,qm){
     qmain.textContent=word.zh; qmain.className='qmain'; qpy.textContent=word.py;
     buildMCQ(word,qm);
   } else {
-    $('qlabel').textContent='Type the Chinese for...';
-    qmain.textContent=word.en; qmain.className='qmain lat'; qpy.textContent='';
+    // 'type' mode — direction depends on typeDir
+    if(typeDir==='english'){
+      // Show Chinese, answer in English
+      $('qlabel').textContent='What does this mean in English?';
+      qmain.textContent=word.zh; qmain.className='qmain'; qpy.textContent=word.py;
+      $('typeinput').placeholder='English meaning...';
+      $('typehint').textContent='Type the English meaning';
+    } else if(typeDir==='chars'){
+      $('qlabel').textContent='Type the Chinese characters for...';
+      qmain.textContent=word.en; qmain.className='qmain lat'; qpy.textContent='';
+      $('typeinput').placeholder='汉字...';
+      $('typehint').textContent='Chinese characters only (no pinyin)';
+    } else {
+      // pinyin (default)
+      $('qlabel').textContent='Type the pinyin for...';
+      qmain.textContent=word.en; qmain.className='qmain lat'; qpy.textContent='';
+      $('typeinput').placeholder='pinyin...';
+      $('typehint').textContent='Pinyin (tones optional)';
+    }
     showTypeInput(false);
   }
   if(word.mn){$('mnTxt').textContent=word.mn;show('mnBtn');}
@@ -790,7 +832,18 @@ function submitTyped(){
     $('typeinput').className+=' '+(ok?'tok':'tno');
     finishSent(ok,s);
   } else {
-    const w=q.data, ok=raw===w.zh||norm(raw)===norm(w.py);
+    const w=q.data;
+    let ok;
+    if(typeDir==='english'){
+      // Accept if it matches any of the slash-separated English meanings
+      const targets=w.en.toLowerCase().split('/').map(s=>s.trim());
+      ok=targets.some(t=>norm(raw)===norm(t));
+    } else if(typeDir==='chars'){
+      ok=raw===w.zh;
+    } else {
+      // pinyin (default) or mixed fallback
+      ok=raw===w.zh||norm(raw)===norm(w.py);
+    }
     $('typeinput').className+=' '+(ok?'tok':'tno');
     recordResult(w,ok);
     if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
@@ -857,6 +910,8 @@ const BIN_NAME = 'cn_fc_ratings';
 let fcKey = '';
 let fcBinId = '';
 let fcRatings = {}; // { zh: { again:n, hard:n, good:n, easy:n } }
+let fcSRS = {}; // SM-2 data: { zh: { interval, ease, due, reps } }
+try{ fcSRS = JSON.parse(localStorage.getItem('cn_srs_v1')||'{}'); }catch(e){}
 let fcDirMode = 'zh-front';
 let fcLesson = 'all';
 let fcDeck = [];
@@ -882,11 +937,12 @@ function setSyncStatus(state, text){
 
 function cloudPayload(){
   // Everything we want to sync in one object
-  return { fcRatings, weakMap };
+  return { fcRatings, weakMap, fcSRS };
 }
 
 function applyCloudPayload(data){
   if(data.fcRatings) fcRatings = data.fcRatings;
+  if(data.fcSRS){ fcSRS = data.fcSRS; try{localStorage.setItem('cn_srs_v1',JSON.stringify(fcSRS));}catch(e){} }
   if(data.weakMap){
     weakMap = data.weakMap;
     saveWeak();       // persist to localStorage
@@ -967,6 +1023,7 @@ function saveCacheLocal(){
   try{
     localStorage.setItem('cn_fc_ratings_v1', JSON.stringify(fcRatings));
     localStorage.setItem('cn_weak_v2', JSON.stringify(weakMap));
+    localStorage.setItem('cn_srs_v1', JSON.stringify(fcSRS));
   }catch(e){}
 }
 
@@ -993,6 +1050,79 @@ function saveKey(){
   fcLoadFromCloud();
 }
 
+// ── SM-2 Spaced Repetition ───────────────────────────────
+// fcSRS stores per-card: { interval, ease, due }
+// interval: days until next review (starts at 0 = new)
+// ease: multiplier, starts at 2.5
+// due: day number (Math.floor(Date.now()/86400000))
+
+const DAY = 86400000;
+function today(){ return Math.floor(Date.now()/DAY); }
+
+function srsGet(zh){
+  const d = fcSRS[zh];
+  if(!d) return { interval:0, ease:2.5, due:0, reps:0 };
+  return d;
+}
+
+function srsSave(zh, data){
+  fcSRS[zh] = data;
+  try{ localStorage.setItem('cn_srs_v1', JSON.stringify(fcSRS)); }catch(e){}
+}
+
+const MAX_INTERVAL = 3; // cap — revisit once vocab grows
+
+function srsApply(zh, rating){
+  const d = srsGet(zh);
+  let { interval, ease, reps } = d;
+  // SM-2 logic (capped at MAX_INTERVAL days)
+  if(rating==='again'){
+    reps=0; interval=0; // reset — show again today
+  } else if(rating==='hard'){
+    reps=Math.max(0,reps-1);
+    interval = Math.min(MAX_INTERVAL, Math.max(1, Math.round(interval * 1.2)));
+    ease = Math.max(1.3, ease - 0.15);
+  } else if(rating==='good'){
+    if(reps===0) interval=1;
+    else if(reps===1) interval=2;
+    else interval = Math.min(MAX_INTERVAL, Math.round(interval * ease));
+    reps++;
+  } else { // easy
+    if(reps===0) interval=2;
+    else interval = Math.min(MAX_INTERVAL, Math.round(interval * ease * 1.3));
+    ease = Math.min(3.0, ease + 0.1);
+    reps++;
+  }
+  const due = today() + interval;
+  srsSave(zh, { interval, ease, due, reps });
+}
+
+function srsNextInterval(zh, rating){
+  // Preview what interval would be (for button labels)
+  const d = srsGet(zh);
+  let { interval, ease, reps } = d;
+  if(rating==='again') return 'today';
+  if(rating==='hard'){
+    interval = Math.min(MAX_INTERVAL, Math.max(1, Math.round(interval * 1.2)));
+    return interval+'d';
+  }
+  if(rating==='good'){
+    if(reps===0) interval=1;
+    else if(reps===1) interval=2;
+    else interval = Math.min(MAX_INTERVAL, Math.round(interval * ease));
+    return interval+'d';
+  }
+  // easy
+  if(reps===0) interval=2;
+  else interval = Math.min(MAX_INTERVAL, Math.round(interval * ease * 1.3));
+  return interval+'d';
+}
+
+function fcDueCount(pool){
+  const t=today();
+  return pool.filter(v=>{ const d=srsGet(v.zh); return d.due<=t; }).length;
+}
+
 // ── Card logic ───────────────────────────────────────────
 function fcGetScore(zh){
   const r = fcRatings[zh];
@@ -1002,12 +1132,23 @@ function fcGetScore(zh){
 
 function fcBuildDeck(weakOnly){
   let pool = fcFilterVocab();
+  const t = today();
   if(weakOnly){
+    // Weak = again/hard heavy cards: use old rating score for compatibility
     pool = pool.filter(v => fcGetScore(v.zh) <= 0);
-    if(!pool.length){ alert('No weak cards — all your ratings are positive!'); return false; }
+    if(!pool.length){ alert('No weak cards — all ratings are positive!'); return false; }
+    fcDeck = shuffle(pool);
+  } else {
+    // Sort: due first (overdue → today), then new cards (no SRS data), then future
+    const due   = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
+    const newC  = pool.filter(v=>srsGet(v.zh).reps===0);
+    const future= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
+    // Sort due by most overdue first
+    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
+    fcDeck = [...shuffle(due), ...shuffle(newC), ...shuffle(future)];
   }
-  fcDeck = shuffle(pool);
   fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
+  fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
   $('fcDone').style.display = 'none';
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
@@ -1015,7 +1156,25 @@ function fcBuildDeck(weakOnly){
   return true;
 }
 
+// Per-session breakdown (for done screen)
+let fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
+
 function fcShowCard(){
+  // FIX: don't animate or populate immediately — if we're mid-flip (flipping back),
+  // wait until the CSS transition finishes before populating content.
+  // We track this with fcAnimating.
+  if(fcAnimating){
+    fcPendingCard = true;
+    return;
+  }
+  fcPendingCard = false;
+  _fcPopulateCard();
+}
+
+let fcAnimating = false;
+let fcPendingCard = false;
+
+function _fcPopulateCard(){
   fcFlipped = false;
   $('fcWrap').classList.remove('flipped');
   $('ratingRow').classList.remove('vis');
@@ -1034,6 +1193,12 @@ function fcShowCard(){
   $('fcFrontLesson').textContent = card.lesson;
   $('fcBackLesson').textContent  = card.lesson;
   $('fcDirTag').textContent = fcCardDir==='zh-front' ? 'ZH → EN' : 'EN → ZH';
+
+  // Update SRS preview labels on rating buttons
+  $('rbAgain').querySelector('.rs').textContent = srsNextInterval(card.zh,'again');
+  $('rbHard').querySelector('.rs').textContent  = srsNextInterval(card.zh,'hard');
+  $('rbGood').querySelector('.rs').textContent  = srsNextInterval(card.zh,'good');
+  $('rbEasy').querySelector('.rs').textContent  = srsNextInterval(card.zh,'easy');
 
   if(fcCardDir==='zh-front'){
     $('fcFrontZh').textContent = card.zh;
@@ -1076,18 +1241,44 @@ function fcFlip(){
 function fcRate(rating){
   if(!fcFlipped) return;
   const card = fcDeck[fcCurrent];
+
+  // Update legacy ratings store (for weak-word compatibility)
   if(!fcRatings[card.zh]) fcRatings[card.zh] = {};
   fcRatings[card.zh][rating] = (fcRatings[card.zh][rating]||0) + 1;
 
+  // Apply real SM-2 scheduling
+  srsApply(card.zh, rating);
+
+  // Session stats
+  fcSessionBreakdown[rating]++;
   if(rating==='again'||rating==='hard') fcSessionA++;
   else fcSessionG++;
 
   saveCacheLocal();
   schedulePush();
 
+  // FIX for peek bug:
+  // Start flipping back immediately. Mark animating=true.
+  // Only populate the next card's DOM content AFTER the flip animation completes.
   fcCurrent++;
-  if(fcCurrent >= fcDeck.length) fcShowDone();
-  else fcShowCard();
+  if(fcCurrent >= fcDeck.length){
+    // No next card — just show done after animation
+    setTimeout(fcShowDone, 520);
+    return;
+  }
+
+  // Flip back: remove flipped class (animates back to front)
+  fcFlipped = false;
+  $('fcWrap').classList.remove('flipped');
+  $('ratingRow').classList.remove('vis');
+  fcAnimating = true;
+
+  // After the 500ms CSS transition, populate and reset
+  setTimeout(()=>{
+    fcAnimating = false;
+    _fcPopulateCard();
+    if(fcPendingCard){ fcPendingCard=false; _fcPopulateCard(); }
+  }, 520); // slightly over the 500ms transition
 }
 
 function fcShowDone(){
@@ -1105,17 +1296,10 @@ function fcShowDone(){
     pct>=0.6   ? 'Getting there — keep going.' :
                  'Drill the hard ones — you\'ve got this.';
 
-  // Tally from this session's fcDeck ratings
-  let a=0,h=0,g=0,e=0;
-  fcDeck.forEach(card=>{
-    // We track session ratings via fcSessionA/G but for breakdown read last-applied
-    // Simple: session added 1 to one bucket per card — we just show totals
-  });
-  // Re-tally from session log
-  $('fdAgain').textContent = fcSessionA;
-  $('fdHard').textContent  = 0; // hard counted in sessionA for simplicity display
-  $('fdGood').textContent  = fcSessionG;
-  $('fdEasy').textContent  = 0;
+  $('fdAgain').textContent = fcSessionBreakdown.again;
+  $('fdHard').textContent  = fcSessionBreakdown.hard;
+  $('fdGood').textContent  = fcSessionBreakdown.good;
+  $('fdEasy').textContent  = fcSessionBreakdown.easy;
 }
 
 function fcRestart(){

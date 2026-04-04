@@ -1,3 +1,156 @@
+
+Learning Chinese
+/
+
+David 4月.md
+36 lines
+
+md
+
+This is my new vocab for the week. I really need to get better at reading the characters, can you help?
+
+13:17
+
+David 4月.md
+36 lines
+
+md
+
+This is my new vocab for the week. I really need to get better at reading the characters, can you help and add these words to the app - if you just send over the updated HTML I can paste it straight into github
+
+13:17
+Let me read the current app and then build the updates.
+
+
+Check the skills available
+Check the skills available
+Good. Now let me put the new vocab together and write the updated file. The lesson 4.03 words are:
+
+zh	py	en
+烤鸡	kǎo jī	roasted chicken
+面条	miàn tiáo	noodles
+牛肉	niú ròu	beef
+牛奶	niú nǎi	milk
+啤酒	pí jiǔ	beer
+葡萄酒	pú tao jiǔ	wine
+葡萄	pú tao	grapes
+鸡肉	jī ròu	chicken (meat)
+朋友	péng you	friend
+游泳	yóu yǒng	to swim
+足球	zú qiú	football / soccer
+踢足球	tī zú qiú	to play football
+Note: 和 is already in the vocab from 3.21, so I'll skip the duplicate.
+
+Now let me write the updated index.html with these words added, a new Character Study mode (great for your specific goal of reading characters), and the lesson filter updated to include 4.03.
+
+
+Read index.html to get the full content to modify
+Read index.html to get the full content to modify
+The file is 1377 lines. Let me read it in chunks to get the key sections I need to modify.
+
+
+Viewed 2 files
+Viewed 2 files
+Good, I have enough context. Now I'll write the complete updated file. The key changes are:
+
+Add 12 new lesson 4.03 vocab words with mnemonics
+Add 4.03 pill to both lesson rows (quiz + flashcards)
+Add a Character Study tab — shows each character large, you self-assess reading it, then flip to see meaning + mnemonic
+Update the header subtitle
+
+Edited 4 files, ran a command
+Edited 4 files, ran a command
+Now add the Character Study section HTML after the FC section closing div:
+
+
+Add Character Study section HTML and CSS after FC section
+Add Character Study section HTML and CSS after FC section
+Now add CSS for the Character Study section (before closing </style>):
+
+
+Add CS tab styling and character study card CSS before closing style tag
+Add CS tab styling and character study card CSS before closing style tag
+Claude's response was interrupted
+The chacter study section should include all characters, not just the ones for this week.
+
+13:19
+Good point. The Character Study tab will use the full VOCAB array (all lessons). The only thing that changes is removing the lesson filter from that section and making it always use all cards. Let me make that edit cleanly.
+
+
+Viewed 2 files
+Viewed 2 files
+Good. Now I'll replace the CS section — removing the lesson filter (no pills needed, always uses all vocab) and cleaning up the incomplete CSS that was half-written:
+
+
+Replace CS section HTML - remove lesson filter, keep it simple as all-vocab study
+Replace CS section HTML - remove lesson filter, keep it simple as all-vocab study
+Now fix the incomplete CSS that got cut off, and add the full CS styles:
+
+
+Find the broken CSS at end of style block
+Find the broken CSS at end of style block
+Good — the broken CSS fragment from the previous session isn't in the file (it was never saved). The </style> is clean. Now add the CS styles and cs-tab colour before it:
+
+
+Add Character Study CSS before closing style tag
+Add Character Study CSS before closing style tag
+Now fix the CS HTML — the mn div used wrong class names and the assess div needs the right structure:
+
+
+Fix CS card HTML - correct class names and structure
+Fix CS card HTML - correct class names and structure
+Now find the end of the VOCAB array and add the new 4.03 words, then add the CS JavaScript:
+
+
+Viewed a file, edited a file
+Viewed a file, edited a file
+Now find the switchTab function and add CS tab logic, then add the CS JavaScript:
+
+
+Viewed a file, edited a file
+Viewed a file, edited a file
+Now find the end of the file to add the CS JavaScript before </script>:
+
+
+Viewed a file, edited a file
+Viewed a file, edited a file
+Now verify the file is clean and complete:
+
+
+Ran 2 commands
+Ran 2 commands
+Everything looks good. Copy to outputs:
+
+
+Ran a command, read a file
+Ran a command, read a file
+Here's what's changed — paste this straight into GitHub as index.html:
+
+New vocab (12 words, lesson 4.03) — all with mnemonics:
+
+烤鸡, 面条, 牛肉, 牛奶, 啤酒, 葡萄酒, 葡萄, 鸡肉, 朋友, 游泳, 足球, 踢足球
+Note: 和 was skipped as it's already in 3.21
+New 🔍 Characters tab — designed specifically for what you asked:
+
+Shows every character from all lessons (3.07 through 4.03) in one big deck
+Each card displays the character(s) large on a plain white card — just you and the character, nothing else
+Tap (or press Space) to reveal pinyin, English, and the mnemonic hook
+Then self-assess: Knew it (K) or Missed it (M)
+At the end you can drill just the ones you missed
+4.03 pill added to both the quiz and flashcard lesson filters too, so you can isolate this week's words for drilling.
+
+Index
+Code · HTML 
+
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Index · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,13 +169,13 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 60px;font-family:'Crimson Pro',Georgia,serif;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%239a7c2a' fill-opacity='0.035'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
-
+ 
 /* ── HEADER ── */
 .hdr{text-align:center;margin-bottom:22px;}
 .hdr-zh{font-family:'Noto Serif SC',serif;font-size:2.4rem;color:var(--red);line-height:1;margin-bottom:2px;}
 .hdr-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.05rem;color:var(--gold);}
 .hdr-sub{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
-
+ 
 /* ── TOP-LEVEL TABS ── */
 .tabrow{display:flex;gap:0;width:100%;max-width:500px;margin-bottom:20px;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
 .tabrow button{flex:1;padding:9px 6px;background:transparent;border:none;border-right:1.5px solid var(--border);font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);cursor:pointer;transition:all 0.18s;letter-spacing:0.5px;}
@@ -30,7 +183,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .tabrow button:hover{background:var(--soft);color:var(--ink);}
 .tabrow button.on{background:var(--ink);color:var(--paper);}
 .tabrow button.fc-tab.on{background:var(--purple);color:white;}
-
+ 
 /* ── SHARED LABELS / PILLS ── */
 .slabel{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;text-align:center;}
 .prow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
@@ -44,13 +197,13 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .pill.sent:hover{background:var(--blue-dim);}
 .pill.sent.on{background:var(--blue);color:white;border-color:var(--blue);}
 .wbadge{position:absolute;top:-7px;right:-7px;background:var(--orange);color:white;font-size:0.52rem;font-family:'DM Mono',monospace;border-radius:10px;padding:1px 5px;min-width:18px;text-align:center;line-height:1.4;display:none;}
-
+ 
 /* ── TYPE DIRECTION TOGGLE ── */
 #typeDirRow{display:none;width:100%;max-width:500px;margin-bottom:4px;}
 .type-dir-pill{padding:4px 11px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.64rem;cursor:pointer;border-radius:20px;transition:all 0.16s;}
 .type-dir-pill:hover{border-color:var(--blue);color:var(--blue);}
 .type-dir-pill.on{background:var(--blue);color:white;border-color:var(--blue);}
-
+ 
 /* ── WEAK PANEL ── */
 .wpanel{width:100%;max-width:500px;background:white;border:1.5px solid var(--orange);border-radius:4px;padding:14px 18px;margin-bottom:14px;display:none;}
 .wpanel-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
@@ -62,7 +215,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .cc1{background:var(--orange-dim);color:var(--orange);}
 .cc2{background:var(--red-dim);color:var(--red);}
 .cc3{background:var(--red);color:white;}
-
+ 
 /* ── QUIZ CARD ── */
 .card{background:white;border:1px solid var(--border);border-radius:4px;width:100%;max-width:500px;padding:28px 24px 22px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);position:relative;margin-bottom:12px;}
 .flame{position:absolute;top:12px;right:14px;font-size:1.1rem;display:none;cursor:help;}
@@ -134,10 +287,10 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .mpy{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--red);}
 .men{font-style:italic;color:var(--muted);font-size:0.92rem;}
 .mcnt{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.62rem;white-space:nowrap;}
-
+ 
 /* ── FLASHCARD SECTION ── */
 #fcSection{display:none;width:100%;max-width:500px;}
-
+ 
 /* Sync bar */
 .sync-bar{display:flex;align-items:center;justify-content:space-between;background:white;border:1.5px solid var(--border);border-radius:4px;padding:9px 14px;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
 .sync-status{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:6px;}
@@ -151,7 +304,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .sync-btn:hover{border-color:var(--gold);color:var(--gold);}
 .sync-btn.cfg{border-color:var(--purple);color:var(--purple);}
 .sync-btn.cfg:hover{background:var(--purple-dim);}
-
+ 
 /* API key modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(28,18,9,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
 .modal{background:var(--paper);border:1.5px solid var(--border);border-radius:6px;padding:28px 26px;max-width:420px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.18);}
@@ -169,13 +322,13 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .modal-btn.sec{background:transparent;color:var(--muted);border:1.5px solid var(--border);}
 .modal-btn.sec:hover{border-color:var(--gold);color:var(--gold);}
 .modal-note{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:10px;line-height:1.6;}
-
+ 
 /* FC direction row */
 .fc-dir-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;}
 .fc-dir-pill{padding:5px 13px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.68rem;cursor:pointer;border-radius:20px;transition:all 0.18s;}
 .fc-dir-pill:hover{border-color:var(--purple);color:var(--purple);}
 .fc-dir-pill.on{background:var(--purple);color:white;border-color:var(--purple);}
-
+ 
 /* Flashcard flip card */
 .fc-scene{width:100%;perspective:1200px;margin-bottom:16px;cursor:pointer;}
 .fc-wrap{position:relative;width:100%;transform-style:preserve-3d;transition:transform 0.5s cubic-bezier(0.4,0.2,0.2,1);}
@@ -196,7 +349,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-mn{background:var(--purple-dim);border:1px solid rgba(90,45,130,0.18);border-radius:4px;padding:11px 14px;text-align:left;width:100%;margin-top:8px;}
 .fc-mn-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;}
 .fc-mn-txt{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.92rem;color:var(--ink);line-height:1.55;}
-
+ 
 /* Rating buttons */
 .fc-prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .fc-prog-txt{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);}
@@ -206,7 +359,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-stat.g{background:var(--green-dim);color:var(--green);}
 .fc-pbwrap{width:100%;height:2px;background:var(--soft);border-radius:2px;margin-bottom:16px;}
 .fc-pb{height:2px;background:var(--purple);border-radius:2px;transition:width 0.4s ease;width:0%;}
-
+ 
 .rating-row{display:flex;gap:8px;justify-content:center;width:100%;margin-bottom:10px;opacity:0;transform:translateY(6px);transition:opacity 0.25s,transform 0.25s;pointer-events:none;}
 .rating-row.vis{opacity:1;transform:none;pointer-events:all;}
 .rbtn{flex:1;padding:9px 4px;border-radius:4px;border:1.5px solid;font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;transition:all 0.15s;background:transparent;line-height:1.3;max-width:110px;}
@@ -220,17 +373,16 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .rbtn.good:hover{background:var(--green);color:white;}
 .rbtn.easy{border-color:var(--gold);color:var(--gold);}
 .rbtn.easy:hover{background:var(--gold);color:white;}
-
+ 
 .kb-hint{font-family:'DM Mono',monospace;font-size:0.54rem;color:var(--border);text-align:center;letter-spacing:1px;margin-top:2px;}
 .kb-hint span{border:1px solid var(--border);border-radius:3px;padding:1px 5px;margin:0 2px;}
-
+ 
 /* FC done screen */
 .fc-done{background:white;border:1px solid var(--border);border-radius:6px;width:100%;padding:32px 26px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);display:none;}
 .fc-done h2{font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--purple);margin-bottom:6px;}
 .fc-done-big{font-family:'Crimson Pro',serif;font-size:3.4rem;color:var(--ink);margin:6px 0;}
 .fc-done-msg{font-style:italic;color:var(--muted);font-size:1rem;margin-bottom:20px;}
-.fc-breakdown{display:flex;gap:14px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
-.fc-done-next{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--blue);background:var(--blue-dim);padding:7px 14px;border-radius:4px;margin-bottom:18px;display:none;}
+.fc-breakdown{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
 .fbd{text-align:center;}
 .fbd-n{font-family:'Crimson Pro',serif;font-size:1.9rem;line-height:1;}
 .fbd-l{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:1px;color:var(--muted);margin-top:2px;}
@@ -240,34 +392,50 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-dbtn.p:hover{background:var(--red);border-color:var(--red);}
 .fc-dbtn.s{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
 .fc-dbtn.s:hover{background:var(--orange);color:white;}
-
-/* FC queue status */
-.fc-queue-status{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
-.fc-qs{font-family:'DM Mono',monospace;font-size:0.62rem;padding:4px 11px;border-radius:20px;background:var(--soft);border:1px solid var(--border);color:var(--muted);}
-.fc-qs.due{background:var(--red-dim);border-color:var(--red);color:var(--red);}
-.fc-qs.new{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
-.fc-qs.sched{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+ 
+/* ── CHARACTER STUDY TAB ── */
+.tabrow button.cs-tab.on{background:var(--green);color:white;}
+ 
+/* ── CHARACTER STUDY CARD ── */
+.cs-card{background:white;border:1px solid var(--border);border-radius:6px;box-shadow:0 2px 18px rgba(0,0,0,0.07);padding:36px 24px 32px;text-align:center;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;cursor:pointer;margin-bottom:14px;transition:box-shadow 0.2s;width:100%;}
+.cs-card:hover{box-shadow:0 4px 24px rgba(0,0,0,0.11);}
+.cs-zh{font-family:'Noto Serif SC',serif;font-size:5.5rem;color:var(--ink);line-height:1;margin-bottom:4px;}
+.cs-zh.sm{font-size:3.4rem;}
+.cs-tap{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;color:var(--border);text-transform:uppercase;margin-top:10px;}
+.cs-divider{width:36px;height:1px;background:var(--border);margin:14px auto;}
+.cs-py{font-family:'DM Mono',monospace;font-size:1.05rem;color:var(--red);margin-bottom:6px;}
+.cs-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.35rem;color:var(--ink);margin-bottom:12px;}
+.cs-mn-box{background:var(--purple-dim);border:1px solid rgba(90,45,130,0.18);border-radius:4px;padding:10px 14px;text-align:left;width:100%;margin-top:4px;}
+.cs-mn-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;}
+.cs-mn-txt{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.92rem;color:var(--ink);line-height:1.55;}
+.cs-assess{display:flex;gap:10px;justify-content:center;width:100%;margin-bottom:4px;transition:opacity 0.25s;}
+.cs-btn{flex:1;max-width:160px;padding:11px 8px;border-radius:4px;border:1.5px solid;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.15s;background:transparent;}
+.cs-knew{border-color:var(--green);color:var(--green);}
+.cs-knew:hover{background:var(--green);color:white;}
+.cs-missed{border-color:var(--red);color:var(--red);}
+.cs-missed:hover{background:var(--red);color:white;}
 </style>
 </head>
 <body>
-
+ 
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · Words &amp; Sentences</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · Words &amp; Sentences</div>
 </div>
-
+ 
 <!-- TOP-LEVEL TABS -->
 <div class="tabrow">
   <button id="tabQuiz" class="on" onclick="switchTab('quiz')">📝 Quiz</button>
   <button id="tabFC" class="fc-tab" onclick="switchTab('fc')">🃏 Flashcards</button>
+  <button id="tabCS" class="cs-tab" onclick="switchTab('cs')">🔍 Characters</button>
 </div>
-
+ 
 <!-- ════════════════════════════════════════════════
      QUIZ SECTION
 ════════════════════════════════════════════════ -->
 <div id="quizSection">
-
+ 
 <div class="slabel">Lesson</div>
 <div class="prow" id="lessonRow">
   <button class="pill on" onclick="setLesson('all',this)">All</button>
@@ -275,8 +443,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" onclick="setLesson('3.14',this)">3.14</button>
   <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
   <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
+  <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
 </div>
-
+ 
 <div class="slabel" style="margin-top:8px">Mode</div>
 <div class="prow" id="modeRow">
   <button class="pill on" onclick="setMode('mcq-en2zh',this)">English → Chinese</button>
@@ -286,7 +455,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill sent" onclick="setMode('sentences',this)">📖 Sentences</button>
   <button class="pill fire" id="weakBtn" onclick="setMode('weak',this)">🔥 Weak words <span class="wbadge" id="weakBadge"></span></button>
 </div>
-
+ 
 <!-- Type direction toggle: only visible in 'type' mode -->
 <div id="typeDirRow">
   <div class="slabel" style="margin-top:4px">Answer in</div>
@@ -296,17 +465,17 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="type-dir-pill" data-tdir="english" onclick="setTypeDir('english',this)">English (ZH→EN)</button>
   </div>
 </div>
-
+ 
 <div class="wpanel" id="weakPanel">
   <div class="wpanel-title">🔥 Words you keep getting wrong</div>
   <div class="wlist" id="weakList"></div>
 </div>
-
+ 
 <!-- QUIZ CARD -->
 <div class="card" id="quizCard">
   <div class="flame" id="flame">🔥</div>
   <div class="stag" id="stag">sentence</div>
-
+ 
   <div class="pbar-row">
     <div class="pbar-txt" id="progTxt">1 / 10</div>
     <div class="schips">
@@ -315,37 +484,37 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     </div>
   </div>
   <div class="pbwrap"><div class="pb" id="pb"></div></div>
-
+ 
   <div class="qlabel" id="qlabel"></div>
   <div class="qmain" id="qmain"></div>
   <div class="qpy" id="qpy"></div>
   <div class="ltag" id="ltag"></div>
-
+ 
   <button class="mn-btn" id="mnBtn">💡 Show memory hint</button>
   <div class="mn-box" id="mnBox">
     <div class="mn-lbl">Memory hook</div>
     <div class="mn-txt" id="mnTxt"></div>
   </div>
-
+ 
   <div class="opts" id="opts"></div>
-
+ 
   <div class="typewrap" id="typewrap">
     <input class="typeinput" id="typeinput" placeholder="pinyin or 汉字..." autocomplete="off" spellcheck="false"/>
     <div class="typehint" id="typehint">Pinyin (tones optional) or Chinese characters — both accepted</div>
     <button class="submbtn" id="submbtn">Check →</button>
   </div>
-
+ 
   <div class="srev" id="srev">
     <div class="srev-zh" id="srevZh"></div>
     <div class="srev-py" id="srevPy"></div>
     <div class="srev-en" id="srevEn"></div>
   </div>
   <div class="gnote" id="gnote"></div>
-
+ 
   <div class="fb" id="fb"></div>
   <button class="nextbtn" id="nextbtn">Next →</button>
 </div>
-
+ 
 <!-- SCORE SCREEN -->
 <div class="scorescreen" id="scorescreen">
   <h2>Session complete</h2>
@@ -357,15 +526,15 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="msect" id="msect"></div>
 </div>
-
+ 
 </div><!-- /quizSection -->
-
-
+ 
+ 
 <!-- ════════════════════════════════════════════════
      FLASHCARD SECTION
 ════════════════════════════════════════════════ -->
 <div id="fcSection">
-
+ 
   <!-- Sync bar -->
   <div class="sync-bar">
     <div class="sync-status">
@@ -377,7 +546,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
       <button class="sync-btn cfg" onclick="openModal()">⚙ JSONBin key</button>
     </div>
   </div>
-
+ 
   <!-- Lesson filter -->
   <div class="slabel">Lesson</div>
   <div class="prow" id="fcLessonRow">
@@ -386,8 +555,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="pill" data-lesson="3.14">3.14</button>
     <button class="pill" data-lesson="3.21">3.21</button>
     <button class="pill" data-lesson="3.28">3.28</button>
+    <button class="pill" data-lesson="4.03">4.03</button>
   </div>
-
+ 
   <!-- Direction -->
   <div class="slabel" style="margin-top:4px">Direction</div>
   <div class="fc-dir-row">
@@ -395,17 +565,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="fc-dir-pill" data-dir="en-front">English → Chinese</button>
     <button class="fc-dir-pill" data-dir="mixed">Mixed</button>
   </div>
-
-  <!-- Queue mode -->
-  <div class="slabel" style="margin-top:4px">Queue</div>
-  <div class="prow" id="fcQueueRow">
-    <button class="pill on" data-queue="due" onclick="fcSetQueue('due',this)">Due now</button>
-    <button class="pill" data-queue="all" onclick="fcSetQueue('all',this)">All cards</button>
-  </div>
-
-  <!-- Queue status -->
-  <div class="fc-queue-status" id="fcQueueStatus"></div>
-
+ 
   <!-- Progress -->
   <div class="fc-prog-row">
     <div class="fc-prog-txt" id="fcProgTxt">Card 1 of —</div>
@@ -415,7 +575,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     </div>
   </div>
   <div class="fc-pbwrap"><div class="fc-pb" id="fcPb"></div></div>
-
+ 
   <!-- Flip card -->
   <div class="fc-scene" id="fcScene">
     <div class="fc-wrap" id="fcWrap">
@@ -442,7 +602,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
       </div>
     </div>
   </div>
-
+ 
   <!-- Rating buttons -->
   <div class="rating-row" id="ratingRow">
     <button class="rbtn again" id="rbAgain"><span>Again</span><span class="rs">didn't know</span></button>
@@ -451,7 +611,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="rbtn easy"  id="rbEasy"><span>Easy</span><span class="rs">too easy</span></button>
   </div>
   <div class="kb-hint"><span>Space</span> flip · <span>1</span> again · <span>2</span> hard · <span>3</span> good · <span>4</span> easy</div>
-
+ 
   <!-- Done screen -->
   <div class="fc-done" id="fcDone">
     <h2>Deck complete!</h2>
@@ -463,24 +623,68 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
       <div class="fbd"><div class="fbd-n" id="fdGood"  style="color:var(--green)">0</div><div class="fbd-l">Good</div></div>
       <div class="fbd"><div class="fbd-n" id="fdEasy"  style="color:var(--gold)">0</div><div class="fbd-l">Easy</div></div>
     </div>
-    <div class="fc-done-next" id="fcDoneNext"></div>
     <div class="fc-done-acts">
       <button class="fc-dbtn p" onclick="fcRestart()">Review again</button>
-      <button class="fc-dbtn s" onclick="fcDrillWeak()">🔥 Drill weak cards</button>
+      <button class="fc-dbtn s" onclick="fcDrillWeak()">Drill weak cards</button>
     </div>
   </div>
-
-  <!-- All-clear screen (nothing due) -->
-  <div class="fc-done" id="fcAllClear" style="display:none">
-    <h2 style="color:var(--green)">All caught up! 🎉</h2>
-    <div class="fc-done-msg" id="fcAllClearMsg"></div>
-    <div class="fc-done-acts">
-      <button class="fc-dbtn p" onclick="fcSetQueue('all', document.querySelector('[data-queue=all]'))">Review all cards anyway</button>
-    </div>
-  </div>
-
+ 
 </div><!-- /fcSection -->
-
+ 
+<!-- ════════════════════════════════════════════════
+     CHARACTER STUDY SECTION
+════════════════════════════════════════════════ -->
+<div id="csSection" style="display:none;width:100%;max-width:500px;">
+ 
+  <!-- Progress -->
+  <div class="fc-prog-row" style="margin-top:4px">
+    <div class="fc-prog-txt" id="csProgTxt">Card 1 of —</div>
+    <div class="fc-stats">
+      <span class="fc-stat g">✓ <span id="csCntK">0</span> knew</span>
+      <span class="fc-stat a">✗ <span id="csCntM">0</span> missed</span>
+    </div>
+  </div>
+  <div class="fc-pbwrap"><div class="fc-pb" id="csPb" style="background:var(--green)"></div></div>
+ 
+  <!-- Study card -->
+  <div class="cs-card" id="csCard">
+    <div class="fc-lesson" id="csLesson"></div>
+    <div class="cs-zh" id="csZh"></div>
+    <div class="cs-tap" id="csTapHint">tap to reveal</div>
+    <!-- Reveal panel -->
+    <div class="cs-reveal" id="csReveal" style="display:none">
+      <div class="cs-divider"></div>
+      <div class="cs-py" id="csPy"></div>
+      <div class="cs-en" id="csEn"></div>
+      <div class="cs-mn-box" id="csMn" style="display:none">
+        <div class="cs-mn-lbl">Memory hook</div>
+        <div class="cs-mn-txt" id="csMnTxt"></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Self-assess buttons -->
+  <div class="cs-assess" id="csAssess" style="display:none;opacity:0">
+    <button class="cs-btn cs-knew" id="csBtnKnew">✓ Knew it</button>
+    <button class="cs-btn cs-missed" id="csBtnMissed">✗ Missed it</button>
+  </div>
+  <div class="kb-hint" style="margin-top:6px"><span>Space</span> reveal · <span>K</span> knew · <span>M</span> missed</div>
+ 
+  <!-- Done screen -->
+  <div class="cs-done" id="csDone" style="display:none">
+    <div class="fc-done" style="display:block">
+      <h2 style="color:var(--green)">Round complete!</h2>
+      <div class="fc-done-big" id="csDoneBig"></div>
+      <div class="fc-done-msg" id="csDoneMsg"></div>
+      <div class="fc-done-acts">
+        <button class="fc-dbtn p" style="background:var(--green);border-color:var(--green)" onclick="csStart(false)">All cards again</button>
+        <button class="fc-dbtn s" onclick="csStart(true)">🔥 Missed only</button>
+      </div>
+    </div>
+  </div>
+ 
+</div><!-- /csSection -->
+ 
 <!-- API KEY MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none">
   <div class="modal">
@@ -499,7 +703,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <div class="modal-note">Your key is stored only in your browser's localStorage — never sent anywhere except JSONBin's own API.</div>
   </div>
 </div>
-
+ 
 <script>
 // ══════════════════════════════════════════════════════════
 // SHARED VOCAB + SENTENCES DATA
@@ -560,8 +764,21 @@ const VOCAB = [
   {zh:"很多",py:"hěn duō",en:"many / a lot",lesson:"3.28",mn:"很 (very) + 多 (many/much). 多 shows two stacked moons (夕夕) — so much moon! Very + many = a lot. 多 alone can mean 'many'; 很多 amplifies it. Think: very moon-much = loads."},
   {zh:"一些",py:"yī xiē",en:"some / a few",lesson:"3.28",mn:"一 = one (the simplest character — a single stroke). 些 = a small amount. One small amount = some. 一些 is softer than 很多. A single handful, not a mountain. One + bits = some."},
   {zh:"想",py:"xiǎng",en:"to want to / to think",lesson:"3.28",mn:"想 has 心 (heart) at the bottom — what the heart desires. The top part gives the sound. Your HEART wants something = 想. Used as 想 + verb: 想吃 (want to eat), 想喝 (want to drink). Follow your heart!"},
+  // 4.03
+  {zh:"烤鸡",py:"kǎo jī",en:"roasted chicken",lesson:"4.03",mn:"烤 = roasted (fire radical 火 at the bottom — cooked over flames). 鸡 = chicken (bird radical 鸟 on the right). Fire + chicken = roasted chicken. Same 烤 as in 烤鸭 (roasted duck) — you know this pattern already."},
+  {zh:"面条",py:"miàn tiáo",en:"noodles",lesson:"4.03",mn:"面 means flour/face/noodle — the wheat radical 麦 is in there. 条 means strip or strand. Flour in strips = noodles. 面 (miàn) sounds a bit like 'man' — imagine a man made entirely of noodle strips."},
+  {zh:"牛肉",py:"niú ròu",en:"beef",lesson:"4.03",mn:"牛 is a cow — the character literally shows horns on top of a cross: 牛. 肉 means meat (the moon radical 月 is really flesh/meat 肉 in disguise). Cow + meat = beef. Spot 牛 anywhere and think: bovine."},
+  {zh:"牛奶",py:"niú nǎi",en:"milk",lesson:"4.03",mn:"牛 (cow) again — your key to all things bovine. 奶 means milk/breast (woman radical 女 on the left). Cow + woman/nourish = cow's milk. Once you've got 牛 = cow, 牛肉 and 牛奶 are both obvious."},
+  {zh:"啤酒",py:"pí jiǔ",en:"beer",lesson:"4.03",mn:"啤 is phonetic — pí sounds like 'beer'. 酒 means alcohol (water radical 氵 on the left, because it's a liquid). The 酒 character appears in all alcoholic drinks. Pí jiǔ — say it: beer! The 口 mouth radical in 啤 hints you drink it."},
+  {zh:"葡萄酒",py:"pú tao jiǔ",en:"wine",lesson:"4.03",mn:"葡萄 = grape (both have the grass radical 艹 — they grow on vines). 酒 = alcohol (氵liquid). Grape + alcohol = wine. Notice 酒 is the key character for any alcoholic drink — 啤酒 (beer), 葡萄酒 (wine). Learn 酒, unlock all drinks."},
+  {zh:"葡萄",py:"pú tao",en:"grapes",lesson:"4.03",mn:"Both characters have the grass radical 艹 at the top — they're plants. 葡萄 is a transliteration of an ancient foreign word for grape. The double-grass-radical pattern is your clue: two plant characters together = a vine fruit. Pú tao — sounds a bit like 'boo-dow'."},
+  {zh:"鸡肉",py:"jī ròu",en:"chicken (meat)",lesson:"4.03",mn:"鸡 = chicken (you already know this from 烤鸡). 肉 = meat (same as in 牛肉). Chicken + meat = chicken meat. The pattern [animal] + 肉 is universal: 牛肉 beef, 鸡肉 chicken, 猪肉 pork. Learn 肉 once, apply forever."},
+  {zh:"朋友",py:"péng you",en:"friend",lesson:"4.03",mn:"朋 is two moons (月月) side by side — two people walking together under the moon. 友 shows two hands clasped (an ancient sign of friendship). Two moons + clasped hands = friend. Péng yǒu — the 'you' even sounds like the English word!"},
+  {zh:"游泳",py:"yóu yǒng",en:"to swim",lesson:"4.03",mn:"游 has the water radical 氵on the left — of course swimming involves water. 泳 also has 氵— double water radical, because swimming is very watery! Both characters have water on the left. When you see double-氵, think aquatic activity."},
+  {zh:"足球",py:"zú qiú",en:"football / soccer",lesson:"4.03",mn:"足 means foot (it's a pictograph of a leg and foot — the top is a knee, the bottom is toes). 球 means ball (jade radical 王 on the left, because balls were precious round objects). Foot + ball = football. Exactly what it says."},
+  {zh:"踢足球",py:"tī zú qiú",en:"to play football",lesson:"4.03",mn:"踢 means to kick — it has the foot radical 足 on the left (same 足 as in 足球!). So: kick + foot-ball = play football. 踢 (kick) + 足球 (football) = the action of kicking the ball. The foot radical appears twice — once in 踢, once in 足."},
 ];
-
+ 
 const SENTENCES = [
   {zh:"你今天好吗？",py:"Nǐ jīn tiān hǎo ma?",en:"Are you doing well today?",lesson:"3.14",dir:"zh2en",note:"吗 at the end turns any statement into a yes/no question."},
   {zh:"我今天很好。你呢？",py:"Wǒ jīn tiān hěn hǎo. Nǐ ne?",en:"I'm very well today. What about you?",lesson:"3.14",dir:"zh2en",note:"你呢 = 'you then?' — a quick way to bounce the question back."},
@@ -608,18 +825,21 @@ const SENTENCES = [
   {zh:"你有很多水果吗？",py:"Nǐ yǒu hěn duō shuǐ guǒ ma?",en:"Do you have a lot of fruit?",lesson:"3.28",dir:"zh2en",note:"很多 goes before the noun it modifies — like 'many/a lot of'."},
   {zh:"我有一些橙汁。",py:"Wǒ yǒu yī xiē chéng zhī.",en:"I have some orange juice.",lesson:"3.28",dir:"zh2en",note:"一些 = some/a few — softer and smaller than 很多."},
 ];
-
+ 
 // ══════════════════════════════════════════════════════════
 // TAB SWITCHING
 // ══════════════════════════════════════════════════════════
 function switchTab(tab){
   document.getElementById('tabQuiz').classList.toggle('on', tab==='quiz');
   document.getElementById('tabFC').classList.toggle('on', tab==='fc');
+  document.getElementById('tabCS').classList.toggle('on', tab==='cs');
   document.getElementById('quizSection').style.display = tab==='quiz'?'':'none';
   document.getElementById('fcSection').style.display   = tab==='fc' ?'block':'none';
+  document.getElementById('csSection').style.display   = tab==='cs' ?'block':'none';
   if(tab==='fc') fcInit();
+  if(tab==='cs') csInit();
 }
-
+ 
 // ══════════════════════════════════════════════════════════
 // QUIZ LOGIC (unchanged from original)
 // ══════════════════════════════════════════════════════════
@@ -628,7 +848,7 @@ let scoreC=0, scoreW=0, answered=false, sessionMissed=[];
 let typeDir='pinyin'; // 'pinyin' | 'chars' | 'english'
 let weakMap={};
 try{weakMap=JSON.parse(localStorage.getItem('cn_weak_v2')||'{}');}catch(e){}
-
+ 
 const $=id=>document.getElementById(id);
 function shuffle(a){return[...a].sort(()=>Math.random()-0.5);}
 function show(id){$(id).style.display='block';}
@@ -637,7 +857,7 @@ function hide(id){$(id).style.display='none';}
 function filtVocab(){return lessonFilter==='all'?VOCAB:VOCAB.filter(v=>v.lesson===lessonFilter);}
 function filtSent(){return lessonFilter==='all'?SENTENCES:SENTENCES.filter(s=>s.lesson===lessonFilter);}
 function getMisses(w){return(weakMap[w.zh]||{}).misses||0;}
-
+ 
 function saveWeak(){try{localStorage.setItem('cn_weak_v2',JSON.stringify(weakMap));}catch(e){}}
 function recordResult(word,correct){
   if(!weakMap[word.zh])weakMap[word.zh]={misses:0,hits:0};
@@ -928,13 +1148,13 @@ document.addEventListener('keydown',e=>{
   if(!answered){if($('typewrap').style.display==='flex')submitTyped();}
   else{if($('nextbtn').style.display!=='none')nextQuestion();}
 });
-
+ 
 // ══════════════════════════════════════════════════════════
 // FLASHCARD LOGIC
 // ══════════════════════════════════════════════════════════
 const JSONBIN_API = 'https://api.jsonbin.io/v3';
 const BIN_NAME = 'cn_fc_ratings';
-
+ 
 let fcKey = '';
 let fcBinId = '';
 let fcRatings = {}; // { zh: { again:n, hard:n, good:n, easy:n } }
@@ -947,27 +1167,27 @@ let fcCurrent = 0;
 let fcFlipped = false;
 let fcSessionA = 0, fcSessionG = 0;
 let fcCardDir = 'zh-front';
-
+ 
 function fcFilterVocab(){
   return fcLesson==='all' ? VOCAB : VOCAB.filter(v=>v.lesson===fcLesson);
 }
-
+ 
 // ── JSONBin sync (covers BOTH fc ratings + quiz weak words) ─
 // Strategy: one bin per user, ID stored in localStorage after first create.
 // On first run with a new key: create bin. On subsequent runs: read by ID.
 // No listing API used — that was the source of the previous failures.
-
+ 
 function setSyncStatus(state, text){
   const dot = $('syncDot'), txt = $('syncTxt');
   dot.className = 'sync-dot' + (state==='ok'?' ok':state==='err'?' err':state==='spin'?' spin':'');
   txt.textContent = text;
 }
-
+ 
 function cloudPayload(){
   // Everything we want to sync in one object
   return { fcRatings, weakMap, fcSRS };
 }
-
+ 
 function applyCloudPayload(data){
   if(data.fcRatings) fcRatings = data.fcRatings;
   if(data.fcSRS){ fcSRS = data.fcSRS; try{localStorage.setItem('cn_srs_v1',JSON.stringify(fcSRS));}catch(e){} }
@@ -977,7 +1197,7 @@ function applyCloudPayload(data){
     updateWeakUI();   // refresh the quiz weak panel
   }
 }
-
+ 
 async function fcLoadFromCloud(){
   if(!fcKey){ setSyncStatus('','Not connected — add your JSONBin key to sync'); return; }
   setSyncStatus('spin','Connecting…');
@@ -1020,7 +1240,7 @@ async function fcLoadFromCloud(){
     console.error('JSONBin error:', err);
   }
 }
-
+ 
 async function pushToCloud(){
   if(!fcKey || !fcBinId) return;
   setSyncStatus('spin','Saving…');
@@ -1038,15 +1258,15 @@ async function pushToCloud(){
     console.error('Push error:', err);
   }
 }
-
+ 
 // Debounced push — called after any rating change
 function schedulePush(){
   clearTimeout(schedulePush._t);
   schedulePush._t = setTimeout(pushToCloud, 2000);
 }
-
+ 
 function fcSyncNow(){ fcLoadFromCloud(); }
-
+ 
 function saveCacheLocal(){
   try{
     localStorage.setItem('cn_fc_ratings_v1', JSON.stringify(fcRatings));
@@ -1054,11 +1274,11 @@ function saveCacheLocal(){
     localStorage.setItem('cn_srs_v1', JSON.stringify(fcSRS));
   }catch(e){}
 }
-
+ 
 function fcLoadCacheLocal(){
   try{ return JSON.parse(localStorage.getItem('cn_fc_ratings_v1')||'{}'); }catch(e){ return {}; }
 }
-
+ 
 // ── Key modal ────────────────────────────────────────────
 function openModal(){
   $('keyInput').value = fcKey || '';
@@ -1077,29 +1297,29 @@ function saveKey(){
   closeModal();
   fcLoadFromCloud();
 }
-
+ 
 // ── SM-2 Spaced Repetition ───────────────────────────────
 // fcSRS stores per-card: { interval, ease, due }
 // interval: days until next review (starts at 0 = new)
 // ease: multiplier, starts at 2.5
 // due: day number (Math.floor(Date.now()/86400000))
-
+ 
 const DAY = 86400000;
 function today(){ return Math.floor(Date.now()/DAY); }
-
+ 
 function srsGet(zh){
   const d = fcSRS[zh];
   if(!d) return { interval:0, ease:2.5, due:0, reps:0 };
   return d;
 }
-
+ 
 function srsSave(zh, data){
   fcSRS[zh] = data;
   try{ localStorage.setItem('cn_srs_v1', JSON.stringify(fcSRS)); }catch(e){}
 }
-
+ 
 const MAX_INTERVAL = 3; // cap — revisit once vocab grows
-
+ 
 function srsApply(zh, rating){
   const d = srsGet(zh);
   let { interval, ease, reps } = d;
@@ -1124,7 +1344,7 @@ function srsApply(zh, rating){
   const due = today() + interval;
   srsSave(zh, { interval, ease, due, reps });
 }
-
+ 
 function srsNextInterval(zh, rating){
   // Preview what interval would be (for button labels)
   const d = srsGet(zh);
@@ -1145,121 +1365,48 @@ function srsNextInterval(zh, rating){
   else interval = Math.min(MAX_INTERVAL, Math.round(interval * ease * 1.3));
   return interval+'d';
 }
-
+ 
 function fcDueCount(pool){
   const t=today();
   return pool.filter(v=>{ const d=srsGet(v.zh); return d.due<=t; }).length;
 }
-
-// ── Queue mode ───────────────────────────────────────────
-let fcQueueMode = 'due'; // 'due' | 'all'
-
-function fcSetQueue(mode, btn){
-  fcQueueMode = mode;
-  document.querySelectorAll('[data-queue]').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  fcStartSession();
-}
-
-function fcGetQueueCounts(){
-  const pool = fcFilterVocab();
-  const t = today();
-  const due  = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
-  const newC = pool.filter(v=>srsGet(v.zh).reps===0);
-  const sched= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
-  return { due, newC, sched };
-}
-
-function fcUpdateQueueStatus(){
-  const { due, newC, sched } = fcGetQueueCounts();
-  const parts = [];
-  if(due.length)  parts.push(`<span class="fc-qs due">${due.length} due</span>`);
-  if(newC.length) parts.push(`<span class="fc-qs new">${newC.length} new</span>`);
-  if(sched.length)parts.push(`<span class="fc-qs sched">${sched.length} scheduled</span>`);
-  $('fcQueueStatus').innerHTML = parts.length ? parts.join('') : '<span class="fc-qs">No cards yet</span>';
-}
-
-function fcNextDueText(){
-  // Find the soonest upcoming card
-  const pool = fcFilterVocab();
-  const t = today();
-  const future = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
-  if(!future.length) return null;
-  future.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
-  const daysUntil = srsGet(future[0].zh).due - t;
-  return daysUntil===1 ? 'Next cards due tomorrow' : `Next cards due in ${daysUntil} days`;
-}
-
-function fcStartSession(){
-  fcUpdateQueueStatus();
-  const { due, newC, sched } = fcGetQueueCounts();
-
-  // In 'due' mode, only show due + new cards
-  // In 'all' mode, show everything
-  let pool;
-  if(fcQueueMode === 'due'){
-    pool = [...due, ...newC];
-    if(!pool.length){
-      // Nothing due — show all-clear screen
-      $('fcScene').style.display = 'none';
-      $('ratingRow').style.display = 'none';
-      $('fcDone').style.display = 'none';
-      $('fcAllClear').style.display = 'block';
-      const nextTxt = fcNextDueText();
-      $('fcAllClearMsg').textContent = nextTxt
-        ? `You\'re all caught up for now. ${nextTxt}.`
-        : `Rate some cards first and they\'ll be scheduled for review.`;
-      return;
-    }
-  } else {
-    // All mode: due first, then new, then future
-    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
-    pool = [...shuffle(due), ...shuffle(newC), ...shuffle(sched)];
-  }
-
-  // Shuffle within each group but keep due → new order
-  if(fcQueueMode==='due'){
-    pool = [...shuffle(due), ...shuffle(newC)];
-  }
-
-  fcDeck = pool;
-  fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
-  fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
-  $('fcDone').style.display = 'none';
-  $('fcAllClear').style.display = 'none';
-  $('fcScene').style.display = 'block';
-  $('ratingRow').style.display = 'flex';
-  fcShowCard();
-}
-
+ 
 // ── Card logic ───────────────────────────────────────────
 function fcGetScore(zh){
   const r = fcRatings[zh];
   if(!r) return 0;
   return (r.good||0) + (r.easy||0)*2 - (r.again||0)*2 - (r.hard||0);
 }
-
+ 
 function fcBuildDeck(weakOnly){
+  let pool = fcFilterVocab();
+  const t = today();
   if(weakOnly){
-    const pool = fcFilterVocab().filter(v => fcGetScore(v.zh) <= 0);
+    // Weak = again/hard heavy cards: use old rating score for compatibility
+    pool = pool.filter(v => fcGetScore(v.zh) <= 0);
     if(!pool.length){ alert('No weak cards — all ratings are positive!'); return false; }
     fcDeck = shuffle(pool);
-    fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
-    fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
-    $('fcDone').style.display = 'none';
-    $('fcAllClear').style.display = 'none';
-    $('fcScene').style.display = 'block';
-    $('ratingRow').style.display = 'flex';
-    fcShowCard();
-    return true;
+  } else {
+    // Sort: due first (overdue → today), then new cards (no SRS data), then future
+    const due   = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
+    const newC  = pool.filter(v=>srsGet(v.zh).reps===0);
+    const future= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
+    // Sort due by most overdue first
+    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
+    fcDeck = [...shuffle(due), ...shuffle(newC), ...shuffle(future)];
   }
-  fcStartSession();
+  fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
+  fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
+  $('fcDone').style.display = 'none';
+  $('fcScene').style.display = 'block';
+  $('ratingRow').style.display = 'flex';
+  fcShowCard();
   return true;
 }
-
+ 
 // Per-session breakdown (for done screen)
 let fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
-
+ 
 function fcShowCard(){
   // FIX: don't animate or populate immediately — if we're mid-flip (flipping back),
   // wait until the CSS transition finishes before populating content.
@@ -1271,36 +1418,36 @@ function fcShowCard(){
   fcPendingCard = false;
   _fcPopulateCard();
 }
-
+ 
 let fcAnimating = false;
 let fcPendingCard = false;
-
+ 
 function _fcPopulateCard(){
   fcFlipped = false;
   $('fcWrap').classList.remove('flipped');
   $('ratingRow').classList.remove('vis');
-
+ 
   const card = fcDeck[fcCurrent];
   const total = fcDeck.length;
   $('fcProgTxt').textContent = `Card ${fcCurrent+1} of ${total}`;
   $('fcPb').style.width = `${(fcCurrent/total)*100}%`;
   $('fcCntA').textContent = fcSessionA;
   $('fcCntG').textContent = fcSessionG;
-
+ 
   // Direction
   if(fcDirMode==='mixed') fcCardDir = Math.random()<0.5 ? 'zh-front' : 'en-front';
   else fcCardDir = fcDirMode;
-
+ 
   $('fcFrontLesson').textContent = card.lesson;
   $('fcBackLesson').textContent  = card.lesson;
   $('fcDirTag').textContent = fcCardDir==='zh-front' ? 'ZH → EN' : 'EN → ZH';
-
+ 
   // Update SRS preview labels on rating buttons
   $('rbAgain').querySelector('.rs').textContent = srsNextInterval(card.zh,'again');
   $('rbHard').querySelector('.rs').textContent  = srsNextInterval(card.zh,'hard');
   $('rbGood').querySelector('.rs').textContent  = srsNextInterval(card.zh,'good');
   $('rbEasy').querySelector('.rs').textContent  = srsNextInterval(card.zh,'easy');
-
+ 
   if(fcCardDir==='zh-front'){
     $('fcFrontZh').textContent = card.zh;
     $('fcFrontZh').style.display = 'block';
@@ -1323,7 +1470,7 @@ function _fcPopulateCard(){
     $('fcBackPy').textContent = card.py;
     $('fcBackPy').style.display = 'block';
   }
-
+ 
   if(card.mn){
     $('fcMnTxt').textContent = card.mn;
     $('fcMn').style.display = 'block';
@@ -1331,67 +1478,63 @@ function _fcPopulateCard(){
     $('fcMn').style.display = 'none';
   }
 }
-
+ 
 function fcFlip(){
   if(fcFlipped) return;
   fcFlipped = true;
   $('fcWrap').classList.add('flipped');
   setTimeout(()=>{ $('ratingRow').classList.add('vis'); }, 220);
 }
-
+ 
 function fcRate(rating){
   if(!fcFlipped) return;
   const card = fcDeck[fcCurrent];
-
+ 
   // Update legacy ratings store (for weak-word compatibility)
   if(!fcRatings[card.zh]) fcRatings[card.zh] = {};
   fcRatings[card.zh][rating] = (fcRatings[card.zh][rating]||0) + 1;
-
+ 
   // Apply real SM-2 scheduling
   srsApply(card.zh, rating);
-
+ 
   // Session stats
   fcSessionBreakdown[rating]++;
   if(rating==='again'||rating==='hard') fcSessionA++;
   else fcSessionG++;
-
-  // If 'Again' — reinsert card ~3 positions ahead so it comes back soon this session
-  if(rating==='again'){
-    const reinsertAt = Math.min(fcCurrent + 3, fcDeck.length);
-    fcDeck.splice(reinsertAt, 0, card);
-  }
-
+ 
   saveCacheLocal();
   schedulePush();
-  fcUpdateQueueStatus();
-
+ 
   // FIX for peek bug:
+  // Start flipping back immediately. Mark animating=true.
+  // Only populate the next card's DOM content AFTER the flip animation completes.
   fcCurrent++;
   if(fcCurrent >= fcDeck.length){
+    // No next card — just show done after animation
     setTimeout(fcShowDone, 520);
     return;
   }
-
-  // Flip back — populate DOM only after animation completes
+ 
+  // Flip back: remove flipped class (animates back to front)
   fcFlipped = false;
   $('fcWrap').classList.remove('flipped');
   $('ratingRow').classList.remove('vis');
   fcAnimating = true;
-
+ 
+  // After the 500ms CSS transition, populate and reset
   setTimeout(()=>{
     fcAnimating = false;
     _fcPopulateCard();
     if(fcPendingCard){ fcPendingCard=false; _fcPopulateCard(); }
-  }, 520);
+  }, 520); // slightly over the 500ms transition
 }
-
+ 
 function fcShowDone(){
   $('fcScene').style.display = 'none';
   $('ratingRow').style.display = 'none';
   $('fcDone').style.display = 'block';
-  $('fcAllClear').style.display = 'none';
   $('fcPb').style.width = '100%';
-
+ 
   const total = fcDeck.length;
   $('fcDoneBig').textContent = `${fcSessionG} / ${total}`;
   const pct = fcSessionG/total;
@@ -1400,35 +1543,24 @@ function fcShowDone(){
     pct>=0.8   ? 'Strong session — great work.' :
     pct>=0.6   ? 'Getting there — keep going.' :
                  'Drill the hard ones — you\'ve got this.';
-
+ 
   $('fdAgain').textContent = fcSessionBreakdown.again;
   $('fdHard').textContent  = fcSessionBreakdown.hard;
   $('fdGood').textContent  = fcSessionBreakdown.good;
   $('fdEasy').textContent  = fcSessionBreakdown.easy;
-
-  // Show when next cards are due
-  const nextTxt = fcNextDueText();
-  if(nextTxt){
-    $('fcDoneNext').textContent = '📅 ' + nextTxt;
-    $('fcDoneNext').style.display = 'block';
-  } else {
-    $('fcDoneNext').style.display = 'none';
-  }
-
-  fcUpdateQueueStatus();
 }
-
+ 
 function fcRestart(){
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
-  fcStartSession();
+  fcBuildDeck(false);
 }
 function fcDrillWeak(){
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
   fcBuildDeck(true);
 }
-
+ 
 // ── Keyboard for flashcards ──────────────────────────────
 document.addEventListener('keydown', e => {
   if($('fcSection').style.display !== 'block') return;
@@ -1439,54 +1571,180 @@ document.addEventListener('keydown', e => {
   if(e.key==='3') fcRate('good');
   if(e.key==='4') fcRate('easy');
 });
-
+ 
 // ── FC scene click ───────────────────────────────────────
 $('fcScene').addEventListener('click', fcFlip);
 $('rbAgain').addEventListener('click', e=>{ e.stopPropagation(); fcRate('again'); });
 $('rbHard').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('hard'); });
 $('rbGood').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('good'); });
 $('rbEasy').addEventListener('click',  e=>{ e.stopPropagation(); fcRate('easy'); });
-
+ 
 // ── FC lesson pills ──────────────────────────────────────
 document.querySelectorAll('#fcLessonRow .pill').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('#fcLessonRow .pill').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
     fcLesson = btn.dataset.lesson;
-    fcStartSession();
+    fcBuildDeck(false);
   });
 });
-
+ 
 // ── FC direction pills ───────────────────────────────────
 document.querySelectorAll('.fc-dir-pill').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('.fc-dir-pill').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
     fcDirMode = btn.dataset.dir;
-    fcStartSession();
+    fcBuildDeck(false);
   });
 });
-
+ 
 // ── FC init ──────────────────────────────────────────────
 function fcInit(){
   fcKey   = localStorage.getItem('cn_fc_key')   || '';
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
   fcRatings = fcLoadCacheLocal();
-  try{ fcSRS = JSON.parse(localStorage.getItem('cn_srs_v1')||'{}'); }catch(e){}
+  // Also freshen weakMap from localStorage in case it diverged
   try{ weakMap = JSON.parse(localStorage.getItem('cn_weak_v2')||'{}'); }catch(e){}
-
+ 
   if(fcKey){
     $('syncNowBtn').style.display = 'inline-block';
     fcLoadFromCloud();
   } else {
     setSyncStatus('','Not connected — add your JSONBin key to sync across devices');
   }
-  fcStartSession();
+  fcBuildDeck(false);
 }
-
+ 
 // ── INIT ─────────────────────────────────────────────────
 updateWeakUI();
 startQuiz();
+ 
+// ══════════════════════════════════════════════════════════
+// CHARACTER STUDY LOGIC
+// Uses ALL vocab (no lesson filter) — full deck every time.
+// Show the character big; tap/Space to reveal pinyin + English
+// + mnemonic; then self-assess: Knew it / Missed it.
+// ══════════════════════════════════════════════════════════
+let csDeck = [];
+let csCurrent = 0;
+let csRevealed = false;
+let csCntKnew = 0, csCntMissed = 0;
+let csMissedCards = [];
+ 
+function csInit(){
+  csStart(false);
+}
+ 
+function csStart(missedOnly){
+  const pool = missedOnly ? [...csMissedCards] : shuffle([...VOCAB]);
+  if(missedOnly && pool.length === 0){
+    alert('No missed cards to drill!'); return;
+  }
+  csDeck = missedOnly ? shuffle(pool) : pool;
+  csCurrent = 0; csCntKnew = 0; csCntMissed = 0; csMissedCards = [];
+  $('csDone').style.display = 'none';
+  $('csCard').style.display = 'flex';
+  $('csAssess').style.display = 'flex';
+  csShowCard();
+}
+ 
+function csShowCard(){
+  csRevealed = false;
+  const card = csDeck[csCurrent];
+  const total = csDeck.length;
+ 
+  $('csProgTxt').textContent = `Card ${csCurrent + 1} of ${total}`;
+  $('csPb').style.width = `${(csCurrent / total) * 100}%`;
+  $('csCntK').textContent = csCntKnew;
+  $('csCntM').textContent = csCntMissed;
+ 
+  // Front: big character(s)
+  const zhEl = $('csZh');
+  zhEl.textContent = card.zh;
+  zhEl.className = 'cs-zh' + (card.zh.length > 2 ? ' sm' : '');
+  $('csLesson').textContent = card.lesson;
+ 
+  // Hide reveal area
+  $('csReveal').style.display = 'none';
+  $('csTapHint').style.display = 'block';
+ 
+  // Hide assess buttons until revealed
+  $('csAssess').style.opacity = '0';
+  $('csAssess').style.pointerEvents = 'none';
+}
+ 
+function csReveal(){
+  if(csRevealed) return;
+  csRevealed = true;
+  const card = csDeck[csCurrent];
+ 
+  $('csTapHint').style.display = 'none';
+  $('csPy').textContent = card.py;
+  $('csEn').textContent = card.en;
+ 
+  if(card.mn){
+    $('csMnTxt').textContent = card.mn;
+    $('csMn').style.display = 'block';
+  } else {
+    $('csMn').style.display = 'none';
+  }
+ 
+  $('csReveal').style.display = 'block';
+  $('csAssess').style.opacity = '1';
+  $('csAssess').style.pointerEvents = 'all';
+}
+ 
+function csAssess(knew){
+  if(!csRevealed) return;
+  const card = csDeck[csCurrent];
+  if(knew){ csCntKnew++; }
+  else { csCntMissed++; csMissedCards.push(card); }
+ 
+  csCurrent++;
+  if(csCurrent >= csDeck.length){
+    csShowDone();
+  } else {
+    csShowCard();
+  }
+}
+ 
+function csShowDone(){
+  $('csCard').style.display = 'none';
+  $('csAssess').style.display = 'none';
+  $('csDone').style.display = 'block';
+  $('csPb').style.width = '100%';
+  $('csCntK').textContent = csCntKnew;
+  $('csCntM').textContent = csCntMissed;
+ 
+  const total = csDeck.length;
+  $('csDoneBig').textContent = `${csCntKnew} / ${total}`;
+  const pct = csCntKnew / total;
+  $('csDoneMsg').textContent =
+    pct === 1   ? '完美！Every character recognised.' :
+    pct >= 0.8  ? 'Strong — you\'re reading well.' :
+    pct >= 0.6  ? 'Getting there — drill the missed ones.' :
+                  'Keep at it — characters take time.';
+}
+ 
+// Card click to reveal
+$('csCard').addEventListener('click', csReveal);
+$('csBtnKnew').addEventListener('click', e => { e.stopPropagation(); csAssess(true); });
+$('csBtnMissed').addEventListener('click', e => { e.stopPropagation(); csAssess(false); });
+ 
+// Keyboard
+document.addEventListener('keydown', e => {
+  if($('csSection').style.display !== 'block') return;
+  if(e.key === ' '){ e.preventDefault(); csReveal(); }
+  if(e.key.toLowerCase() === 'k') csAssess(true);
+  if(e.key.toLowerCase() === 'm') csAssess(false);
+});
 </script>
 </body>
 </html>
+ 
+
+
+
+
+

@@ -239,28 +239,6 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .fc-dbtn.p:hover{background:var(--red);border-color:var(--red);}
 .fc-dbtn.s{background:transparent;color:var(--orange);border:1.5px solid var(--orange);}
 .fc-dbtn.s:hover{background:var(--orange);color:white;}
-
-/* ── CHARACTER STUDY TAB ── */
-.tabrow button.cs-tab.on{background:var(--green);color:white;}
-
-/* ── CHARACTER STUDY CARD ── */
-.cs-card{background:white;border:1px solid var(--border);border-radius:6px;box-shadow:0 2px 18px rgba(0,0,0,0.07);padding:36px 24px 32px;text-align:center;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;cursor:pointer;margin-bottom:14px;transition:box-shadow 0.2s;width:100%;}
-.cs-card:hover{box-shadow:0 4px 24px rgba(0,0,0,0.11);}
-.cs-zh{font-family:'Noto Serif SC',serif;font-size:5.5rem;color:var(--ink);line-height:1;margin-bottom:4px;}
-.cs-zh.sm{font-size:3.4rem;}
-.cs-tap{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;color:var(--border);text-transform:uppercase;margin-top:10px;}
-.cs-divider{width:36px;height:1px;background:var(--border);margin:14px auto;}
-.cs-py{font-family:'DM Mono',monospace;font-size:1.05rem;color:var(--red);margin-bottom:6px;}
-.cs-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.35rem;color:var(--ink);margin-bottom:12px;}
-.cs-mn-box{background:var(--purple-dim);border:1px solid rgba(90,45,130,0.18);border-radius:4px;padding:10px 14px;text-align:left;width:100%;margin-top:4px;}
-.cs-mn-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:5px;}
-.cs-mn-txt{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.92rem;color:var(--ink);line-height:1.55;}
-.cs-assess{display:flex;gap:10px;justify-content:center;width:100%;margin-bottom:4px;transition:opacity 0.25s;}
-.cs-btn{flex:1;max-width:160px;padding:11px 8px;border-radius:4px;border:1.5px solid;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.15s;background:transparent;}
-.cs-knew{border-color:var(--green);color:var(--green);}
-.cs-knew:hover{background:var(--green);color:white;}
-.cs-missed{border-color:var(--red);color:var(--red);}
-.cs-missed:hover{background:var(--red);color:white;}
 </style>
 </head>
 <body>
@@ -268,14 +246,13 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · Words &amp; Sentences</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · Words &amp; Sentences</div>
 </div>
 
 <!-- TOP-LEVEL TABS -->
 <div class="tabrow">
   <button id="tabQuiz" class="on" onclick="switchTab('quiz')">📝 Quiz</button>
   <button id="tabFC" class="fc-tab" onclick="switchTab('fc')">🃏 Flashcards</button>
-  <button id="tabCS" class="cs-tab" onclick="switchTab('cs')">🔍 Characters</button>
 </div>
 
 <!-- ════════════════════════════════════════════════
@@ -290,7 +267,6 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" onclick="setLesson('3.14',this)">3.14</button>
   <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
   <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
-  <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
 </div>
 
 <div class="slabel" style="margin-top:8px">Mode</div>
@@ -402,7 +378,6 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="pill" data-lesson="3.14">3.14</button>
     <button class="pill" data-lesson="3.21">3.21</button>
     <button class="pill" data-lesson="3.28">3.28</button>
-    <button class="pill" data-lesson="4.03">4.03</button>
   </div>
 
   <!-- Direction -->
@@ -419,6 +394,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <div class="fc-stats">
       <span class="fc-stat a">↩ <span id="fcCntA">0</span></span>
       <span class="fc-stat g">✓ <span id="fcCntG">0</span></span>
+      <span class="fc-stat due" id="fcDueBadge" style="background:var(--purple-dim);color:var(--purple);">— due</span>
     </div>
   </div>
   <div class="fc-pbwrap"><div class="fc-pb" id="fcPb"></div></div>
@@ -459,6 +435,17 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="kb-hint"><span>Space</span> flip · <span>1</span> again · <span>2</span> hard · <span>3</span> good · <span>4</span> easy</div>
 
+  <!-- Nothing due screen -->
+  <div class="fc-done" id="fcNothingDue" style="display:none;">
+    <h2 style="color:var(--green)">You're all caught up! 🎉</h2>
+    <div class="fc-done-big" style="font-size:2.4rem;">没有到期的</div>
+    <div class="fc-done-msg">No cards are due for review today. Come back tomorrow — or browse everything now.</div>
+    <div class="fc-done-acts">
+      <button class="fc-dbtn p" onclick="fcBuildDeck(false,true)">Browse all cards</button>
+      <button class="fc-dbtn s" onclick="fcDrillWeak()">Drill weak cards</button>
+    </div>
+  </div>
+
   <!-- Done screen -->
   <div class="fc-done" id="fcDone">
     <h2>Deck complete!</h2>
@@ -471,66 +458,13 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
       <div class="fbd"><div class="fbd-n" id="fdEasy"  style="color:var(--gold)">0</div><div class="fbd-l">Easy</div></div>
     </div>
     <div class="fc-done-acts">
-      <button class="fc-dbtn p" onclick="fcRestart()">Review again</button>
+      <button class="fc-dbtn p" onclick="fcRestart()">Review due cards</button>
+      <button class="fc-dbtn p" style="background:var(--muted);border-color:var(--muted)" onclick="fcBuildDeck(false,true)">Browse all</button>
       <button class="fc-dbtn s" onclick="fcDrillWeak()">Drill weak cards</button>
     </div>
   </div>
 
 </div><!-- /fcSection -->
-
-<!-- ════════════════════════════════════════════════
-     CHARACTER STUDY SECTION
-════════════════════════════════════════════════ -->
-<div id="csSection" style="display:none;width:100%;max-width:500px;">
-
-  <!-- Progress -->
-  <div class="fc-prog-row" style="margin-top:4px">
-    <div class="fc-prog-txt" id="csProgTxt">Card 1 of —</div>
-    <div class="fc-stats">
-      <span class="fc-stat g">✓ <span id="csCntK">0</span> knew</span>
-      <span class="fc-stat a">✗ <span id="csCntM">0</span> missed</span>
-    </div>
-  </div>
-  <div class="fc-pbwrap"><div class="fc-pb" id="csPb" style="background:var(--green)"></div></div>
-
-  <!-- Study card -->
-  <div class="cs-card" id="csCard">
-    <div class="fc-lesson" id="csLesson"></div>
-    <div class="cs-zh" id="csZh"></div>
-    <div class="cs-tap" id="csTapHint">tap to reveal</div>
-    <!-- Reveal panel -->
-    <div class="cs-reveal" id="csReveal" style="display:none">
-      <div class="cs-divider"></div>
-      <div class="cs-py" id="csPy"></div>
-      <div class="cs-en" id="csEn"></div>
-      <div class="cs-mn-box" id="csMn" style="display:none">
-        <div class="cs-mn-lbl">Memory hook</div>
-        <div class="cs-mn-txt" id="csMnTxt"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Self-assess buttons -->
-  <div class="cs-assess" id="csAssess" style="display:none;opacity:0">
-    <button class="cs-btn cs-knew" id="csBtnKnew">✓ Knew it</button>
-    <button class="cs-btn cs-missed" id="csBtnMissed">✗ Missed it</button>
-  </div>
-  <div class="kb-hint" style="margin-top:6px"><span>Space</span> reveal · <span>K</span> knew · <span>M</span> missed</div>
-
-  <!-- Done screen -->
-  <div class="cs-done" id="csDone" style="display:none">
-    <div class="fc-done" style="display:block">
-      <h2 style="color:var(--green)">Round complete!</h2>
-      <div class="fc-done-big" id="csDoneBig"></div>
-      <div class="fc-done-msg" id="csDoneMsg"></div>
-      <div class="fc-done-acts">
-        <button class="fc-dbtn p" style="background:var(--green);border-color:var(--green)" onclick="csStart(false)">All cards again</button>
-        <button class="fc-dbtn s" onclick="csStart(true)">🔥 Missed only</button>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /csSection -->
 
 <!-- API KEY MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none">
@@ -611,19 +545,6 @@ const VOCAB = [
   {zh:"很多",py:"hěn duō",en:"many / a lot",lesson:"3.28",mn:"很 (very) + 多 (many/much). 多 shows two stacked moons (夕夕) — so much moon! Very + many = a lot. 多 alone can mean 'many'; 很多 amplifies it. Think: very moon-much = loads."},
   {zh:"一些",py:"yī xiē",en:"some / a few",lesson:"3.28",mn:"一 = one (the simplest character — a single stroke). 些 = a small amount. One small amount = some. 一些 is softer than 很多. A single handful, not a mountain. One + bits = some."},
   {zh:"想",py:"xiǎng",en:"to want to / to think",lesson:"3.28",mn:"想 has 心 (heart) at the bottom — what the heart desires. The top part gives the sound. Your HEART wants something = 想. Used as 想 + verb: 想吃 (want to eat), 想喝 (want to drink). Follow your heart!"},
-  // 4.03
-  {zh:"烤鸡",py:"kǎo jī",en:"roasted chicken",lesson:"4.03",mn:"烤 = roasted (fire radical 火 at the bottom — cooked over flames). 鸡 = chicken (bird radical 鸟 on the right). Fire + chicken = roasted chicken. Same 烤 as in 烤鸭 (roasted duck) — you know this pattern already."},
-  {zh:"面条",py:"miàn tiáo",en:"noodles",lesson:"4.03",mn:"面 means flour/face/noodle — the wheat radical 麦 is in there. 条 means strip or strand. Flour in strips = noodles. 面 (miàn) sounds a bit like 'man' — imagine a man made entirely of noodle strips."},
-  {zh:"牛肉",py:"niú ròu",en:"beef",lesson:"4.03",mn:"牛 is a cow — the character literally shows horns on top of a cross: 牛. 肉 means meat (the moon radical 月 is really flesh/meat 肉 in disguise). Cow + meat = beef. Spot 牛 anywhere and think: bovine."},
-  {zh:"牛奶",py:"niú nǎi",en:"milk",lesson:"4.03",mn:"牛 (cow) again — your key to all things bovine. 奶 means milk/breast (woman radical 女 on the left). Cow + woman/nourish = cow's milk. Once you've got 牛 = cow, 牛肉 and 牛奶 are both obvious."},
-  {zh:"啤酒",py:"pí jiǔ",en:"beer",lesson:"4.03",mn:"啤 is phonetic — pí sounds like 'beer'. 酒 means alcohol (water radical 氵 on the left, because it's a liquid). The 酒 character appears in all alcoholic drinks. Pí jiǔ — say it: beer! The 口 mouth radical in 啤 hints you drink it."},
-  {zh:"葡萄酒",py:"pú tao jiǔ",en:"wine",lesson:"4.03",mn:"葡萄 = grape (both have the grass radical 艹 — they grow on vines). 酒 = alcohol (氵liquid). Grape + alcohol = wine. Notice 酒 is the key character for any alcoholic drink — 啤酒 (beer), 葡萄酒 (wine). Learn 酒, unlock all drinks."},
-  {zh:"葡萄",py:"pú tao",en:"grapes",lesson:"4.03",mn:"Both characters have the grass radical 艹 at the top — they're plants. 葡萄 is a transliteration of an ancient foreign word for grape. The double-grass-radical pattern is your clue: two plant characters together = a vine fruit. Pú tao — sounds a bit like 'boo-dow'."},
-  {zh:"鸡肉",py:"jī ròu",en:"chicken (meat)",lesson:"4.03",mn:"鸡 = chicken (you already know this from 烤鸡). 肉 = meat (same as in 牛肉). Chicken + meat = chicken meat. The pattern [animal] + 肉 is universal: 牛肉 beef, 鸡肉 chicken, 猪肉 pork. Learn 肉 once, apply forever."},
-  {zh:"朋友",py:"péng you",en:"friend",lesson:"4.03",mn:"朋 is two moons (月月) side by side — two people walking together under the moon. 友 shows two hands clasped (an ancient sign of friendship). Two moons + clasped hands = friend. Péng yǒu — the 'you' even sounds like the English word!"},
-  {zh:"游泳",py:"yóu yǒng",en:"to swim",lesson:"4.03",mn:"游 has the water radical 氵on the left — of course swimming involves water. 泳 also has 氵— double water radical, because swimming is very watery! Both characters have water on the left. When you see double-氵, think aquatic activity."},
-  {zh:"足球",py:"zú qiú",en:"football / soccer",lesson:"4.03",mn:"足 means foot (it's a pictograph of a leg and foot — the top is a knee, the bottom is toes). 球 means ball (jade radical 王 on the left, because balls were precious round objects). Foot + ball = football. Exactly what it says."},
-  {zh:"踢足球",py:"tī zú qiú",en:"to play football",lesson:"4.03",mn:"踢 means to kick — it has the foot radical 足 on the left (same 足 as in 足球!). So: kick + foot-ball = play football. 踢 (kick) + 足球 (football) = the action of kicking the ball. The foot radical appears twice — once in 踢, once in 足."},
 ];
 
 const SENTENCES = [
@@ -679,12 +600,9 @@ const SENTENCES = [
 function switchTab(tab){
   document.getElementById('tabQuiz').classList.toggle('on', tab==='quiz');
   document.getElementById('tabFC').classList.toggle('on', tab==='fc');
-  document.getElementById('tabCS').classList.toggle('on', tab==='cs');
   document.getElementById('quizSection').style.display = tab==='quiz'?'':'none';
   document.getElementById('fcSection').style.display   = tab==='fc' ?'block':'none';
-  document.getElementById('csSection').style.display   = tab==='cs' ?'block':'none';
   if(tab==='fc') fcInit();
-  if(tab==='cs') csInit();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1045,46 +963,43 @@ function applyCloudPayload(data){
   }
 }
 
-async function fcLoadFromCloud(){
+async function fcLoadFromCloud(rebuildDeck){
   if(!fcKey){ setSyncStatus('','Not connected — add your JSONBin key to sync'); return; }
   setSyncStatus('spin','Connecting…');
   try {
+    let record = null;
     if(fcBinId){
-      // We already know our bin — just read it
-      const res = await fetch(`${JSONBIN_API}/b/${fcBinId}/latest`, {
-        headers:{'X-Master-Key': fcKey}
-      });
-      if(res.status === 401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
-      if(res.status === 404){
-        // Bin was deleted — create a fresh one
-        fcBinId = '';
-        localStorage.removeItem('cn_fc_binid');
-        await fcLoadFromCloud();
-        return;
+      const res = await fetch(`${JSONBIN_API}/b/${fcBinId}/latest`, {headers:{'X-Master-Key':fcKey}});
+      if(res.status===401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
+      if(res.status===404){
+        fcBinId=''; localStorage.removeItem('cn_fc_binid');
+        await fcLoadFromCloud(rebuildDeck); return;
       }
       if(!res.ok) throw new Error(`Read failed: ${res.status}`);
       const data = await res.json();
-      applyCloudPayload(data.record || {});
+      record = data.record || {};
       setSyncStatus('ok','Synced · '+new Date().toLocaleTimeString());
     } else {
-      // No bin yet — create one
       const res = await fetch(`${JSONBIN_API}/b`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json','X-Master-Key': fcKey, 'X-Bin-Name': BIN_NAME, 'X-Bin-Private': 'true'},
-        body: JSON.stringify(cloudPayload())
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-Master-Key':fcKey,'X-Bin-Name':BIN_NAME,'X-Bin-Private':'true'},
+        body:JSON.stringify(cloudPayload())
       });
-      if(res.status === 401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
+      if(res.status===401){ setSyncStatus('err','Key rejected — check it and try again'); return; }
       if(!res.ok) throw new Error(`Create failed: ${res.status}`);
       const data = await res.json();
       fcBinId = data.metadata.id;
       localStorage.setItem('cn_fc_binid', fcBinId);
       setSyncStatus('ok','New sync bin created · ready');
     }
-    $('syncNowBtn').style.display = 'inline-block';
+    if(record) applyCloudPayload(record);
+    $('syncNowBtn').style.display='inline-block';
     saveCacheLocal();
+    fcUpdateDueBadge();
+    if(rebuildDeck && $('fcSection').style.display==='block') fcBuildDeck(false, false);
   } catch(err){
     setSyncStatus('err','Sync error — check your key');
-    console.error('JSONBin error:', err);
+    console.error('JSONBin error:',err);
   }
 }
 
@@ -1112,7 +1027,7 @@ function schedulePush(){
   schedulePush._t = setTimeout(pushToCloud, 2000);
 }
 
-function fcSyncNow(){ fcLoadFromCloud(); }
+function fcSyncNow(){ fcLoadFromCloud(true); }
 
 function saveCacheLocal(){
   try{
@@ -1142,7 +1057,7 @@ function saveKey(){
   localStorage.setItem('cn_fc_key', fcKey);
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
   closeModal();
-  fcLoadFromCloud();
+  fcLoadFromCloud(true);
 }
 
 // ── SM-2 Spaced Repetition ───────────────────────────────
@@ -1165,7 +1080,7 @@ function srsSave(zh, data){
   try{ localStorage.setItem('cn_srs_v1', JSON.stringify(fcSRS)); }catch(e){}
 }
 
-const MAX_INTERVAL = 3; // cap — revisit once vocab grows
+const MAX_INTERVAL = 60; // days — real spaced repetition range
 
 function srsApply(zh, rating){
   const d = srsGet(zh);
@@ -1218,6 +1133,14 @@ function fcDueCount(pool){
   return pool.filter(v=>{ const d=srsGet(v.zh); return d.due<=t; }).length;
 }
 
+function fcUpdateDueBadge(){
+  const pool = VOCAB; // always count all
+  const t = today();
+  const due = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps===0 || d.due<=t; }).length;
+  const badge = $('fcDueBadge');
+  if(badge){ badge.textContent = due + ' due'; }
+}
+
 // ── Card logic ───────────────────────────────────────────
 function fcGetScore(zh){
   const r = fcRatings[zh];
@@ -1225,29 +1148,48 @@ function fcGetScore(zh){
   return (r.good||0) + (r.easy||0)*2 - (r.again||0)*2 - (r.hard||0);
 }
 
-function fcBuildDeck(weakOnly){
+function fcBuildDeck(weakOnly, browseAll){
   let pool = fcFilterVocab();
   const t = today();
   if(weakOnly){
-    // Weak = again/hard heavy cards: use old rating score for compatibility
     pool = pool.filter(v => fcGetScore(v.zh) <= 0);
     if(!pool.length){ alert('No weak cards — all ratings are positive!'); return false; }
     fcDeck = shuffle(pool);
-  } else {
-    // Sort: due first (overdue → today), then new cards (no SRS data), then future
+  } else if(browseAll){
+    // Browse everything regardless of SRS schedule
     const due   = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
     const newC  = pool.filter(v=>srsGet(v.zh).reps===0);
     const future= pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due>t; });
-    // Sort due by most overdue first
     due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due);
     fcDeck = [...shuffle(due), ...shuffle(newC), ...shuffle(future)];
+  } else {
+    // ★ Normal mode: ONLY due cards + new (unseen) cards — not future ones.
+    // This is the core Anki behaviour: cards you've already learned well
+    // won't appear until their scheduled day.
+    const due  = pool.filter(v=>{ const d=srsGet(v.zh); return d.reps>0 && d.due<=t; });
+    const newC = pool.filter(v=>srsGet(v.zh).reps===0);
+    due.sort((a,b)=>srsGet(a.zh).due - srsGet(b.zh).due); // most overdue first
+    fcDeck = [...shuffle(due), ...shuffle(newC)];
+    if(!fcDeck.length){
+      // Nothing due today — show a message and offer browse-all
+      $('fcDone').style.display='none';
+      $('fcScene').style.display='none';
+      $('ratingRow').style.display='none';
+      const nothingDiv = $('fcNothingDue');
+      if(nothingDiv) nothingDiv.style.display='block';
+      fcUpdateDueBadge();
+      return false;
+    }
   }
+  const nothingDiv = $('fcNothingDue');
+  if(nothingDiv) nothingDiv.style.display='none';
   fcCurrent = 0; fcSessionA = 0; fcSessionG = 0;
   fcSessionBreakdown = {again:0,hard:0,good:0,easy:0};
   $('fcDone').style.display = 'none';
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
   fcShowCard();
+  fcUpdateDueBadge();
   return true;
 }
 
@@ -1349,37 +1291,40 @@ function fcRate(rating){
   if(rating==='again'||rating==='hard') fcSessionA++;
   else fcSessionG++;
 
+  // ★ "Again" re-queues the card later in this session (Anki core behaviour)
+  if(rating==='again'){
+    // Insert the card ~4 positions ahead, or at the end if fewer cards remain
+    const insertAt = Math.min(fcCurrent + 4, fcDeck.length);
+    fcDeck.splice(insertAt, 0, card);
+  }
+
   saveCacheLocal();
   schedulePush();
 
-  // FIX for peek bug:
-  // Start flipping back immediately. Mark animating=true.
-  // Only populate the next card's DOM content AFTER the flip animation completes.
   fcCurrent++;
   if(fcCurrent >= fcDeck.length){
-    // No next card — just show done after animation
     setTimeout(fcShowDone, 520);
     return;
   }
 
-  // Flip back: remove flipped class (animates back to front)
+  // Flip back then populate next card after animation
   fcFlipped = false;
   $('fcWrap').classList.remove('flipped');
   $('ratingRow').classList.remove('vis');
   fcAnimating = true;
 
-  // After the 500ms CSS transition, populate and reset
   setTimeout(()=>{
     fcAnimating = false;
     _fcPopulateCard();
     if(fcPendingCard){ fcPendingCard=false; _fcPopulateCard(); }
-  }, 520); // slightly over the 500ms transition
+  }, 520);
 }
 
 function fcShowDone(){
   $('fcScene').style.display = 'none';
   $('ratingRow').style.display = 'none';
   $('fcDone').style.display = 'block';
+  const nd = $('fcNothingDue'); if(nd) nd.style.display='none';
   $('fcPb').style.width = '100%';
 
   const total = fcDeck.length;
@@ -1400,12 +1345,12 @@ function fcShowDone(){
 function fcRestart(){
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
-  fcBuildDeck(false);
+  fcBuildDeck(false, false);
 }
 function fcDrillWeak(){
   $('fcScene').style.display = 'block';
   $('ratingRow').style.display = 'flex';
-  fcBuildDeck(true);
+  fcBuildDeck(true, false);
 }
 
 // ── Keyboard for flashcards ──────────────────────────────
@@ -1451,141 +1396,35 @@ function fcInit(){
   fcKey   = localStorage.getItem('cn_fc_key')   || '';
   fcBinId = localStorage.getItem('cn_fc_binid') || '';
   fcRatings = fcLoadCacheLocal();
-  // Also freshen weakMap from localStorage in case it diverged
   try{ weakMap = JSON.parse(localStorage.getItem('cn_weak_v2')||'{}'); }catch(e){}
 
   if(fcKey){
     $('syncNowBtn').style.display = 'inline-block';
-    fcLoadFromCloud();
+    fcLoadFromCloud(true); // will rebuild deck after sync
   } else {
     setSyncStatus('','Not connected — add your JSONBin key to sync across devices');
+    fcBuildDeck(false, false);
   }
-  fcBuildDeck(false);
 }
 
 // ── INIT ─────────────────────────────────────────────────
 updateWeakUI();
 startQuiz();
 
-// ══════════════════════════════════════════════════════════
-// CHARACTER STUDY LOGIC
-// Uses ALL vocab (no lesson filter) — full deck every time.
-// Show the character big; tap/Space to reveal pinyin + English
-// + mnemonic; then self-assess: Knew it / Missed it.
-// ══════════════════════════════════════════════════════════
-let csDeck = [];
-let csCurrent = 0;
-let csRevealed = false;
-let csCntKnew = 0, csCntMissed = 0;
-let csMissedCards = [];
+// On page load: if we have a key, pull from cloud immediately (even on Quiz tab)
+// so SRS data is fresh before the user switches to Flashcards.
+(function pageLoadSync(){
+  const key = localStorage.getItem('cn_fc_key');
+  if(!key) return;
+  fcKey   = key;
+  fcBinId = localStorage.getItem('cn_fc_binid') || '';
+  fcRatings = JSON.parse(localStorage.getItem('cn_fc_ratings_v1')||'{}');
+  // Fire-and-forget: pull cloud data silently. If user is on FC tab, deck
+  // rebuilds automatically via the rebuildDeck flag. If on Quiz tab, weak
+  // map gets refreshed and the due badge is updated.
+  fcLoadFromCloud(false).then(()=>{ fcUpdateDueBadge(); }).catch(()=>{});
+})();
 
-function csInit(){
-  csStart(false);
-}
-
-function csStart(missedOnly){
-  const pool = missedOnly ? [...csMissedCards] : shuffle([...VOCAB]);
-  if(missedOnly && pool.length === 0){
-    alert('No missed cards to drill!'); return;
-  }
-  csDeck = missedOnly ? shuffle(pool) : pool;
-  csCurrent = 0; csCntKnew = 0; csCntMissed = 0; csMissedCards = [];
-  $('csDone').style.display = 'none';
-  $('csCard').style.display = 'flex';
-  $('csAssess').style.display = 'flex';
-  csShowCard();
-}
-
-function csShowCard(){
-  csRevealed = false;
-  const card = csDeck[csCurrent];
-  const total = csDeck.length;
-
-  $('csProgTxt').textContent = `Card ${csCurrent + 1} of ${total}`;
-  $('csPb').style.width = `${(csCurrent / total) * 100}%`;
-  $('csCntK').textContent = csCntKnew;
-  $('csCntM').textContent = csCntMissed;
-
-  // Front: big character(s)
-  const zhEl = $('csZh');
-  zhEl.textContent = card.zh;
-  zhEl.className = 'cs-zh' + (card.zh.length > 2 ? ' sm' : '');
-  $('csLesson').textContent = card.lesson;
-
-  // Hide reveal area
-  $('csReveal').style.display = 'none';
-  $('csTapHint').style.display = 'block';
-
-  // Hide assess buttons until revealed
-  $('csAssess').style.opacity = '0';
-  $('csAssess').style.pointerEvents = 'none';
-}
-
-function csReveal(){
-  if(csRevealed) return;
-  csRevealed = true;
-  const card = csDeck[csCurrent];
-
-  $('csTapHint').style.display = 'none';
-  $('csPy').textContent = card.py;
-  $('csEn').textContent = card.en;
-
-  if(card.mn){
-    $('csMnTxt').textContent = card.mn;
-    $('csMn').style.display = 'block';
-  } else {
-    $('csMn').style.display = 'none';
-  }
-
-  $('csReveal').style.display = 'block';
-  $('csAssess').style.opacity = '1';
-  $('csAssess').style.pointerEvents = 'all';
-}
-
-function csAssess(knew){
-  if(!csRevealed) return;
-  const card = csDeck[csCurrent];
-  if(knew){ csCntKnew++; }
-  else { csCntMissed++; csMissedCards.push(card); }
-
-  csCurrent++;
-  if(csCurrent >= csDeck.length){
-    csShowDone();
-  } else {
-    csShowCard();
-  }
-}
-
-function csShowDone(){
-  $('csCard').style.display = 'none';
-  $('csAssess').style.display = 'none';
-  $('csDone').style.display = 'block';
-  $('csPb').style.width = '100%';
-  $('csCntK').textContent = csCntKnew;
-  $('csCntM').textContent = csCntMissed;
-
-  const total = csDeck.length;
-  $('csDoneBig').textContent = `${csCntKnew} / ${total}`;
-  const pct = csCntKnew / total;
-  $('csDoneMsg').textContent =
-    pct === 1   ? '完美！Every character recognised.' :
-    pct >= 0.8  ? 'Strong — you\'re reading well.' :
-    pct >= 0.6  ? 'Getting there — drill the missed ones.' :
-                  'Keep at it — characters take time.';
-}
-
-// Card click to reveal
-$('csCard').addEventListener('click', csReveal);
-$('csBtnKnew').addEventListener('click', e => { e.stopPropagation(); csAssess(true); });
-$('csBtnMissed').addEventListener('click', e => { e.stopPropagation(); csAssess(false); });
-
-// Keyboard
-document.addEventListener('keydown', e => {
-  if($('csSection').style.display !== 'block') return;
-  if(e.key === ' '){ e.preventDefault(); csReveal(); }
-  if(e.key.toLowerCase() === 'k') csAssess(true);
-  if(e.key.toLowerCase() === 'm') csAssess(false);
-});
 </script>
 </body>
 </html>

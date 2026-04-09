@@ -246,7 +246,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · Words &amp; Sentences</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · Words &amp; Sentences</div>
 </div>
 
 <!-- TOP-LEVEL TABS -->
@@ -267,6 +267,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" onclick="setLesson('3.14',this)">3.14</button>
   <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
   <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
+  <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
 </div>
 
 <div class="slabel" style="margin-top:8px">Mode</div>
@@ -378,6 +379,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="pill" data-lesson="3.14">3.14</button>
     <button class="pill" data-lesson="3.21">3.21</button>
     <button class="pill" data-lesson="3.28">3.28</button>
+    <button class="pill" data-lesson="4.03">4.03</button>
   </div>
 
   <!-- Direction -->
@@ -545,6 +547,19 @@ const VOCAB = [
   {zh:"很多",py:"hěn duō",en:"many / a lot",lesson:"3.28",mn:"很 (very) + 多 (many/much). 多 shows two stacked moons (夕夕) — so much moon! Very + many = a lot. 多 alone can mean 'many'; 很多 amplifies it. Think: very moon-much = loads."},
   {zh:"一些",py:"yī xiē",en:"some / a few",lesson:"3.28",mn:"一 = one (the simplest character — a single stroke). 些 = a small amount. One small amount = some. 一些 is softer than 很多. A single handful, not a mountain. One + bits = some."},
   {zh:"想",py:"xiǎng",en:"to want to / to think",lesson:"3.28",mn:"想 has 心 (heart) at the bottom — what the heart desires. The top part gives the sound. Your HEART wants something = 想. Used as 想 + verb: 想吃 (want to eat), 想喝 (want to drink). Follow your heart!"},
+  // ── 4.03 ──────────────────────────────────────────────
+  {zh:"烤鸡",py:"kǎo jī",en:"roasted chicken",lesson:"4.03",mn:"烤 has 火 (fire) at the bottom — cooked over flames. 鸡 means chicken (bird radical 鸟 on the right). Fire + chicken = roasted chicken. Same pattern as 烤鸭 (roasted duck) — swap the bird!"},
+  {zh:"面条",py:"miàn tiáo",en:"noodles",lesson:"4.03",mn:"面 means flour/noodle (a face 面 made of wheat — flour is the face of the grain). 条 means a long strip or strand. Long strips of flour = noodles. 条 is the measure word for long thin things — noodles, roads, fish."},
+  {zh:"牛肉",py:"niú ròu",en:"beef",lesson:"4.03",mn:"牛 is a cow — the character looks like a horned animal head viewed from above. 肉 means meat (月 with two strokes inside — flesh). Cow + meat = beef. Once you know 牛 and 肉, all meats follow: 鸡肉, 猪肉 (pork)..."},
+  {zh:"牛奶",py:"niú nǎi",en:"milk",lesson:"4.03",mn:"牛 = cow. 奶 has the woman radical 女 on the left — milk is associated with motherhood. Cow + mother-liquid = milk. The 女 in 奶 is your reminder: it's a nurturing fluid from a living creature."},
+  {zh:"啤酒",py:"pí jiǔ",en:"beer",lesson:"4.03",mn:"啤 is phonetic — pí sounds like 'beer'. 酒 means alcohol (water radical 氵 on the left, because it's a liquid). The 酉 part of 酒 is an ancient wine jar. Liquid in a jar = alcohol. pí jiǔ = beer-alcohol = beer."},
+  {zh:"葡萄酒",py:"pú tao jiǔ",en:"wine",lesson:"4.03",mn:"葡萄 = grape (both characters have the grass radical 艹 — they're plants). 酒 = alcohol. Grape alcohol = wine. You already know 酒 from 啤酒. 葡萄 sounds like 'poo-tao' — imagine a grape vine going 'poo-tao, poo-tao' in the breeze."},
+  {zh:"葡萄",py:"pú tao",en:"grape",lesson:"4.03",mn:"Both characters have the grass radical 艹 on top — grapes grow on a vine, which is a plant. 葡萄 is a phonetic borrowing for the sound. Pú tao — say it fast, it almost sounds like 'fruit' with a twist. Two grass-plants = grape cluster."},
+  {zh:"鸡肉",py:"jī ròu",en:"chicken (meat)",lesson:"4.03",mn:"鸡 = chicken (bird radical 鸟). 肉 = meat. Chicken + meat = chicken meat. You already know 烤鸡 (roasted chicken) — 鸡肉 is the raw ingredient. Same 肉 pattern as 牛肉 (beef). Learn 肉 once, name every meat."},
+  {zh:"朋友",py:"péng you",en:"friend",lesson:"4.03",mn:"朋 shows two moons (月月) side by side — two people walking together through the night. 友 has two hands (又) joined — a handshake. Two moons + joined hands = friend. Péng yǒu — sounds a bit like 'peng pal', like pen pal!"},
+  {zh:"游泳",py:"yóu yǒng",en:"to swim",lesson:"4.03",mn:"游 has the water radical 氵on the left — moving through water. 泳 also has 氵— it's definitely in the water! Both characters are wet. The right side of 游 shows a child (子) by a flag — learning to swim with a float. Double water = swimming."},
+  {zh:"足球",py:"zú qiú",en:"football / soccer",lesson:"4.03",mn:"足 means foot — the character shows a leg with a foot at the bottom. 球 means ball (the jade radical 王 on the left — round and precious, like a ball). Foot + ball = football. Simple and logical."},
+  {zh:"踢足球",py:"tī zú qiú",en:"to play football",lesson:"4.03",mn:"踢 means to kick — it has 足 (foot) on the left, because kicking uses your foot. 足球 = football. So 踢足球 = kick + football = to play football. The foot radical appears twice: in 踢 and in 足球. Feet everywhere!"},
 ];
 
 const SENTENCES = [

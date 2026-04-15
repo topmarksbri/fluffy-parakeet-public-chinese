@@ -185,8 +185,22 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .hsk-drill-zh{font-family:'Noto Serif SC',serif;font-size:4.5rem;color:var(--ink);cursor:pointer;margin-bottom:10px;line-height:1;}
 .hsk-drill-tap{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
 .hsk-drill-py{font-family:'DM Mono',monospace;font-size:0.9rem;color:var(--red);margin-top:12px;margin-bottom:3px;}
-.hsk-drill-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.2rem;color:var(--ink);margin-bottom:14px;}
+.hsk-drill-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.2rem;color:var(--ink);margin-bottom:8px;}
+.hsk-drill-note{font-family:'DM Mono',monospace;font-size:0.63rem;color:var(--muted);line-height:1.55;padding:8px 12px;background:var(--soft);border-radius:4px;text-align:left;margin-bottom:14px;}
 .hsk-drill-assess{display:flex;gap:10px;justify-content:center;margin-top:10px;}
+.hsk-sm2-row{display:flex;gap:5px;justify-content:center;margin-top:12px;}
+.hsk-sm2-btn{flex:1;padding:8px 4px;border-radius:6px;font-family:'DM Mono',monospace;cursor:pointer;transition:all 0.18s;border:1.5px solid;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.hsk-sm2-btn .s-lbl{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;}
+.hsk-sm2-btn .s-int{font-size:0.55rem;opacity:0.72;}
+.hsk-sm2-btn.again{color:var(--red);border-color:var(--red);background:transparent;}
+.hsk-sm2-btn.again:hover{background:var(--red);color:white;}
+.hsk-sm2-btn.hard{color:var(--orange);border-color:var(--orange);background:transparent;}
+.hsk-sm2-btn.hard:hover{background:var(--orange);color:white;}
+.hsk-sm2-btn.good{color:var(--green);border-color:var(--green);background:transparent;}
+.hsk-sm2-btn.good:hover{background:var(--green);color:white;}
+.hsk-sm2-btn.easy{color:var(--blue);border-color:var(--blue);background:transparent;}
+.hsk-sm2-btn.easy:hover{background:var(--blue);color:white;}
+.hsk-drill-end{background:white;border:1px solid var(--border);border-radius:4px;padding:28px 20px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);margin-bottom:12px;}
 </style>
 </head>
 <body>
@@ -399,7 +413,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hsk-drill" id="hskDrill" style="display:none">
   <div class="pbar-row">
     <div class="pbar-txt" id="hskDrillProg"></div>
-    <button class="tr-btn" style="font-size:0.58rem;padding:4px 10px" onclick="endHSKDrill()">✕ End drill</button>
+    <button class="tr-btn" style="font-size:0.58rem;padding:4px 10px" onclick="backFromHSKDrill()">✕ End drill</button>
   </div>
   <div class="pbwrap"><div class="pb" id="hskDrillPb"></div></div>
   <div class="hsk-drill-zh" id="hskDrillZh" onclick="revealHSKDrill()"></div>
@@ -408,10 +422,24 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <div id="hskDrillReveal" style="display:none">
     <div class="hsk-drill-py" id="hskDrillPy"></div>
     <div class="hsk-drill-en" id="hskDrillEn"></div>
-    <div class="hsk-drill-assess">
-      <button class="cs-btn knew" onclick="hskAssess(true)">✓ Knew it</button>
-      <button class="cs-btn missed" onclick="hskAssess(false)">✗ Missed it</button>
+    <div class="hsk-drill-note" id="hskDrillNote" style="display:none"></div>
+    <div class="hsk-sm2-row">
+      <button class="hsk-sm2-btn again" onclick="hskRate(0)"><span class="s-lbl">Again</span><span class="s-int" id="hskInt0"></span></button>
+      <button class="hsk-sm2-btn hard"  onclick="hskRate(1)"><span class="s-lbl">Hard</span><span class="s-int" id="hskInt1"></span></button>
+      <button class="hsk-sm2-btn good"  onclick="hskRate(2)"><span class="s-lbl">Good</span><span class="s-int" id="hskInt2"></span></button>
+      <button class="hsk-sm2-btn easy"  onclick="hskRate(3)"><span class="s-lbl">Easy</span><span class="s-int" id="hskInt3"></span></button>
     </div>
+  </div>
+</div>
+
+<div class="hsk-drill-end" id="hskDrillEnd" style="display:none">
+  <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--green);margin-bottom:6px">Drill complete</div>
+  <div class="bigscore" id="hskDrillScore"></div>
+  <div style="font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);margin-bottom:18px" id="hskDrillMsg"></div>
+  <div class="sacts">
+    <button class="sbtn p" onclick="startHSKDrill()">Drill again</button>
+    <button class="sbtn f" id="hskDrillMissedBtn" onclick="drillHSKMissed()" style="display:none">Drill Again cards →</button>
+    <button class="sbtn t" style="margin-top:8px" onclick="backFromHSKDrill()">← Back to lesson</button>
   </div>
 </div>
 
@@ -536,35 +564,184 @@ const SENTENCES = [
 
 const HSK1_LESSONS = [
 {num:1,zhTitle:"你好",enTitle:"Hello",words:[
-{zh:"你",py:"nǐ",en:"you"},{zh:"好",py:"hǎo",en:"good / hello"},{zh:"您",py:"nín",en:"you (polite)"},{zh:"你们",py:"nǐ men",en:"you all"},{zh:"对不起",py:"duì bu qǐ",en:"sorry"},{zh:"没关系",py:"méi guān xi",en:"it's okay / no problem"}]},
+{zh:"你",py:"nǐ",en:"you",note:"亻 person + 尔 (phonetic) — the person standing before you"},
+{zh:"好",py:"hǎo",en:"good / hello",note:"女 woman + 子 child — a mother with her child: good, fine"},
+{zh:"您",py:"nín",en:"you (polite)",note:"你 you + 心 heart (below) — 'you from the heart': polite form"},
+{zh:"你们",py:"nǐ men",en:"you all",note:"你 you + 们 (plural suffix) — you all"},
+{zh:"对不起",py:"duì bu qǐ",en:"sorry",note:"对 correct + 不 not + 起 rise — 'can't measure up to what's right': sorry"},
+{zh:"没关系",py:"méi guān xi",en:"it's okay / no problem",note:"没 no + 关系 connection — 'no connection to the problem': never mind"}]},
 {num:2,zhTitle:"谢谢你",enTitle:"Thank you",words:[
-{zh:"谢谢",py:"xiè xie",en:"thank you"},{zh:"不",py:"bù",en:"no / not"},{zh:"不客气",py:"bù kè qi",en:"you're welcome"},{zh:"再见",py:"zài jiàn",en:"goodbye"}]},
+{zh:"谢谢",py:"xiè xie",en:"thank you",note:"言 speech + 射 shoot — words shot like arrows of gratitude"},
+{zh:"不",py:"bù",en:"no / not",note:"A bird flying upward — going against, turning away: no/not"},
+{zh:"不客气",py:"bù kè qi",en:"you're welcome",note:"不 not + 客 guest + 气 manner — 'no need for guest formalities'"},
+{zh:"再见",py:"zài jiàn",en:"goodbye",note:"再 again + 见 see — 'see you again': goodbye (like French 'au revoir')"}]},
 {num:3,zhTitle:"你叫什么名字",enTitle:"What's your name",words:[
-{zh:"叫",py:"jiào",en:"to be called"},{zh:"什么",py:"shén me",en:"what"},{zh:"名字",py:"míng zi",en:"name"},{zh:"我",py:"wǒ",en:"I / me"},{zh:"是",py:"shì",en:"is / am / are"},{zh:"老师",py:"lǎo shī",en:"teacher"},{zh:"吗",py:"ma",en:"(question particle)"},{zh:"学生",py:"xué sheng",en:"student"},{zh:"人",py:"rén",en:"person"},{zh:"中国",py:"zhōng guó",en:"China"},{zh:"美国",py:"měi guó",en:"America / USA"}]},
+{zh:"叫",py:"jiào",en:"to be called",note:"口 mouth + 丩 (a person calling out) — mouth calling a name: to call"},
+{zh:"什么",py:"shén me",en:"what",note:"什 = 亻 person + 十 ten. Phonetic compound — what thing?"},
+{zh:"名字",py:"míng zi",en:"name",note:"名 = 夕 evening + 口 mouth (stating your name in the dark). 字 = child 子 under a roof 宀 learning to write"},
+{zh:"我",py:"wǒ",en:"I / me",note:"手 hand + 戈 halberd — a hand gripping a weapon: mine, ME"},
+{zh:"是",py:"shì",en:"is / am / are",note:"日 sun + 正 upright — the sun standing at its zenith: to be, is"},
+{zh:"老师",py:"lǎo shī",en:"teacher",note:"老 = person bent over earth (old). 师 = army leader/master: teacher"},
+{zh:"吗",py:"ma",en:"(question particle)",note:"口 mouth + 马 horse (phonetic ma) — spoken question marker"},
+{zh:"学生",py:"xué sheng",en:"student",note:"学 = learning under a roof with hands. 生 = sprouting plant: life/born"},
+{zh:"人",py:"rén",en:"person",note:"Two strokes — a walking person (pictograph of legs in motion)"},
+{zh:"中国",py:"zhōng guó",en:"China",note:"中 = arrow through centre of a target. 国 = jade 玉 inside walls 口 — the precious land"},
+{zh:"美国",py:"měi guó",en:"America / USA",note:"美 = big 大 + sheep 羊 (beautiful). 国 country — phonetic match for 'America'"}]},
 {num:4,zhTitle:"她是我的汉语老师",enTitle:"She is my Chinese teacher",words:[
-{zh:"她",py:"tā",en:"she / her"},{zh:"谁",py:"shéi",en:"who"},{zh:"的",py:"de",en:"(possessive particle)"},{zh:"汉语",py:"hàn yǔ",en:"Chinese (language)"},{zh:"哪",py:"nǎ",en:"which"},{zh:"国",py:"guó",en:"country"},{zh:"呢",py:"ne",en:"(question particle)"},{zh:"他",py:"tā",en:"he / him"},{zh:"同学",py:"tóng xué",en:"classmate"},{zh:"朋友",py:"péng you",en:"friend"}]},
+{zh:"她",py:"tā",en:"she / her",note:"女 woman + 也 — the female version of 他. Same sound, different radical"},
+{zh:"谁",py:"shéi",en:"who",note:"言 speech + 隹 bird (phonetic) — spoken question: who?"},
+{zh:"的",py:"de",en:"(possessive particle)",note:"白 white + 勺 ladle — possessive/attributive particle (de)"},
+{zh:"汉语",py:"hàn yǔ",en:"Chinese (language)",note:"汉 = Han people/river (氵 water + 又). 语 = 言 speech + 吾 I — my speech: language"},
+{zh:"哪",py:"nǎ",en:"which",note:"口 mouth + 那 that — 'which one of those?'"},
+{zh:"国",py:"guó",en:"country",note:"口 boundary walls + 玉 jade inside — the precious land within borders: country"},
+{zh:"呢",py:"ne",en:"(question particle)",note:"口 mouth + 尼 (phonetic) — soft question or continuation particle"},
+{zh:"他",py:"tā",en:"he / him",note:"亻 person + 也 also — 'another person': he/him"},
+{zh:"同学",py:"tóng xué",en:"classmate",note:"同 same/together + 学 study — 'those who study together': classmate"},
+{zh:"朋友",py:"péng you",en:"friend",note:"朋 = two groups of shells (ancient gifts). 友 = two right hands clasped: friendship"}]},
 {num:5,zhTitle:"她女儿今年二十岁",enTitle:"Her daughter is 20 years old",words:[
-{zh:"家",py:"jiā",en:"home / family"},{zh:"有",py:"yǒu",en:"to have"},{zh:"口",py:"kǒu",en:"mouth / (measure word)"},{zh:"女儿",py:"nǚ ér",en:"daughter"},{zh:"几",py:"jǐ",en:"how many"},{zh:"岁",py:"suì",en:"years old"},{zh:"了",py:"le",en:"(change-of-state particle)"},{zh:"今年",py:"jīn nián",en:"this year"},{zh:"多",py:"duō",en:"many / much"},{zh:"大",py:"dà",en:"big / old (age)"}]},
+{zh:"家",py:"jiā",en:"home / family",note:"宀 roof + 豕 pig — a pig under a roof (pigs lived inside traditional homes): home"},
+{zh:"有",py:"yǒu",en:"to have",note:"手 hand + 月 meat/moon — a hand holding meat: to have, to possess"},
+{zh:"口",py:"kǒu",en:"mouth / (measure word)",note:"Pictograph of an open mouth — mouth / measure word for family members"},
+{zh:"女儿",py:"nǚ ér",en:"daughter",note:"女 woman/girl + 儿 child suffix — girl-child: daughter"},
+{zh:"几",py:"jǐ",en:"how many",note:"Pictograph of a low table — a few items on a table: how many / a few"},
+{zh:"岁",py:"suì",en:"years old",note:"Mountain steps + 夕 evening — years pass like sunsets over the mountain"},
+{zh:"了",py:"le",en:"(change-of-state particle)",note:"子 child, simplified — marks completion or a change in situation"},
+{zh:"今年",py:"jīn nián",en:"this year",note:"今 = person 人 with a line: present/now. 年 = grain stalk bending at harvest: year"},
+{zh:"多",py:"duō",en:"many / much",note:"Two evenings 夕夕 stacked — so many days ending: many/much"},
+{zh:"大",py:"dà",en:"big / old (age)",note:"A person with arms spread wide — big, large (pictograph)"}]},
 {num:6,zhTitle:"我会说汉语",enTitle:"I can speak Chinese",words:[
-{zh:"会",py:"huì",en:"can / able to"},{zh:"说",py:"shuō",en:"to speak / say"},{zh:"妈妈",py:"mā ma",en:"mum / mother"},{zh:"菜",py:"cài",en:"dish / vegetable"},{zh:"很",py:"hěn",en:"very"},{zh:"好吃",py:"hǎo chī",en:"delicious (food)"},{zh:"做",py:"zuò",en:"to do / make"},{zh:"写",py:"xiě",en:"to write"},{zh:"汉字",py:"hàn zì",en:"Chinese character"},{zh:"字",py:"zì",en:"character / word"},{zh:"怎么",py:"zěn me",en:"how"},{zh:"读",py:"dú",en:"to read aloud"}]},
+{zh:"会",py:"huì",en:"can / able to",note:"亼 gather + 曰 say below — people gathering to speak: can/able to"},
+{zh:"说",py:"shuō",en:"to speak / say",note:"言 speech + 兑 exchange — exchanging words: to speak"},
+{zh:"妈妈",py:"mā ma",en:"mum / mother",note:"女 woman + 马 horse (phonetic ma) — mama"},
+{zh:"菜",py:"cài",en:"dish / vegetable",note:"艹 plants + 采 pick — picked greens: vegetables / dish"},
+{zh:"很",py:"hěn",en:"very",note:"彳 walk + 艮 stand firm — persisting to an extreme degree: very"},
+{zh:"好吃",py:"hǎo chī",en:"delicious (food)",note:"好 good + 吃 eat — 'good to eat': delicious"},
+{zh:"做",py:"zuò",en:"to do / make",note:"亻 person + 故 old/cause + work element — a person making something: to do"},
+{zh:"写",py:"xiě",en:"to write",note:"冖 cover + 与 give — giving form and shape to words: to write"},
+{zh:"汉字",py:"hàn zì",en:"Chinese character",note:"汉 Han + 字 character — Chinese character"},
+{zh:"字",py:"zì",en:"character / word",note:"宀 roof + 子 child — a child at home learning to write: character/word"},
+{zh:"怎么",py:"zěn me",en:"how",note:"怎 = 心 heart + 乍 suddenly — 'how on earth?': how"},
+{zh:"读",py:"dú",en:"to read aloud",note:"言 speech + 卖(phonetic) — speaking words aloud: to read"}]},
 {num:7,zhTitle:"今天几号",enTitle:"What's the date today",words:[
-{zh:"请",py:"qǐng",en:"please / invite"},{zh:"问",py:"wèn",en:"to ask"},{zh:"今天",py:"jīn tiān",en:"today"},{zh:"号",py:"hào",en:"number / date"},{zh:"月",py:"yuè",en:"month / moon"},{zh:"星期",py:"xīng qī",en:"week / weekday"},{zh:"昨天",py:"zuó tiān",en:"yesterday"},{zh:"明天",py:"míng tiān",en:"tomorrow"},{zh:"去",py:"qù",en:"to go"},{zh:"学校",py:"xué xiào",en:"school"},{zh:"看",py:"kàn",en:"to look / read"},{zh:"书",py:"shū",en:"book"}]},
+{zh:"请",py:"qǐng",en:"please / invite",note:"言 speech + 青 blue-green (phonetic) — polite, clear speech: please/invite"},
+{zh:"问",py:"wèn",en:"to ask",note:"口 mouth inside 门 door — knocking at the door with your mouth: to ask"},
+{zh:"今天",py:"jīn tiān",en:"today",note:"今 now + 天 sky/day — this day: today"},
+{zh:"号",py:"hào",en:"number / date",note:"口 mouth + 号 (phonetic) — calling out a number: number/date"},
+{zh:"月",py:"yuè",en:"month / moon",note:"Crescent moon (pictograph) — moon / month"},
+{zh:"星期",py:"xīng qī",en:"week / weekday",note:"星 = 日 sun + 生 born (stars born from the sun). 期 = time period: week"},
+{zh:"昨天",py:"zuó tiān",en:"yesterday",note:"昨 = 日 sun + 乍 sudden/past — yesterday's sun. 天 sky/day"},
+{zh:"明天",py:"míng tiān",en:"tomorrow",note:"明 = 日 sun + 月 moon — both lights shining: bright, tomorrow"},
+{zh:"去",py:"qù",en:"to go",note:"Soil + a footstep departing upward — to go (away from where you are)"},
+{zh:"学校",py:"xué xiào",en:"school",note:"学 study + 校 = 木 wood + 交 compare/inspect: place of learning"},
+{zh:"看",py:"kàn",en:"to look / read",note:"手 hand over 目 eye — shading your eyes to look into the distance: to look"},
+{zh:"书",py:"shū",en:"book",note:"Stylised brush and document — book (pictograph of writing materials)"}]},
 {num:8,zhTitle:"我想喝茶",enTitle:"I'd like some tea",words:[
-{zh:"想",py:"xiǎng",en:"to want / think"},{zh:"喝",py:"hē",en:"to drink"},{zh:"茶",py:"chá",en:"tea"},{zh:"吃",py:"chī",en:"to eat"},{zh:"米饭",py:"mǐ fàn",en:"rice"},{zh:"下午",py:"xià wǔ",en:"afternoon"},{zh:"商店",py:"shāng diàn",en:"shop / store"},{zh:"买",py:"mǎi",en:"to buy"},{zh:"个",py:"gè",en:"(measure word)"},{zh:"杯子",py:"bēi zi",en:"cup"},{zh:"这",py:"zhè",en:"this"},{zh:"多少",py:"duō shao",en:"how many / much"},{zh:"钱",py:"qián",en:"money"},{zh:"块",py:"kuài",en:"yuan"},{zh:"那",py:"nà",en:"that"}]},
+{zh:"想",py:"xiǎng",en:"to want / think",note:"相 mutual/toward + 心 heart — the heart reaching toward something: to want/think"},
+{zh:"喝",py:"hē",en:"to drink",note:"口 mouth + 曷 (phonetic) — the mouth taking in liquid: to drink"},
+{zh:"茶",py:"chá",en:"tea",note:"艹 plant + 木 tree + 人 person — a person beneath the tea plant: tea"},
+{zh:"吃",py:"chī",en:"to eat",note:"口 mouth + 乞 beg — a begging mouth: to eat"},
+{zh:"米饭",py:"mǐ fàn",en:"rice",note:"米 = grain cross (pictograph of scattered grains). 饭 = 食 food + 反 turn — cooked rice"},
+{zh:"下午",py:"xià wǔ",en:"afternoon",note:"下 below + 午 noon — below the noon peak: afternoon"},
+{zh:"商店",py:"shāng diàn",en:"shop / store",note:"商 = person on platform calling trades. 店 = 广 shelter + 占 occupy: shop"},
+{zh:"买",py:"mǎi",en:"to buy",note:"乙 hook + 贝 shell/coin — shell was ancient money: to buy"},
+{zh:"个",py:"gè",en:"(measure word)",note:"亻 person + stroke — individual person: general measure word"},
+{zh:"杯子",py:"bēi zi",en:"cup",note:"杯 = 木 wood + 不 (phonetic). 子 suffix — wooden cup"},
+{zh:"这",py:"zhè",en:"this",note:"辶 walk/movement + 文 pattern — the patterned thing you're walking toward: this"},
+{zh:"多少",py:"duō shao",en:"how many / much",note:"多 many + 少 few — between many and few: how much/many?"},
+{zh:"钱",py:"qián",en:"money",note:"金 metal + 戋 little — small pieces of metal: money"},
+{zh:"块",py:"kuài",en:"yuan",note:"土 earth + 夬 (phonetic) — chunk of earth: yuan, lump, piece"},
+{zh:"那",py:"nà",en:"that",note:"冉 + 阝 mound — something over by the mound: that"}]},
 {num:9,zhTitle:"你儿子在哪儿工作",enTitle:"Where does your son work",words:[
-{zh:"小",py:"xiǎo",en:"small / little"},{zh:"猫",py:"māo",en:"cat"},{zh:"在",py:"zài",en:"at / in / on"},{zh:"那儿",py:"nàr",en:"there"},{zh:"狗",py:"gǒu",en:"dog"},{zh:"椅子",py:"yǐ zi",en:"chair"},{zh:"下面",py:"xià miàn",en:"below / underneath"},{zh:"哪儿",py:"nǎr",en:"where"},{zh:"工作",py:"gōng zuò",en:"work / job"},{zh:"儿子",py:"ér zi",en:"son"},{zh:"医院",py:"yī yuàn",en:"hospital"},{zh:"医生",py:"yī shēng",en:"doctor"},{zh:"爸爸",py:"bà ba",en:"dad / father"}]},
+{zh:"小",py:"xiǎo",en:"small / little",note:"A vertical line with two dots — something split into tiny pieces: small"},
+{zh:"猫",py:"māo",en:"cat",note:"犭 animal radical + 苗 sprout (phonetic, sounds like māo) — the meowing animal: cat"},
+{zh:"在",py:"zài",en:"at / in / on",note:"土 earth + 才 just/talent — rooted firmly in the ground: at/in/on"},
+{zh:"那儿",py:"nàr",en:"there",note:"那 that + 儿 (location suffix) — over there"},
+{zh:"狗",py:"gǒu",en:"dog",note:"犭 animal radical + 句 bend (phonetic) — the bending/fetching animal: dog"},
+{zh:"椅子",py:"yǐ zi",en:"chair",note:"椅 = 木 wood + 奇 odd/seated (phonetic). 子 suffix — wooden sitting thing: chair"},
+{zh:"下面",py:"xià miàn",en:"below / underneath",note:"下 below + 面 face/surface — below the surface: underneath"},
+{zh:"哪儿",py:"nǎr",en:"where",note:"哪 which + 儿 (location suffix) — which place? Where?"},
+{zh:"工作",py:"gōng zuò",en:"work / job",note:"工 = carpenter's square (symbol of craft/work). 作 = 亻 person + 乍 making: work"},
+{zh:"儿子",py:"ér zi",en:"son",note:"儿 child + 子 child — double child emphasis: son"},
+{zh:"医院",py:"yī yuàn",en:"hospital",note:"医 = quiver with medical tools (healer). 院 = 阝 mound + 完 complete — courtyard: hospital"},
+{zh:"医生",py:"yī shēng",en:"doctor",note:"医 medicine + 生 life — 'life healer': doctor"},
+{zh:"爸爸",py:"bà ba",en:"dad / father",note:"父 father + 巴 (phonetic ba) — dad"}]},
 {num:10,zhTitle:"我能坐这儿吗",enTitle:"Can I sit here",words:[
-{zh:"桌子",py:"zhuō zi",en:"table"},{zh:"上",py:"shàng",en:"on / above"},{zh:"电脑",py:"diàn nǎo",en:"computer"},{zh:"和",py:"hé",en:"and"},{zh:"本",py:"běn",en:"(measure word for books)"},{zh:"里",py:"lǐ",en:"inside"},{zh:"前面",py:"qián miàn",en:"in front of"},{zh:"后面",py:"hòu miàn",en:"behind"},{zh:"这儿",py:"zhèr",en:"here"},{zh:"没有",py:"méi yǒu",en:"don't have"},{zh:"能",py:"néng",en:"can / able to"},{zh:"坐",py:"zuò",en:"to sit"}]},
+{zh:"桌子",py:"zhuō zi",en:"table",note:"桌 = 木 wood + 卓 outstanding/upright — prominent wooden surface: table"},
+{zh:"上",py:"shàng",en:"on / above",note:"A dot or line above another line — on top: on/above/up"},
+{zh:"电脑",py:"diàn nǎo",en:"computer",note:"电 = lightning in a field (electricity). 脑 = 月 flesh + 囟 fontanelle (brain) — electric brain"},
+{zh:"和",py:"hé",en:"and",note:"禾 grain + 口 mouth — grain in your mouth: harmony, and (joining things peacefully)"},
+{zh:"本",py:"běn",en:"(measure word for books)",note:"木 tree + dot at the base — marking the root: root, origin, measure word for books"},
+{zh:"里",py:"lǐ",en:"inside",note:"田 field + 土 earth — earth within the field: inside"},
+{zh:"前面",py:"qián miàn",en:"in front of",note:"前 = 止 foot + 刀 knife + 月 — cutting a path forward: front. 面 face/surface"},
+{zh:"后面",py:"hòu miàn",en:"behind",note:"后 = a figure following behind another. 面 face/surface — the back face: behind"},
+{zh:"这儿",py:"zhèr",en:"here",note:"这 this + 儿 (location suffix) — right here"},
+{zh:"没有",py:"méi yǒu",en:"don't have",note:"没 = 水 water + 殳 (submerged/gone). 有 have — gone under water: not have"},
+{zh:"能",py:"néng",en:"can / able to",note:"Depicts a bear — the bear is capable and strong: can/able to"},
+{zh:"坐",py:"zuò",en:"to sit",note:"Two people 人人 sitting on the earth 土 — to sit (pictograph)"}]},
 {num:11,zhTitle:"现在几点",enTitle:"What's the time now",words:[
-{zh:"现在",py:"xiàn zài",en:"now"},{zh:"点",py:"diǎn",en:"o'clock"},{zh:"分",py:"fēn",en:"minute"},{zh:"中午",py:"zhōng wǔ",en:"noon"},{zh:"吃饭",py:"chī fàn",en:"to eat a meal"},{zh:"时候",py:"shí hou",en:"time / when"},{zh:"回",py:"huí",en:"to return"},{zh:"我们",py:"wǒ men",en:"we / us"},{zh:"电影",py:"diàn yǐng",en:"movie / film"},{zh:"住",py:"zhù",en:"to live (somewhere)"},{zh:"前",py:"qián",en:"front / before"},{zh:"北京",py:"běi jīng",en:"Beijing"}]},
+{zh:"现在",py:"xiàn zài",en:"now",note:"现 = 王 jade/king + 见 see — seeing the present gem. 在 at: now, currently"},
+{zh:"点",py:"diǎn",en:"o'clock",note:"占 occupy + 灬 fire dots — a small burning point: dot, o'clock"},
+{zh:"分",py:"fēn",en:"minute",note:"八 divide + 刀 knife — a knife dividing: minute, divide, part"},
+{zh:"中午",py:"zhōng wǔ",en:"noon",note:"中 middle + 午 noon hour — the middle of the day: noon"},
+{zh:"吃饭",py:"chī fàn",en:"to eat a meal",note:"吃 eat + 饭 cooked rice — eat rice: to have a meal"},
+{zh:"时候",py:"shí hou",en:"time / when",note:"时 = 日 sun + 寸 inch (measuring sunlight). 候 = waiting season: time/when"},
+{zh:"回",py:"huí",en:"to return",note:"A spiral path looping back (pictograph of a whirlpool) — to return"},
+{zh:"我们",py:"wǒ men",en:"we / us",note:"我 I + 们 (plural suffix) — we/us"},
+{zh:"电影",py:"diàn yǐng",en:"movie / film",note:"电 electricity + 影 = 景 scenery + 彡 shadow — electric shadow: movie"},
+{zh:"住",py:"zhù",en:"to live (somewhere)",note:"亻 person + 主 master/stay — the person who stays in one place: to live/reside"},
+{zh:"前",py:"qián",en:"front / before",note:"止 foot + 刀 knife + 月 — moving forward cutting the path: front/before"},
+{zh:"北京",py:"běi jīng",en:"Beijing",note:"北 = two figures back to back (north/back). 京 = tall structure (capital city)"}]},
 {num:12,zhTitle:"明天天气怎么样",enTitle:"What's the weather like tomorrow",words:[
-{zh:"天气",py:"tiān qì",en:"weather"},{zh:"怎么样",py:"zěn me yàng",en:"how is it / what's it like"},{zh:"太",py:"tài",en:"too (excessive)"},{zh:"热",py:"rè",en:"hot"},{zh:"冷",py:"lěng",en:"cold"},{zh:"下雨",py:"xià yǔ",en:"to rain"},{zh:"小姐",py:"xiǎo jiě",en:"miss / young woman"},{zh:"来",py:"lái",en:"to come"},{zh:"身体",py:"shēn tǐ",en:"body / health"},{zh:"爱",py:"ài",en:"to love"},{zh:"些",py:"xiē",en:"some"},{zh:"水果",py:"shuǐ guǒ",en:"fruit"},{zh:"水",py:"shuǐ",en:"water"}]},
+{zh:"天气",py:"tiān qì",en:"weather",note:"天 sky + 气 = steam rising from grain (vapour/energy) — sky-breath: weather"},
+{zh:"怎么样",py:"zěn me yàng",en:"how is it / what's it like",note:"怎 how + 么 particle + 样 = 木 tree + 羊 sheep (appearance/type) — 'what sort?'"},
+{zh:"太",py:"tài",en:"too (excessive)",note:"大 big + extra dot — beyond big: too much, excessive"},
+{zh:"热",py:"rè",en:"hot",note:"执 grasp + 灬 fire — gripping something on fire: hot"},
+{zh:"冷",py:"lěng",en:"cold",note:"冫 ice radical + 令 command — an icy command: cold"},
+{zh:"下雨",py:"xià yǔ",en:"to rain",note:"下 fall + 雨 = clouds with raindrops falling (pictograph): to rain"},
+{zh:"小姐",py:"xiǎo jiě",en:"miss / young woman",note:"小 small/young + 姐 = 女 woman + 且 (older one) — young woman: miss"},
+{zh:"来",py:"lái",en:"to come",note:"A tree with roots going down and branches reaching up — something coming toward you"},
+{zh:"身体",py:"shēn tǐ",en:"body / health",note:"身 = a pregnant figure in profile (body). 体 = 亻 person + 本 root — person's foundation: body/health"},
+{zh:"爱",py:"ài",en:"to love",note:"爫 claw/hand + 冖 cover + 心 heart + 友 friend — heart covered and given to a friend: love"},
+{zh:"些",py:"xiē",en:"some",note:"此 this + 二 two — a few of these: some, a few"},
+{zh:"水果",py:"shuǐ guǒ",en:"fruit",note:"水 water + 果 = 木 tree + 日 sun (fruit ripened in the sun) — water-fruit: fruit"},
+{zh:"水",py:"shuǐ",en:"water",note:"Flowing stream with currents on either side — water (pictograph)"}]},
 {num:13,zhTitle:"他在学做中国菜呢",enTitle:"He is learning to cook Chinese food",words:[
-{zh:"喂",py:"wèi",en:"hello (on phone)"},{zh:"也",py:"yě",en:"also / too"},{zh:"学习",py:"xué xí",en:"to study / learn"},{zh:"上午",py:"shàng wǔ",en:"morning (a.m.)"},{zh:"睡觉",py:"shuì jiào",en:"to sleep"},{zh:"电视",py:"diàn shì",en:"television"},{zh:"喜欢",py:"xǐ huan",en:"to like"},{zh:"给",py:"gěi",en:"to give / for"},{zh:"打电话",py:"dǎ diàn huà",en:"to make a phone call"}]},
+{zh:"喂",py:"wèi",en:"hello (on phone)",note:"口 mouth + 畏 awe/call — calling out to get attention: hello (on phone)"},
+{zh:"也",py:"yě",en:"also / too",note:"A simple turning stroke — also, too (adds to what was just said)"},
+{zh:"学习",py:"xué xí",en:"to study / learn",note:"学 study + 习 = bird flapping wings (repeated practice) — study and practise"},
+{zh:"上午",py:"shàng wǔ",en:"morning (a.m.)",note:"上 above + 午 noon — above the noon peak: morning"},
+{zh:"睡觉",py:"shuì jiào",en:"to sleep",note:"睡 = 目 eye + 垂 droop — drooping eyelid. 觉 = perceive/feel: to sleep"},
+{zh:"电视",py:"diàn shì",en:"television",note:"电 electricity + 视 = 示 show + 见 see — electric vision: television"},
+{zh:"喜欢",py:"xǐ huan",en:"to like",note:"喜 = joy + 口 mouth (joyful sounds). 欢 = joy with a person — to like/enjoy"},
+{zh:"给",py:"gěi",en:"to give / for",note:"糸 thread + 合 join — joining threads to pass to someone: to give/for"},
+{zh:"打电话",py:"dǎ diàn huà",en:"to make a phone call",note:"打 = 手 hand + 丁 nail (hit/make). 电 electricity. 话 = 言 speech + 舌 tongue — make electric speech: phone call"}]},
 {num:14,zhTitle:"她买了不少衣服",enTitle:"She has bought quite a few clothes",words:[
-{zh:"东西",py:"dōng xi",en:"things / stuff"},{zh:"一点儿",py:"yī diǎnr",en:"a little / a bit"},{zh:"苹果",py:"píng guǒ",en:"apple"},{zh:"看见",py:"kàn jiàn",en:"to see"},{zh:"先生",py:"xiān sheng",en:"Mr. / sir"},{zh:"开",py:"kāi",en:"to drive / open"},{zh:"车",py:"chē",en:"car / vehicle"},{zh:"回来",py:"huí lái",en:"to come back"},{zh:"分钟",py:"fēn zhōng",en:"minute"},{zh:"后",py:"hòu",en:"after / behind"},{zh:"衣服",py:"yī fu",en:"clothes"},{zh:"漂亮",py:"piào liang",en:"beautiful"},{zh:"少",py:"shǎo",en:"few / little"},{zh:"这些",py:"zhè xiē",en:"these"},{zh:"都",py:"dōu",en:"all / both"},{zh:"张",py:"zhāng",en:"(measure word for flat things)"}]},
+{zh:"东西",py:"dōng xi",en:"things / stuff",note:"东 east + 西 west — east and west = everything = stuff/things"},
+{zh:"一点儿",py:"yī diǎnr",en:"a little / a bit",note:"一 one + 点 dot + 儿 — one tiny dot: a little bit"},
+{zh:"苹果",py:"píng guǒ",en:"apple",note:"苹 = 艹 plant + 平 flat (phonetic). 果 = fruit on a tree: apple"},
+{zh:"看见",py:"kàn jiàn",en:"to see",note:"看 look + 见 see — look and actually see: to catch sight of"},
+{zh:"先生",py:"xiān sheng",en:"Mr. / sir",note:"先 = 止 foot going ahead + 儿 (born first). 生 life — 'born before others': Mr./sir"},
+{zh:"开",py:"kāi",en:"to drive / open",note:"Two hands lifting a bar from a door — to open, start, drive"},
+{zh:"车",py:"chē",en:"car / vehicle",note:"A wheel and axle viewed from above (pictograph) — vehicle/car"},
+{zh:"回来",py:"huí lái",en:"to come back",note:"回 return + 来 come — come back (returning to where you started)"},
+{zh:"分钟",py:"fēn zhōng",en:"minute",note:"分 divide/minute + 钟 = 金 metal + 童 (phonetic, bell) — clock minute"},
+{zh:"后",py:"hòu",en:"after / behind",note:"A figure following behind — after, behind"},
+{zh:"衣服",py:"yī fu",en:"clothes",note:"衣 = garment with collar open at top (pictograph). 服 = 月 flesh + 服 obey — to wear/comply"},
+{zh:"漂亮",py:"piào liang",en:"beautiful",note:"漂 = 水 water + 票 ticket (floating gracefully). 亮 = 高 high + 儿 (bright): beautiful"},
+{zh:"少",py:"shǎo",en:"few / little",note:"小 small minus one stroke — even fewer than small: few/little"},
+{zh:"这些",py:"zhè xiē",en:"these",note:"这 this + 些 some — these (things here)"},
+{zh:"都",py:"dōu",en:"all / both",note:"者 the one who + 阝 city — all the people gathered in the city: all/both"},
+{zh:"张",py:"zhāng",en:"(measure word for flat things)",note:"弓 bow + 长 stretch — stretching open flat: measure word for flat things (paper, photos)"}]},
 {num:15,zhTitle:"我是坐飞机来的",enTitle:"I came here by air",words:[
-{zh:"认识",py:"rèn shi",en:"to know (a person)"},{zh:"年",py:"nián",en:"year"},{zh:"大学",py:"dà xué",en:"university"},{zh:"饭店",py:"fàn diàn",en:"hotel / restaurant"},{zh:"出租车",py:"chū zū chē",en:"taxi"},{zh:"一起",py:"yī qǐ",en:"together"},{zh:"高兴",py:"gāo xìng",en:"happy / pleased"},{zh:"听",py:"tīng",en:"to listen"},{zh:"飞机",py:"fēi jī",en:"airplane"}]},
+{zh:"认识",py:"rèn shi",en:"to know (a person)",note:"认 = 言 speech + 忍 endure (patient recognition). 识 = 言 + 戠 — to recognise/know"},
+{zh:"年",py:"nián",en:"year",note:"禾 grain stalk bent by the weight of the harvest — year (the harvest cycle)"},
+{zh:"大学",py:"dà xué",en:"university",note:"大 big + 学 study — big place of study: university"},
+{zh:"饭店",py:"fàn diàn",en:"hotel / restaurant",note:"饭 rice/meal + 店 = 广 shelter + 占 occupy — meal shelter: restaurant/hotel"},
+{zh:"出租车",py:"chū zū chē",en:"taxi",note:"出 = two footprints leaving an enclosure (exit). 租 = 禾 grain + 且 (rent). 车 vehicle — rented exit vehicle: taxi"},
+{zh:"一起",py:"yī qǐ",en:"together",note:"一 one + 起 = 走 walk + 己 self (rise up) — rising as one: together"},
+{zh:"高兴",py:"gāo xìng",en:"happy / pleased",note:"高 = tall building with raised roof (high). 兴 = four hands raising something together: excited, happy"},
+{zh:"听",py:"tīng",en:"to listen",note:"口 mouth + 斤 axe — listening as precisely as an axe cuts: to listen"},
+{zh:"飞机",py:"fēi jī",en:"airplane",note:"飞 = a bird in flight with wings spread (pictograph). 机 = 木 wood + 几 machine — flying machine: airplane"}]},
 ];
 
 // ════════════════════════════════════════════════════════
@@ -1081,7 +1258,44 @@ function nextTraceWord(){
 // ════════════════════════════════════════════════════════
 let hskProgress=new Set();
 let hskCurrentLesson=null;
-let hskDrillCards=[],hskDrillIdx=0,hskDrillRevealed=false;
+let hskDrillCards=[],hskDrillIdx=0,hskDrillRevealed=false,hskDrillAgain=[];
+let hskSRS={};
+const HSK_SRS_KEY='cn_hsk_srs_v1';
+function loadHSKSRS(){hskSRS=JSON.parse(localStorage.getItem(HSK_SRS_KEY)||'{}');}
+function saveHSKSRS(){localStorage.setItem(HSK_SRS_KEY,JSON.stringify(hskSRS));}
+function getHSKSRSCard(zh){return hskSRS[zh]||{interval:1,ease:2.5,reps:0};}
+function hskIntervalPreview(zh,rating){
+  const c=getHSKSRSCard(zh);
+  let {interval,ease,reps}=c;
+  if(rating===0)return '<1d';
+  let i;
+  if(reps===0)i=1;
+  else if(reps===1)i=6;
+  else i=Math.round(interval*ease);
+  if(rating===1)i=Math.max(1,Math.round(i*0.6));
+  if(rating===3)i=Math.round(i*1.3);
+  if(i<=1)return '1d';
+  if(i<30)return i+'d';
+  return Math.round(i/30)+'mo';
+}
+function applyHSKSM2(zh,rating){
+  const c=getHSKSRSCard(zh);
+  let {interval,ease,reps}=c;
+  if(rating===0){interval=1;reps=0;}
+  else{
+    if(reps===0)interval=1;
+    else if(reps===1)interval=6;
+    else interval=Math.round(interval*ease);
+    if(rating===1)interval=Math.max(1,Math.round(interval*0.6));
+    if(rating===3)interval=Math.round(interval*1.3);
+    reps++;
+    ease=Math.max(1.3,ease+0.1-(3-rating)*(0.08+(3-rating)*0.02));
+  }
+  const due=new Date();
+  due.setDate(due.getDate()+interval);
+  hskSRS[zh]={interval,ease,reps,due:due.toISOString().split('T')[0]};
+  saveHSKSRS();
+}
 
 function loadHSKProgress(){
   try{
@@ -1178,11 +1392,12 @@ function toggleHSKLesson(){
   $('hskPb').style.width=`${(hskProgress.size/15)*100}%`;
 }
 
-function startHSKDrill(){
+function startHSKDrill(cards){
   if(!hskCurrentLesson)return;
-  hskDrillCards=shuffle([...hskCurrentLesson.words]);
-  hskDrillIdx=0;hskDrillRevealed=false;
-  hide('hskDetail');
+  loadHSKSRS();
+  hskDrillCards=shuffle([...(cards||hskCurrentLesson.words)]);
+  hskDrillIdx=0;hskDrillRevealed=false;hskDrillAgain=[];
+  hide('hskDetail');hide('hskDrillEnd');
   $('hskDrill').style.display='block';
   showHSKDrillCard();
 }
@@ -1196,6 +1411,8 @@ function showHSKDrillCard(){
   $('hskDrillZh').textContent=w.zh;
   $('hskDrillTap').textContent='Tap to reveal';
   hide('hskDrillReveal');
+  // Pre-populate interval previews
+  [0,1,2,3].forEach(r=>{ const el=$('hskInt'+r); if(el)el.textContent=hskIntervalPreview(w.zh,r); });
 }
 
 function revealHSKDrill(){
@@ -1205,17 +1422,47 @@ function revealHSKDrill(){
   $('hskDrillTap').textContent='';
   $('hskDrillPy').textContent=w.py;
   $('hskDrillEn').textContent=w.en;
+  if(w.note){$('hskDrillNote').textContent=w.note;$('hskDrillNote').style.display='block';}
+  else{$('hskDrillNote').style.display='none';}
   $('hskDrillReveal').style.display='block';
 }
 
-function hskAssess(knew){
+function hskRate(rating){
   if(!hskDrillRevealed)return;
+  const w=hskDrillCards[hskDrillIdx];
+  if(rating===0){
+    hskDrillAgain.push(w);   // Again: re-queue at end of deck
+    hskDrillCards.push(w);
+  } else {
+    applyHSKSM2(w.zh,rating);
+  }
   hskDrillIdx++;
   showHSKDrillCard();
 }
 
 function endHSKDrill(){
   hide('hskDrill');
+  const total=hskDrillCards.length;
+  const againCount=hskDrillAgain.length;
+  const learned=total-againCount;
+  $('hskDrillScore').textContent=`${learned} / ${total}`;
+  const p=learned/total;
+  $('hskDrillMsg').textContent=p===1?'完美！Every card nailed.':p>=0.8?'Really solid — almost there.':p>=0.5?'Good progress — drill the ones you missed.':'Keep going. Repetition builds recognition.';
+  const missedBtn=$('hskDrillMissedBtn');
+  if(againCount>0){missedBtn.style.display='inline-block';missedBtn.textContent=`Drill ${againCount} Again card${againCount>1?'s':''} →`;}
+  else{missedBtn.style.display='none';}
+  $('hskDrillEnd').style.display='block';
+}
+
+function drillHSKMissed(){
+  hide('hskDrillEnd');
+  const missed=[...new Set(hskDrillAgain)];
+  hskDrillAgain=[];
+  startHSKDrill(missed);
+}
+
+function backFromHSKDrill(){
+  hide('hskDrill');hide('hskDrillEnd');
   if(hskCurrentLesson)openHSKLesson(hskCurrentLesson.num);
   else renderHSKBook();
 }
@@ -1223,6 +1470,7 @@ function endHSKDrill(){
 // ════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════
+loadHSKSRS();
 updateWeakUI();
 startQuiz();
 </script>

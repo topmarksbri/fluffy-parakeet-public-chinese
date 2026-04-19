@@ -37,6 +37,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .pill.teal.on{background:var(--teal);color:white;border-color:var(--teal);}
 .wbadge{position:absolute;top:-7px;right:-7px;background:var(--orange);color:white;font-size:0.52rem;font-family:'DM Mono',monospace;border-radius:10px;padding:1px 5px;min-width:18px;text-align:center;line-height:1.4;display:none;}
 .wpanel{width:100%;background:white;border:1.5px solid var(--orange);border-radius:4px;padding:14px 18px;margin-bottom:14px;display:none;}
+.sent-opts{width:100%;background:var(--blue-dim);border:1px solid rgba(26,74,122,0.2);border-radius:4px;padding:10px 14px 12px;margin-bottom:12px;}
 .wpanel-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
 .wlist{display:flex;flex-wrap:wrap;gap:7px;}
 .wchip{display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:20px;background:var(--soft);border:1px solid var(--border);}
@@ -82,6 +83,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .typeinput{width:100%;max-width:400px;padding:12px 16px;border:1.5px solid var(--border);border-radius:4px;font-family:'Noto Serif SC',serif;font-size:1.2rem;text-align:center;color:var(--ink);background:var(--soft);outline:none;transition:border 0.2s,background 0.2s;}
 .typeinput:focus{border-color:var(--gold);background:white;}
 .typeinput.sent{font-size:1rem;text-align:left;padding:12px 14px;}
+.typeinput.engtype{font-family:'Crimson Pro',serif;font-style:italic;font-size:1rem;text-align:left;padding:12px 14px;}
 .typeinput.tok{border-color:var(--green)!important;background:var(--green-dim)!important;color:var(--green);}
 .typeinput.tno{border-color:var(--red)!important;background:var(--red-dim)!important;}
 .typehint{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);text-align:center;}
@@ -201,28 +203,35 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .hsk-sm2-btn.easy{color:var(--blue);border-color:var(--blue);background:transparent;}
 .hsk-sm2-btn.easy:hover{background:var(--blue);color:white;}
 .hsk-drill-end{background:white;border:1px solid var(--border);border-radius:4px;padding:28px 20px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);margin-bottom:12px;}
+.hsk-review-due{width:100%;padding:12px 16px;background:white;border:1.5px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;transition:all 0.18s;text-transform:uppercase;letter-spacing:1px;}
+.hsk-review-due:hover{border-color:var(--teal);color:var(--teal);}
+.hsk-review-due.has-due{border-color:var(--teal);color:var(--teal);background:var(--teal-dim);}
+.hsk-review-due.has-due:hover{background:var(--teal);color:white;}
+.hsk-due-badge{background:var(--teal);color:white;font-size:0.7rem;font-family:'DM Mono',monospace;border-radius:12px;padding:2px 9px;min-width:22px;text-align:center;font-weight:600;letter-spacing:0;}
+.hsk-review-due.has-due:hover .hsk-due-badge{background:white;color:var(--teal);}
+.hsk-due-sub{font-size:0.58rem;opacity:0.7;text-transform:none;letter-spacing:0.3px;width:100%;text-align:center;margin-top:-2px;}
 </style>
 </head>
 <body>
-
+ 
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18</div>
 </div>
-
+ 
 <div class="tabrow">
   <button class="tab on" onclick="switchTab('quiz',this)">📝 Quiz</button>
   <button class="tab" onclick="switchTab('chars',this)">🔍 Characters</button>
   <button class="tab" onclick="switchTab('trace',this)">✍️ Trace</button>
   <button class="tab" onclick="switchTab('hsk',this)">📚 HSK Book</button>
 </div>
-
+ 
 <!-- ══════════════════════════════════════════════════════
      TAB 1: QUIZ
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-quiz">
-
+ 
 <div class="slabel">Lesson</div>
 <div class="prow" id="lessonRow">
   <button class="pill on" onclick="setLesson('all',this)">All</button>
@@ -231,8 +240,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
   <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
   <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
+  <button class="pill" onclick="setLesson('4.18',this)">4.18</button>
 </div>
-
+ 
 <div class="slabel" style="margin-top:6px">Mode</div>
 <div class="prow" id="modeRow">
   <button class="pill on" onclick="setMode('mcq-en2zh',this)">English → Chinese</button>
@@ -242,12 +252,26 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill sent" onclick="setMode('sentences',this)">📖 Sentences</button>
   <button class="pill fire" id="weakBtn" onclick="setMode('weak',this)">🔥 Weak words <span class="wbadge" id="weakBadge"></span></button>
 </div>
-
+ 
+<div class="sent-opts" id="sentOpts" style="display:none">
+  <div class="slabel" style="margin-top:4px">Sentence direction</div>
+  <div class="prow" id="sentDirRow">
+    <button class="pill sent on" onclick="setSentDir('en2zh',this)">English → Chinese</button>
+    <button class="pill sent" onclick="setSentDir('zh2en',this)">汉字 → English</button>
+    <button class="pill sent" onclick="setSentDir('py2en',this)">Pinyin → English</button>
+  </div>
+  <div class="slabel" style="margin-top:6px">Format</div>
+  <div class="prow" id="sentFmtRow">
+    <button class="pill sent on" onclick="setSentFormat('mcq',this)">Multiple choice</button>
+    <button class="pill sent" onclick="setSentFormat('type',this)">Type it out</button>
+  </div>
+</div>
+ 
 <div class="wpanel" id="weakPanel">
   <div class="wpanel-title">🔥 Words you keep getting wrong</div>
   <div class="wlist" id="weakList"></div>
 </div>
-
+ 
 <div class="card" id="quizCard">
   <div class="flame" id="flame">🔥</div>
   <div class="stag" id="stag">sentence</div>
@@ -283,7 +307,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <div class="fb" id="fb"></div>
   <button class="nextbtn" id="nextbtn">Next →</button>
 </div>
-
+ 
 <div class="scorescreen" id="scorescreen">
   <h2>Session complete</h2>
   <div class="bigscore" id="bigscore"></div>
@@ -294,14 +318,14 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="msect" id="msect"></div>
 </div>
-
+ 
 </div><!-- end tab-quiz -->
-
+ 
 <!-- ══════════════════════════════════════════════════════
      TAB 2: CHARACTERS
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-chars" style="display:none">
-
+ 
 <div class="cs-front" id="csFront" onclick="revealCS()">
   <div class="pbar-row">
     <div class="pbar-txt" id="csProg">1 / 67</div>
@@ -321,7 +345,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="cs-btn knew" onclick="assessCS(true)">✓ Knew it</button>
   <button class="cs-btn missed" onclick="assessCS(false)">✗ Missed it</button>
 </div>
-
+ 
 <div class="cs-end" id="csEnd" style="display:none">
   <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--red);margin-bottom:6px">Session done</div>
   <div class="bigscore" id="csScore"></div>
@@ -332,27 +356,27 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="msect" id="csMissedList"></div>
 </div>
-
+ 
 </div><!-- end tab-chars -->
-
+ 
 <!-- ══════════════════════════════════════════════════════
      TAB 3: TRACE
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-trace" style="display:none">
-
+ 
 <div class="slabel">Source</div>
 <div class="prow">
   <button class="pill teal on" id="tSrcClass" onclick="toggleTraceClass(this)">My class vocab</button>
 </div>
 <div class="slabel" style="margin-top:4px">Add HSK 1 lessons</div>
 <div class="prow" id="tHSKPills" style="flex-wrap:wrap;gap:6px"></div>
-
+ 
 <div class="slabel" style="margin-top:4px">Mode</div>
 <div class="prow">
   <button class="pill on" id="tModeAnim" onclick="setTraceMode('animate',this)">▶ Watch strokes</button>
   <button class="pill" id="tModeQuiz" onclick="setTraceMode('quiz',this)">✍️ Trace it</button>
 </div>
-
+ 
 <div class="trace-card" id="traceCard">
   <div class="pbar-row">
     <div class="pbar-txt" id="traceProg">1 / 67</div>
@@ -380,14 +404,20 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="trace-hint" id="traceHint"></div>
 </div>
-
+ 
 </div><!-- end tab-trace -->
-
+ 
 <!-- ══════════════════════════════════════════════════════
      TAB 4: HSK BOOK
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-hsk" style="display:none">
-
+ 
+<button class="hsk-review-due" id="hskReviewDueBtn" onclick="startHSKDueReview()">
+  📅 Review due cards
+  <span class="hsk-due-badge" id="hskDueBadge" style="display:none">0</span>
+  <span class="hsk-due-sub">across all studied lessons</span>
+</button>
+ 
 <div class="hsk-prog-wrap">
   <div class="hsk-prog-label">
     <span>HSK 1 Progress</span>
@@ -395,9 +425,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="hsk-pbwrap"><div class="hsk-pb" id="hskPb"></div></div>
 </div>
-
+ 
 <div class="hsk-grid" id="hskGrid"></div>
-
+ 
 <div class="hsk-detail" id="hskDetail" style="display:none">
   <div class="hsk-detail-hdr">
     <button class="hsk-back" onclick="closeHSKDetail()">← Back</button>
@@ -409,7 +439,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="hsk-action-btn blue" onclick="startHSKDrill()">Flash drill →</button>
   </div>
 </div>
-
+ 
 <div class="hsk-drill" id="hskDrill" style="display:none">
   <div class="pbar-row">
     <div class="pbar-txt" id="hskDrillProg"></div>
@@ -431,7 +461,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     </div>
   </div>
 </div>
-
+ 
 <div class="hsk-drill-end" id="hskDrillEnd" style="display:none">
   <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--green);margin-bottom:6px">Drill complete</div>
   <div class="bigscore" id="hskDrillScore"></div>
@@ -442,9 +472,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="sbtn t" style="margin-top:8px" onclick="backFromHSKDrill()">← Back to lesson</button>
   </div>
 </div>
-
+ 
 </div><!-- end tab-hsk -->
-
+ 
 <script>
 // ════════════════════════════════════════════════════════
 // DATA
@@ -522,8 +552,19 @@ const VOCAB = [
 {zh:"游泳",py:"yóu yǒng",en:"to swim",lesson:"4.03",mn:"游 has the water radical 氵— moving through water. 泳 also has 氵— more water! Double water = serious swimming. yóu sounds like 'yo' bobbing on the surface."},
 {zh:"足球",py:"zú qiú",en:"football / soccer",lesson:"4.03",mn:"足 means foot (a shin + foot shape). 球 means ball (king radical 王 + a round thing). Foot + ball = football."},
 {zh:"踢足球",py:"tī zú qiú",en:"to play football",lesson:"4.03",mn:"踢 has the foot radical 足 on the left — a kicking action. 足球 = football. tī = kick. Kick + football = to play football."},
+// 4.18
+{zh:"家",py:"jiā",en:"home / family",lesson:"4.18",mn:"宀 (roof) over 豕 (pig) — a pig under a roof. In old China, pigs lived inside the house; a home was where the livestock slept. Home = roof + pig."},
+{zh:"晚上",py:"wǎn shang",en:"evening",lesson:"4.18",mn:"晚 has 日 (sun) on the left — the sun setting. 上 means 'on/up'. Evening = sun going up and over = late in the day. Pair with 早上 (morning) and 下午 (afternoon)."},
+{zh:"酸奶",py:"suān nǎi",en:"yogurt",lesson:"4.18",mn:"酸 means sour (wine jar 酉 + phonetic). 奶 = milk (from 牛奶). Sour + milk = yogurt. Literally 'sour milk' — exactly what it is."},
+{zh:"蓝莓",py:"lán méi",en:"blueberry",lesson:"4.18",mn:"蓝 = blue (grass radical 艹 over 监 — plant-dye blue). 莓 = berry (grass radical + 母 mother, a mother-plant of berries). Blue-berry."},
+{zh:"鸡肉派",py:"jī ròu pài",en:"chicken pie",lesson:"4.18",mn:"鸡肉 = chicken meat (already know). 派 sounds like 'pie' — pure phonetic loan. Chicken + meat + pie = chicken pie."},
+{zh:"明天见",py:"míng tiān jiàn",en:"see you tomorrow",lesson:"4.18",mn:"明天 = tomorrow. 见 = to see (from 再见). Same structure as 再见 (see again) — here 'see tomorrow'. Just swap 再 for 明天."},
+{zh:"做",py:"zuò",en:"to do / to make",lesson:"4.18",mn:"亻 (person) + 故 (cause/reason). A person causing something = making something. zuò sounds like 'dzwor' — the sound of someone busy at work."},
+{zh:"早饭",py:"zǎo fàn",en:"breakfast",lesson:"4.18",mn:"早 = early/morning (from 早上). 饭 = cooked rice/meal. Early meal = breakfast. Compare 午饭 / 晚饭 — same 饭 pattern."},
+{zh:"午饭",py:"wǔ fàn",en:"lunch",lesson:"4.18",mn:"午 = noon (from 下午/中午). 饭 = meal. Noon meal = lunch. Part of the 早饭·午饭·晚饭 trio."},
+{zh:"晚饭",py:"wǎn fàn",en:"dinner",lesson:"4.18",mn:"晚 = evening/late (from 晚上). 饭 = meal. Evening meal = dinner. Completes the meal set — early / noon / evening."},
 ];
-
+ 
 const SENTENCES = [
 {zh:"你今天好吗？",py:"Nǐ jīn tiān hǎo ma?",en:"Are you doing well today?",lesson:"3.14",dir:"zh2en",note:"吗 at the end turns any statement into a yes/no question."},
 {zh:"我今天很好。你呢？",py:"Wǒ jīn tiān hěn hǎo. Nǐ ne?",en:"I'm very well today. What about you?",lesson:"3.14",dir:"zh2en",note:"你呢 = 'you then?' — a quick way to bounce the question back."},
@@ -560,8 +601,21 @@ const SENTENCES = [
 {zh:"我喜欢喝可乐，不喜欢喝咖啡。",py:"Wǒ xǐ huan hē kě lè, bù xǐ huan hē kā fēi.",en:"I like drinking coke but not coffee.",lesson:"3.14",dir:"zh2en",note:"Two clauses joined by a comma — no extra joining word needed."},
 {zh:"烤鸭好吃吗？",py:"Kǎo yā hǎo chī ma?",en:"Is the roasted duck delicious?",lesson:"3.21",dir:"zh2en",note:""},
 {zh:"我今天不喝可乐。",py:"Wǒ jīn tiān bù hē kě lè.",en:"I'm not drinking coke today.",lesson:"3.14",dir:"zh2en",note:"不 negates the verb that directly follows it."},
+// 4.18 — 了 (completed action), 没(有) (negative past), 你家 (your home)
+{zh:"你今天早上喝了咖啡吗？",py:"Nǐ jīn tiān zǎo shang hē le kā fēi ma?",en:"Did you drink coffee this morning?",lesson:"4.18",dir:"zh2en",note:"Verb + 了 = completed action. Here 喝了 = drank (not just drink). 了 sits right after the verb, before the object."},
+{zh:"我今天早上喝了咖啡。",py:"Wǒ jīn tiān zǎo shang hē le kā fēi.",en:"I drank coffee this morning.",lesson:"4.18",dir:"zh2en",note:"Standard verb+了 past pattern: subject + time + verb+了 + object."},
+{zh:"你今天早上吃了什么？",py:"Nǐ jīn tiān zǎo shang chī le shén me?",en:"What did you eat this morning?",lesson:"4.18",dir:"zh2en",note:"了 works naturally with 什么 questions — completion marker stays on the verb, question word at the end."},
+{zh:"你早饭吃了什么？",py:"Nǐ zǎo fàn chī le shén me?",en:"What did you eat for breakfast?",lesson:"4.18",dir:"zh2en",note:"Meal/time can act as a 'frame' before the verb — 早饭 here sets the context, then 吃了什么 asks the action."},
+{zh:"我昨天晚饭做了鸡蛋。",py:"Wǒ zuó tiān wǎn fàn zuò le jī dàn.",en:"I made eggs for dinner yesterday.",lesson:"4.18",dir:"zh2en",note:"做 = to make/do. Time (昨天) + meal-frame (晚饭) + verb+了 + object. 做了 = made (past)."},
+{zh:"我今天早上没有喝茶。",py:"Wǒ jīn tiān zǎo shang méi yǒu hē chá.",en:"I didn't drink tea this morning.",lesson:"4.18",dir:"zh2en",note:"For past negative, use 没(有) before the verb — NEVER 不. 不 is for general/habitual negation; 没 negates completed actions. Also note: 没有 + verb removes the 了."},
+{zh:"我昨天没踢足球。",py:"Wǒ zuó tiān méi tī zú qiú.",en:"I didn't play football yesterday.",lesson:"4.18",dir:"zh2en",note:"没 can drop the 有 in casual speech — 没 + verb is enough. Same meaning as 没有踢."},
+{zh:"你家有水果吗？",py:"Nǐ jiā yǒu shuǐ guǒ ma?",en:"Do you have fruit at home?",lesson:"4.18",dir:"en2zh",note:"你家 / 我家 = your home / my home — no 的 needed before 家 (or other close-family words). The possessor attaches directly."},
+{zh:"我家有水果。",py:"Wǒ jiā yǒu shuǐ guǒ.",en:"I have fruit at home.",lesson:"4.18",dir:"en2zh",note:"Literally 'my home has fruit' — 有 works for 'have' at a location too, not just personal possession."},
+{zh:"明天见！",py:"Míng tiān jiàn!",en:"See you tomorrow!",lesson:"4.18",dir:"en2zh",note:"Parallel to 再见 (goodbye / see you again). You can swap 明天 for any time word: 下午见 (see you this afternoon), 晚上见 (see you tonight)."},
+{zh:"你今天吃了早饭吗？",py:"Nǐ jīn tiān chī le zǎo fàn ma?",en:"Did you eat breakfast today?",lesson:"4.18",dir:"en2zh",note:"吃了 = ate. Full pattern: time + 吃了 + meal + 吗? Answer yes: 吃了. Answer no: 没(有)吃."},
+{zh:"我今天早上做了早饭。",py:"Wǒ jīn tiān zǎo shang zuò le zǎo fàn.",en:"I made breakfast this morning.",lesson:"4.18",dir:"en2zh",note:"做 + meal = to cook/make a meal. 做了早饭 = made breakfast."},
 ];
-
+ 
 const HSK1_LESSONS = [
 {num:1,zhTitle:"你好",enTitle:"Hello",words:[
 {zh:"你",py:"nǐ",en:"you",note:"亻 person + 尔 (phonetic) — the person standing before you"},
@@ -743,7 +797,7 @@ const HSK1_LESSONS = [
 {zh:"听",py:"tīng",en:"to listen",note:"口 mouth + 斤 axe — listening as precisely as an axe cuts: to listen"},
 {zh:"飞机",py:"fēi jī",en:"airplane",note:"飞 = a bird in flight with wings spread (pictograph). 机 = 木 wood + 几 machine — flying machine: airplane"}]},
 ];
-
+ 
 // ════════════════════════════════════════════════════════
 // TAB SWITCHING
 // ════════════════════════════════════════════════════════
@@ -758,10 +812,10 @@ function switchTab(tab,btn){
   if(tab==='trace')initTrace();
   if(tab==='hsk')renderHSKBook();
 }
-
+ 
 // show tab-quiz by default
 document.getElementById('tab-quiz').style.display='block';
-
+ 
 // ════════════════════════════════════════════════════════
 // QUIZ LOGIC
 // ════════════════════════════════════════════════════════
@@ -780,12 +834,13 @@ function speak(zh){
 function filtVocab(){return lessonFilter==='all'?VOCAB:VOCAB.filter(v=>v.lesson===lessonFilter);}
 function filtSent(){return lessonFilter==='all'?SENTENCES:SENTENCES.filter(s=>s.lesson===lessonFilter);}
 function getMisses(w){return(weakMap[w.zh]||{}).misses||0;}
-
+ 
 let mode='mcq-en2zh',lessonFilter='all',questions=[],current=0;
+let sentDir='en2zh',sentFormat='mcq'; // sentence mode toggles: en2zh | zh2en | py2en  ×  mcq | type
 let scoreC=0,scoreW=0,answered=false,sessionMissed=[];
 let weakMap={};
 try{weakMap=JSON.parse(localStorage.getItem('cn_weak_v2')||'{}');}catch(e){}
-
+ 
 function saveWeak(){try{localStorage.setItem('cn_weak_v2',JSON.stringify(weakMap));}catch(e){}}
 function recordResult(word,correct){
   if(!weakMap[word.zh])weakMap[word.zh]={misses:0,hits:0};
@@ -809,7 +864,15 @@ function updateWeakUI(){
   }).join('');
 }
 function setLesson(l,btn){lessonFilter=l;document.querySelectorAll('#lessonRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');startQuiz();}
-function setMode(m,btn){mode=m;document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');startQuiz();}
+function setMode(m,btn){
+  mode=m;
+  document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  $('sentOpts').style.display=(m==='sentences')?'block':'none';
+  startQuiz();
+}
+function setSentDir(d,btn){sentDir=d;document.querySelectorAll('#sentDirRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(mode==='sentences')startQuiz();}
+function setSentFormat(f,btn){sentFormat=f;document.querySelectorAll('#sentFmtRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(mode==='sentences')startQuiz();}
 function drillWeak(){mode='weak';document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));$('weakBtn').classList.add('on');startQuiz();}
 function pickVMode(){
   if(mode==='mixed'){const r=Math.random();return r<0.34?'mcq-en2zh':r<0.67?'mcq-zh2en':'type';}
@@ -873,14 +936,35 @@ function showSentQ(sent){
   $('stag').style.display='block';
   $('ltag').textContent=sent.lesson;
   const qmain=$('qmain');$('qpy').textContent='';
-  if(sent.dir==='zh2en'){
-    $('qlabel').textContent='Translate into English';
+  qmain.style.fontStyle=''; // reset inline override from prior py2en render
+  // Prompt display based on direction
+  if(sentDir==='en2zh'){
+    $('qlabel').textContent=sentFormat==='mcq'?'Pick the Chinese translation':'Translate into Chinese (pinyin or characters)';
+    qmain.textContent=sent.en;qmain.className='qmain sen';
+  } else if(sentDir==='zh2en'){
+    $('qlabel').textContent=sentFormat==='mcq'?'Pick the English translation':'Translate into English';
     qmain.textContent=sent.zh;qmain.className='qmain szh';
+  } else { // py2en
+    $('qlabel').textContent=sentFormat==='mcq'?'Pick the English translation':'Translate into English';
+    qmain.textContent=sent.py;qmain.className='qmain sen';
+    qmain.style.fontStyle='normal'; // pinyin reads better upright
+  }
+  // Format: MCQ or type
+  if(sentFormat==='mcq'){
     buildSentMCQ(sent);
   } else {
-    $('qlabel').textContent='Translate into Chinese (pinyin or characters)';
-    qmain.textContent=sent.en;qmain.className='qmain sen';
     showTypeInput(true);
+    const inp=$('typeinput');
+    const hint=document.querySelector('#typewrap .typehint');
+    if(sentDir==='en2zh'){
+      if(hint)hint.textContent='Pinyin (tones optional) or Chinese characters — both accepted';
+    } else {
+      // English target — switch input to a Latin-friendly style
+      inp.placeholder='Type the English translation...';
+      inp.classList.remove('sent');
+      inp.classList.add('engtype');
+      if(hint)hint.textContent='Loose match — punctuation, "the/a/an" and capitalisation ignored';
+    }
   }
 }
 function buildMCQ(word,qm){
@@ -903,11 +987,27 @@ function buildSentMCQ(sent){
   grid.style.gridTemplateColumns='1fr';grid.style.display='grid';
   all.forEach(o=>{
     const btn=document.createElement('button');btn.className='opt';
-    btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;line-height:1.4;text-align:left;";
-    btn.textContent=o.en;
+    if(sentDir==='en2zh'){
+      // Show Chinese characters as the option
+      btn.style.cssText="font-family:'Noto Serif SC',serif;font-size:1.05rem;line-height:1.45;text-align:left;";
+      btn.textContent=o.zh;
+    } else {
+      // zh2en or py2en — show English as the option
+      btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;line-height:1.4;text-align:left;";
+      btn.textContent=o.en;
+    }
+    if(o.zh===sent.zh)btn.dataset.correct='1';
     btn.addEventListener('click',()=>checkSentMCQ(btn,o.zh===sent.zh,sent));
     grid.appendChild(btn);
   });
+}
+// Loose English match — for typed-English answers
+function normEn(s){
+  return s.trim().toLowerCase()
+    .replace(/[.,?!;:'"()\-—–]/g,'')
+    .replace(/\s+/g,' ')
+    .replace(/^(the |a |an )/,'')
+    .trim();
 }
 function checkMCQ(clicked,correct,word,qm){
   if(answered)return;answered=true;
@@ -924,7 +1024,7 @@ function checkMCQ(clicked,correct,word,qm){
 }
 function checkSentMCQ(clicked,correct,sent){
   if(answered)return;answered=true;
-  document.querySelectorAll('.opt').forEach(btn=>{btn.disabled=true;if(btn.textContent.trim()===sent.en)btn.classList.add('ok');});
+  document.querySelectorAll('.opt').forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==='1')btn.classList.add('ok');});
   if(!correct)clicked.classList.add('no');
   finishSent(correct,sent);
 }
@@ -950,7 +1050,14 @@ function submitTyped(){
   if(!raw)return;
   answered=true;$('typeinput').disabled=true;$('submbtn').disabled=true;
   if(q.type==='sent'){
-    const s=q.data,ok=norm(raw)===norm(s.zh)||norm(raw)===norm(s.py);
+    const s=q.data;
+    let ok;
+    if(sentDir==='en2zh'){
+      ok=norm(raw)===norm(s.zh)||norm(raw)===norm(s.py);
+    } else {
+      // zh2en or py2en — accept loose English match
+      ok=normEn(raw)===normEn(s.en);
+    }
     $('typeinput').className+=' '+(ok?'tok':'tno');
     finishSent(ok,s);
   } else {
@@ -1009,12 +1116,12 @@ document.addEventListener('keydown',e=>{
   if(!answered){if($('typewrap').style.display==='flex')submitTyped();}
   else{if($('nextbtn').style.display!=='none')nextQuestion();}
 });
-
+ 
 // ════════════════════════════════════════════════════════
 // CHARACTER STUDY
 // ════════════════════════════════════════════════════════
 let csCards=[],csIdx=0,csMissed=[],csRevealed=false;
-
+ 
 function initCharStudy(){
   csCards=shuffle([...VOCAB]);
   csIdx=0;csMissed=[];csRevealed=false;
@@ -1023,7 +1130,7 @@ function initCharStudy(){
   hide('csAssess');
   showCSCard();
 }
-
+ 
 function showCSCard(){
   if(csIdx>=csCards.length){showCSEnd();return;}
   const w=csCards[csIdx];
@@ -1037,7 +1144,7 @@ function showCSCard(){
   hide('csAssess');
   hide('csMnBox');
 }
-
+ 
 function revealCS(){
   if(csRevealed)return;
   csRevealed=true;
@@ -1049,14 +1156,14 @@ function revealCS(){
   $('csRevealArea').style.display='block';
   $('csAssess').style.display='flex';
 }
-
+ 
 function assessCS(knew){
   if(!csRevealed)return;
   if(!knew)csMissed.push(csCards[csIdx]);
   csIdx++;
   showCSCard();
 }
-
+ 
 function showCSEnd(){
   $('csFront').style.display='none';
   hide('csAssess');
@@ -1071,7 +1178,7 @@ function showCSEnd(){
     csMissed.map(w=>`<div class="mitem"><span class="mzh">${w.zh}</span><span><div class="mpy">${w.py}</div><div class="men">${w.en}</div></span></div>`).join('')
     :'';
 }
-
+ 
 function drillMissedCS(){
   csCards=shuffle([...csMissed]);
   csIdx=0;csMissed=[];csRevealed=false;
@@ -1079,7 +1186,7 @@ function drillMissedCS(){
   $('csFront').style.display='block';
   showCSCard();
 }
-
+ 
 // ════════════════════════════════════════════════════════
 // TRACE (HanziWriter)
 // ════════════════════════════════════════════════════════
@@ -1088,7 +1195,7 @@ let traceMode='animate';
 let traceIncludeClass=true;
 let traceHSKLessons=new Set();
 let traceList=[];
-
+ 
 function buildTraceList(){
   let list=[];
   if(traceIncludeClass){
@@ -1106,20 +1213,20 @@ function buildTraceList(){
   }
   traceList=list;
 }
-
+ 
 function toggleTraceClass(btn){
   traceIncludeClass=!traceIncludeClass;
   btn.classList.toggle('on',traceIncludeClass);
   rebuildTrace();
 }
-
+ 
 function toggleTraceHSKLesson(num,btn){
   if(traceHSKLessons.has(num)) traceHSKLessons.delete(num);
   else traceHSKLessons.add(num);
   btn.classList.toggle('on',traceHSKLessons.has(num));
   rebuildTrace();
 }
-
+ 
 function rebuildTrace(){
   buildTraceList();
   traceWordIdx=0;traceCharIdx=0;
@@ -1133,14 +1240,14 @@ function rebuildTrace(){
     $('hw-target').innerHTML='';
   }
 }
-
+ 
 function setTraceMode(mode,btn){
   traceMode=mode;
   document.querySelectorAll('#tab-trace .pill:not(.teal)').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   loadTraceChar();
 }
-
+ 
 function initTrace(){
   // Build HSK lesson pills once
   const container=document.getElementById('tHSKPills');
@@ -1159,13 +1266,13 @@ function initTrace(){
   traceWordIdx=0;traceCharIdx=0;
   loadTraceChar();
 }
-
+ 
 function loadTraceChar(){
   if(!traceList.length)return;
   const word=traceList[traceWordIdx];
   const chars=[...word.zh]; // spread to handle multi-byte chars
   const char=chars[traceCharIdx];
-
+ 
   $('traceWord').textContent=word.zh;
   $('tracePy').textContent=word.py;
   $('traceEn').textContent=word.en;
@@ -1174,7 +1281,7 @@ function loadTraceChar(){
   $('tracePb').style.width=`${(traceWordIdx/traceList.length)*100}%`;
   $('traceComplete').textContent='';
   $('traceCharInfo').textContent=chars.length>1?`character ${traceCharIdx+1} of ${chars.length} · ${char}`:'';
-
+ 
   if(traceMode==='animate'){
     $('traceAnimCtrls').style.display='flex';
     $('traceQuizCtrls').style.display='none';
@@ -1184,12 +1291,12 @@ function loadTraceChar(){
     $('traceQuizCtrls').style.display='flex';
     $('traceHint').textContent='Draw each stroke in order — follow the grey guide';
   }
-
+ 
   if(typeof HanziWriter==='undefined'){
     $('hw-target').innerHTML=`<div style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:160px;color:rgba(154,124,42,0.15);border:1.5px solid var(--border);border-radius:4px">${char}</div>`;
     return;
   }
-
+ 
   $('hw-target').innerHTML='';
   const size=Math.min(window.innerWidth-80,300);
   traceWriter=HanziWriter.create('hw-target',char,{
@@ -1207,14 +1314,14 @@ function loadTraceChar(){
       $('hw-target').innerHTML=`<div style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:${Math.round(size*0.6)}px;color:rgba(154,124,42,0.18);border:1.5px solid var(--border);border-radius:4px">${char}</div>`;
     }
   });
-
+ 
   if(traceMode==='animate'){
     setTimeout(()=>traceWriter&&traceWriter.animateCharacter(),300);
   } else {
     setTimeout(()=>startHWQuiz(),300);
   }
 }
-
+ 
 function startHWQuiz(){
   if(!traceWriter)return;
   traceWriter.quiz({
@@ -1232,7 +1339,7 @@ function startHWQuiz(){
     }
   });
 }
-
+ 
 function replayTrace(){
   if(traceWriter)traceWriter.animateCharacter();
 }
@@ -1252,7 +1359,7 @@ function nextTraceWord(){
   if(traceWordIdx<traceList.length-1){traceWordIdx++;traceCharIdx=0;loadTraceChar();}
   else{$('traceComplete').textContent='🎉 All done! Tap Prev to review.';}
 }
-
+ 
 // ════════════════════════════════════════════════════════
 // HSK BOOK
 // ════════════════════════════════════════════════════════
@@ -1264,19 +1371,20 @@ const HSK_SRS_KEY='cn_hsk_srs_v1';
 function loadHSKSRS(){hskSRS=JSON.parse(localStorage.getItem(HSK_SRS_KEY)||'{}');}
 function saveHSKSRS(){localStorage.setItem(HSK_SRS_KEY,JSON.stringify(hskSRS));}
 function getHSKSRSCard(zh){return hskSRS[zh]||{interval:1,ease:2.5,reps:0};}
+const HSK_MAX_INTERVAL=14; // days — cap to keep cards from disappearing for months
 function hskIntervalPreview(zh,rating){
   const c=getHSKSRSCard(zh);
   let {interval,ease,reps}=c;
   if(rating===0)return '<1d';
   let i;
   if(reps===0)i=1;
-  else if(reps===1)i=6;
+  else if(reps===1)i=Math.min(6,HSK_MAX_INTERVAL);
   else i=Math.round(interval*ease);
   if(rating===1)i=Math.max(1,Math.round(i*0.6));
   if(rating===3)i=Math.round(i*1.3);
+  i=Math.min(i,HSK_MAX_INTERVAL);
   if(i<=1)return '1d';
-  if(i<30)return i+'d';
-  return Math.round(i/30)+'mo';
+  return i+'d';
 }
 function applyHSKSM2(zh,rating){
   const c=getHSKSRSCard(zh);
@@ -1284,19 +1392,67 @@ function applyHSKSM2(zh,rating){
   if(rating===0){interval=1;reps=0;}
   else{
     if(reps===0)interval=1;
-    else if(reps===1)interval=6;
+    else if(reps===1)interval=Math.min(6,HSK_MAX_INTERVAL);
     else interval=Math.round(interval*ease);
     if(rating===1)interval=Math.max(1,Math.round(interval*0.6));
     if(rating===3)interval=Math.round(interval*1.3);
     reps++;
     ease=Math.max(1.3,ease+0.1-(3-rating)*(0.08+(3-rating)*0.02));
   }
+  interval=Math.min(interval,HSK_MAX_INTERVAL);
   const due=new Date();
   due.setDate(due.getDate()+interval);
   hskSRS[zh]={interval,ease,reps,due:due.toISOString().split('T')[0]};
   saveHSKSRS();
 }
-
+// Returns all cards (across all lessons) that have been rated at least once and are due today or earlier.
+// Sorted most-overdue-first so the neediest cards come up first.
+function computeHSKDueCards(){
+  const today=new Date().toISOString().split('T')[0];
+  const due=[];
+  HSK1_LESSONS.forEach(l=>{
+    l.words.forEach(w=>{
+      const srs=hskSRS[w.zh];
+      if(srs && srs.due && srs.due<=today){
+        due.push({...w,_lesson:l.num,_due:srs.due});
+      }
+    });
+  });
+  // Most overdue first (ascending due date)
+  due.sort((a,b)=>a._due.localeCompare(b._due));
+  return due;
+}
+function updateHSKDueBadge(){
+  loadHSKSRS();
+  const n=computeHSKDueCards().length;
+  const btn=$('hskReviewDueBtn');
+  const badge=$('hskDueBadge');
+  if(!btn||!badge)return;
+  if(n>0){
+    badge.textContent=n;
+    badge.style.display='inline-block';
+    btn.classList.add('has-due');
+  } else {
+    badge.style.display='none';
+    btn.classList.remove('has-due');
+  }
+}
+function startHSKDueReview(){
+  loadHSKSRS();
+  const dueCards=computeHSKDueCards();
+  if(dueCards.length===0){
+    alert('🎉 No cards due right now. Come back later or drill a lesson directly.');
+    return;
+  }
+  hskCurrentLesson=null; // cross-lesson review
+  hskDrillCards=[...dueCards];
+  hskDrillIdx=0;hskDrillRevealed=false;hskDrillAgain=[];
+  hide('hskGrid');hide('hskDetail');hide('hskDrillEnd');
+  $('hskGrid').style.display='none';
+  $('hskDrill').style.display='block';
+  showHSKDrillCard();
+}
+ 
 function loadHSKProgress(){
   try{
     const saved=JSON.parse(localStorage.getItem('cn_hsk_v1')||'null');
@@ -1309,11 +1465,11 @@ function loadHSKProgress(){
     }
   }catch(e){hskProgress=new Set([1,2,3]);}
 }
-
+ 
 function saveHSKProgress(){
   localStorage.setItem('cn_hsk_v1',JSON.stringify([...hskProgress]));
 }
-
+ 
 function getCatchupNums(){
   // The 3 lessons above max completed that aren't done yet
   const done=[...hskProgress].sort((a,b)=>a-b);
@@ -1324,16 +1480,18 @@ function getCatchupNums(){
   }
   return catchup;
 }
-
+ 
 function renderHSKBook(){
   loadHSKProgress();
+  loadHSKSRS();
+  updateHSKDueBadge();
   hide('hskDetail');hide('hskDrill');
   $('hskGrid').style.display='grid';
-
+ 
   const done=hskProgress.size;
   $('hskProgText').textContent=`${done} / 15 lessons`;
   $('hskPb').style.width=`${(done/15)*100}%`;
-
+ 
   const catchup=getCatchupNums();
   $('hskGrid').innerHTML=HSK1_LESSONS.map(l=>{
     const isDone=hskProgress.has(l.num);
@@ -1347,20 +1505,20 @@ function renderHSKBook(){
     </div>`;
   }).join('');
 }
-
+ 
 function openHSKLesson(num){
   hskCurrentLesson=HSK1_LESSONS.find(l=>l.num===num);
   $('hskGrid').style.display='none';
   hide('hskDrill');
   $('hskDetail').style.display='block';
   $('hskDetailTitle').textContent=`L${num}: ${hskCurrentLesson.zhTitle} · ${hskCurrentLesson.enTitle}`;
-
+ 
   // Mark button state
   const isDone=hskProgress.has(num);
   const markBtn=$('hskMarkBtn');
   markBtn.textContent=isDone?'✓ Studied':'Mark as studied';
   markBtn.className='hsk-action-btn green'+(isDone?' active':'');
-
+ 
   // Word grid
   $('hskDetailWords').innerHTML=hskCurrentLesson.words.map(w=>
     `<div class="hsk-witem">
@@ -1370,12 +1528,12 @@ function openHSKLesson(num){
     </div>`
   ).join('');
 }
-
+ 
 function closeHSKDetail(){
   hide('hskDetail');
   $('hskGrid').style.display='grid';
 }
-
+ 
 function toggleHSKLesson(){
   if(!hskCurrentLesson)return;
   const num=hskCurrentLesson.num;
@@ -1391,9 +1549,9 @@ function toggleHSKLesson(){
   $('hskProgText').textContent=`${hskProgress.size} / 15 lessons`;
   $('hskPb').style.width=`${(hskProgress.size/15)*100}%`;
 }
-
+ 
 function startHSKDrill(cards){
-  if(!hskCurrentLesson)return;
+  if(!hskCurrentLesson && !cards)return;
   loadHSKSRS();
   hskDrillCards=shuffle([...(cards||hskCurrentLesson.words)]);
   hskDrillIdx=0;hskDrillRevealed=false;hskDrillAgain=[];
@@ -1401,7 +1559,7 @@ function startHSKDrill(cards){
   $('hskDrill').style.display='block';
   showHSKDrillCard();
 }
-
+ 
 function showHSKDrillCard(){
   if(hskDrillIdx>=hskDrillCards.length){endHSKDrill();return;}
   const w=hskDrillCards[hskDrillIdx];
@@ -1414,7 +1572,7 @@ function showHSKDrillCard(){
   // Pre-populate interval previews
   [0,1,2,3].forEach(r=>{ const el=$('hskInt'+r); if(el)el.textContent=hskIntervalPreview(w.zh,r); });
 }
-
+ 
 function revealHSKDrill(){
   if(hskDrillRevealed)return;
   hskDrillRevealed=true;
@@ -1426,20 +1584,22 @@ function revealHSKDrill(){
   else{$('hskDrillNote').style.display='none';}
   $('hskDrillReveal').style.display='block';
 }
-
+ 
 function hskRate(rating){
   if(!hskDrillRevealed)return;
   const w=hskDrillCards[hskDrillIdx];
   if(rating===0){
     hskDrillAgain.push(w);   // Again: re-queue at end of deck
     hskDrillCards.push(w);
+    applyHSKSM2(w.zh,0);     // also reset SRS state so due date refreshes to today
   } else {
     applyHSKSM2(w.zh,rating);
   }
   hskDrillIdx++;
+  updateHSKDueBadge();
   showHSKDrillCard();
 }
-
+ 
 function endHSKDrill(){
   hide('hskDrill');
   const total=hskDrillCards.length;
@@ -1453,26 +1613,29 @@ function endHSKDrill(){
   else{missedBtn.style.display='none';}
   $('hskDrillEnd').style.display='block';
 }
-
+ 
 function drillHSKMissed(){
   hide('hskDrillEnd');
   const missed=[...new Set(hskDrillAgain)];
   hskDrillAgain=[];
   startHSKDrill(missed);
 }
-
+ 
 function backFromHSKDrill(){
   hide('hskDrill');hide('hskDrillEnd');
   if(hskCurrentLesson)openHSKLesson(hskCurrentLesson.num);
   else renderHSKBook();
+  updateHSKDueBadge();
 }
-
+ 
 // ════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════
 loadHSKSRS();
+updateHSKDueBadge();
 updateWeakUI();
 startQuiz();
 </script>
 </body>
 </html>
+ 

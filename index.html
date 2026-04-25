@@ -217,7 +217,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24</div>
 </div>
  
 <div class="tabrow">
@@ -241,6 +241,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
   <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
   <button class="pill" onclick="setLesson('4.18',this)">4.18</button>
+  <button class="pill" onclick="setLesson('4.24',this)">4.24</button>
 </div>
  
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -563,6 +564,20 @@ const VOCAB = [
 {zh:"早饭",py:"zǎo fàn",en:"breakfast",lesson:"4.18",mn:"早 = early/morning (from 早上). 饭 = cooked rice/meal. Early meal = breakfast. Compare 午饭 / 晚饭 — same 饭 pattern."},
 {zh:"午饭",py:"wǔ fàn",en:"lunch",lesson:"4.18",mn:"午 = noon (from 下午/中午). 饭 = meal. Noon meal = lunch. Part of the 早饭·午饭·晚饭 trio."},
 {zh:"晚饭",py:"wǎn fàn",en:"dinner",lesson:"4.18",mn:"晚 = evening/late (from 晚上). 饭 = meal. Evening meal = dinner. Completes the meal set — early / noon / evening."},
+// 4.24
+{zh:"怎么样",py:"zěn me yàng",en:"how / how is it?",lesson:"4.24",mn:"怎 has 心 (heart) at the bottom — asking 'how does your heart feel?' 么样 adds a questioning quality. Altogether: 'how is it?' Used when checking on someone or something."},
+{zh:"还不错",py:"hái bu cuò",en:"not too bad / pretty good",lesson:"4.24",mn:"还 = still/yet. 不 = not. 错 = wrong/mistaken. Literally 'still not wrong' = not too bad. The classic understated Chinese compliment."},
+{zh:"工作",py:"gōng zuò",en:"to work / work",lesson:"4.24",mn:"工 looks like an I-beam or construction tool — the shape of a worker's implement. 作 has 亻(person) doing something. Worker's tool + person doing = work."},
+{zh:"包子",py:"bāo zi",en:"bun (steamed)",lesson:"4.24",mn:"包 is a wrapping — like a coat folded around a filling (巳 wrapped inside the outer strokes). 子 is the small-thing suffix. A small wrapped thing = steamed bun."},
+{zh:"面包",py:"miàn bāo",en:"bread",lesson:"4.24",mn:"面 = flour/face (from 面条). 包 = wrapped up (from 包子). Flour wrapped up and baked = bread. Compare: flour in strips = 面条 noodles; flour wrapped = 面包 bread."},
+{zh:"这",py:"zhè",en:"this",lesson:"4.24",mn:"这 has 辶 (the movement radical — walking feet) + 文. Imagine striding up and pointing your finger right here: THIS. The feet bring you to the thing you're indicating."},
+{zh:"书",py:"shū",en:"book",lesson:"4.24",mn:"书 looks like a hand holding a brush, with the writing stroke below. A stylus making marks on a page = book. shū sounds like 'shoo' — the sound of flipping pages."},
+{zh:"看",py:"kàn",en:"to watch / read / see",lesson:"4.24",mn:"Top part 手 is a hand shielding the eyes from glare. Bottom part 目 is an eye. Hand over eye, peering into the distance = to look, see, watch."},
+{zh:"看书",py:"kàn shū",en:"to read a book",lesson:"4.24",mn:"看 (to look at) + 书 (book). Looking at a book = reading. Simple compound — both parts you already know."},
+{zh:"看电影",py:"kàn diàn yǐng",en:"to watch a movie",lesson:"4.24",mn:"看 (to see) + 电影 (movie — 电 electricity + 影 shadow/image). Electric shadows you watch = movie. 电影 literally means 'electric shadow'."},
+{zh:"妈妈",py:"mā ma",en:"mother / mum",lesson:"4.24",mn:"妈 = 女 (woman) + 马 (horse, phonetic mā). 'Ma' is one of the first sounds babies make in every language — it means mother everywhere. Doubled for warmth: mā ma."},
+{zh:"爸爸",py:"bà ba",en:"father / dad",lesson:"4.24",mn:"爸 = 父 (the father radical — a hand holding a rod of authority) + 巴 (phonetic bā). 'Ba/pa' sounds are universal early words for father. Doubled for affection: bà ba."},
+{zh:"波兰",py:"bō lán",en:"Poland",lesson:"4.24",mn:"Phonetic borrowing from Polska. 波 = wave (水 water + phonetic) — bō. 兰 = orchid — lán. Waves of orchids = Poland. bō lán ≈ Polska spoken with a Chinese accent."},
 ];
  
 const SENTENCES = [
@@ -614,6 +629,13 @@ const SENTENCES = [
 {zh:"明天见！",py:"Míng tiān jiàn!",en:"See you tomorrow!",lesson:"4.18",dir:"en2zh",note:"Parallel to 再见 (goodbye / see you again). You can swap 明天 for any time word: 下午见 (see you this afternoon), 晚上见 (see you tonight)."},
 {zh:"你今天吃了早饭吗？",py:"Nǐ jīn tiān chī le zǎo fàn ma?",en:"Did you eat breakfast today?",lesson:"4.18",dir:"en2zh",note:"吃了 = ate. Full pattern: time + 吃了 + meal + 吗? Answer yes: 吃了. Answer no: 没(有)吃."},
 {zh:"我今天早上做了早饭。",py:"Wǒ jīn tiān zǎo shang zuò le zǎo fàn.",en:"I made breakfast this morning.",lesson:"4.18",dir:"en2zh",note:"做 + meal = to cook/make a meal. 做了早饭 = made breakfast."},
+// 4.24 — 想 + meal frame, 怎么样, 还不错, 看 + object
+{zh:"你午饭想吃什么？",py:"Nǐ wǔ fàn xiǎng chī shén me?",en:"What do you want to eat for lunch?",lesson:"4.24",dir:"zh2en",note:"Meal word (午饭) acts as a time-frame before the verb. 想 = want to. Pattern: [meal] + 想 + verb + 什么?"},
+{zh:"我午饭想吃火锅。",py:"Wǒ wǔ fàn xiǎng chī huǒ guō.",en:"I want to eat hotpot for lunch.",lesson:"4.24",dir:"zh2en",note:"Same meal-frame pattern in the answer: 午饭 + 想吃 + object. No tense marker needed — context is clear."},
+{zh:"你昨天做了什么？",py:"Nǐ zuó tiān zuò le shén me?",en:"What did you do yesterday?",lesson:"4.24",dir:"en2zh",note:"做了 = did (completed). 昨天 = yesterday. 什么 stays at the end. A natural past-tense opener."},
+{zh:"我昨天游泳了。",py:"Wǒ zuó tiān yóu yǒng le.",en:"I swam yesterday.",lesson:"4.24",dir:"en2zh",note:"了 can go at the end of the sentence (after the verb-object) for activity-completion. Means the swimming happened and is done."},
+{zh:"你今天下午想做什么？",py:"Nǐ jīn tiān xià wǔ xiǎng zuò shén me?",en:"What do you want to do this afternoon?",lesson:"4.24",dir:"en2zh",note:"Time phrase (今天下午) first, then 想做什么. No 了 — this is about future intention, not past completion."},
+{zh:"我今天下午想爬山。",py:"Wǒ jīn tiān xià wǔ xiǎng pá shān.",en:"I want to go hiking this afternoon.",lesson:"4.24",dir:"en2zh",note:"爬山 = climb mountain / hike (from 3.28). 想 + verb is the standard 'want to do' pattern."},
 ];
  
 const HSK1_LESSONS = [
@@ -1370,39 +1392,31 @@ let hskSRS={};
 const HSK_SRS_KEY='cn_hsk_srs_v1';
 function loadHSKSRS(){hskSRS=JSON.parse(localStorage.getItem(HSK_SRS_KEY)||'{}');}
 function saveHSKSRS(){localStorage.setItem(HSK_SRS_KEY,JSON.stringify(hskSRS));}
-function getHSKSRSCard(zh){return hskSRS[zh]||{interval:1,ease:2.5,reps:0};}
-const HSK_MAX_INTERVAL=14; // days — cap to keep cards from disappearing for months
+function getHSKSRSCard(zh){return hskSRS[zh]||{interval:1,reps:0};}
+const HSK_STEPS=[1,2,4,6,10]; // fixed step ladder in days
+const HSK_MAX_INTERVAL=10;
 function hskIntervalPreview(zh,rating){
   const c=getHSKSRSCard(zh);
-  let {interval,ease,reps}=c;
+  const reps=c.reps||0;
   if(rating===0)return '<1d';
   let i;
-  if(reps===0)i=1;
-  else if(reps===1)i=Math.min(6,HSK_MAX_INTERVAL);
-  else i=Math.round(interval*ease);
-  if(rating===1)i=Math.max(1,Math.round(i*0.6));
-  if(rating===3)i=Math.round(i*1.3);
-  i=Math.min(i,HSK_MAX_INTERVAL);
+  if(rating===1)i=HSK_STEPS[Math.max(0,reps-1)];                               // Hard: step back
+  else if(rating===3)i=HSK_STEPS[Math.min(HSK_STEPS.length-1,reps+1)];         // Easy: skip ahead
+  else i=HSK_STEPS[Math.min(HSK_STEPS.length-1,reps)];                         // Good: current step
   if(i<=1)return '1d';
   return i+'d';
 }
 function applyHSKSM2(zh,rating){
   const c=getHSKSRSCard(zh);
-  let {interval,ease,reps}=c;
-  if(rating===0){interval=1;reps=0;}
-  else{
-    if(reps===0)interval=1;
-    else if(reps===1)interval=Math.min(6,HSK_MAX_INTERVAL);
-    else interval=Math.round(interval*ease);
-    if(rating===1)interval=Math.max(1,Math.round(interval*0.6));
-    if(rating===3)interval=Math.round(interval*1.3);
-    reps++;
-    ease=Math.max(1.3,ease+0.1-(3-rating)*(0.08+(3-rating)*0.02));
-  }
-  interval=Math.min(interval,HSK_MAX_INTERVAL);
+  let reps=c.reps||0;
+  let interval;
+  if(rating===0){interval=1;reps=0;}                                            // Again: reset
+  else if(rating===1){interval=HSK_STEPS[Math.max(0,reps-1)];}                  // Hard: step back, hold reps
+  else if(rating===3){interval=HSK_STEPS[Math.min(HSK_STEPS.length-1,reps+1)];reps=Math.min(HSK_STEPS.length-1,reps+2);} // Easy: +2 steps
+  else{interval=HSK_STEPS[Math.min(HSK_STEPS.length-1,reps)];reps=Math.min(HSK_STEPS.length-1,reps+1);}                  // Good: advance one
   const due=new Date();
   due.setDate(due.getDate()+interval);
-  hskSRS[zh]={interval,ease,reps,due:due.toISOString().split('T')[0]};
+  hskSRS[zh]={interval,reps,due:due.toISOString().split('T')[0]};
   saveHSKSRS();
 }
 // Returns all cards (across all lessons) that have been rated at least once and are due today or earlier.

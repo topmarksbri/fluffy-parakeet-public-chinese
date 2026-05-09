@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>中文练习 · David's Chinese</title>
-<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
 :root{--ink:#1c1209;--paper:#faf6ef;--red:#b5291c;--red-dim:rgba(181,41,28,0.1);--gold:#9a7c2a;--gold-dim:rgba(154,124,42,0.12);--green:#1e6b3a;--green-dim:rgba(30,107,58,0.1);--blue:#1a4a7a;--blue-dim:rgba(26,74,122,0.1);--purple:#5a2d82;--purple-dim:rgba(90,45,130,0.09);--border:#d8cdb8;--muted:#7a6e5f;--soft:#f2ebe0;--orange:#c45c0a;--orange-dim:rgba(196,92,10,0.1);--teal:#1a6b6b;--teal-dim:rgba(26,107,107,0.1);}
@@ -20,6 +19,37 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .tab:hover{border-color:var(--gold);color:var(--gold);}
 .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 .tabcontent{width:100%;max-width:500px;}
+
+/* Pinyin reference (Grammar tab) */
+.py-hdr{text-align:center;margin-bottom:14px;}
+.py-hdr-zh{font-family:'Noto Serif SC',serif;font-size:1.5rem;color:var(--red);letter-spacing:2px;}
+.py-hdr-en{font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);font-size:0.85rem;margin-top:2px;}
+.py-sec{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;}
+.py-sec[open]{box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.py-sec summary{cursor:pointer;padding:11px 14px;font-family:'Noto Serif SC',serif;font-size:0.95rem;color:var(--ink);list-style:none;position:relative;user-select:none;}
+.py-sec summary::-webkit-details-marker{display:none;}
+.py-sec summary::after{content:'＋';position:absolute;right:14px;top:11px;color:var(--muted);font-size:1rem;transition:transform 0.15s;}
+.py-sec[open] summary::after{content:'−';}
+.py-sec summary:hover{background:rgba(0,0,0,0.02);}
+.py-body{padding:4px 14px 14px;border-top:1px dashed var(--line);}
+.py-chartrow{font-family:'DM Mono',monospace;font-size:1.05rem;color:var(--ink);padding:5px 0;display:flex;gap:18px;flex-wrap:wrap;}
+.py-chartrow span{min-width:28px;}
+.py-finals{display:flex;flex-direction:column;gap:2px;}
+.py-fcol{font-family:'DM Mono',monospace;font-size:0.9rem;color:var(--ink);display:flex;gap:14px;flex-wrap:wrap;padding:3px 0;border-bottom:1px dotted var(--line);}
+.py-fcol:last-child{border-bottom:none;}
+.py-fcol span{min-width:34px;}
+.py-formula{font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);font-size:0.9rem;margin:6px 0 10px;line-height:1.45;}
+.py-ex{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 0;border-bottom:1px dotted var(--line);font-size:0.92rem;}
+.py-ex:last-child{border-bottom:none;}
+.py-ex-py{font-family:'DM Mono',monospace;color:var(--red);font-weight:600;min-width:75px;}
+.py-ex-said{font-family:'DM Mono',monospace;color:var(--green);font-weight:600;}
+.py-ex-arrow{color:var(--muted);font-size:0.8rem;}
+.py-ex-zh{font-family:'Noto Serif SC',serif;color:var(--muted);font-size:0.85rem;}
+.py-speak{padding:2px 7px;font-size:0.7rem;}
+.py-shortrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0;border-bottom:1px dotted var(--line);font-size:0.92rem;}
+.py-shortrow:last-child{border-bottom:none;}
+.py-short-from{font-family:'DM Mono',monospace;color:var(--red);font-weight:600;min-width:70px;}
+.py-short-to{font-family:'DM Mono',monospace;color:var(--ink);}
 /* SHARED */
 .slabel{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;text-align:center;}
 .prow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
@@ -135,20 +165,11 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .cs-btn.missed{color:var(--red);border-color:var(--red);}
 .cs-btn.missed:hover{background:var(--red);color:white;}
 .cs-end{background:white;border:1px solid var(--border);border-radius:4px;width:100%;padding:32px 26px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);}
-/* TRACE */
-.trace-card{background:white;border:1px solid var(--border);border-radius:4px;width:100%;padding:18px 20px 20px;text-align:center;box-shadow:0 2px 14px rgba(0,0,0,0.06);margin-bottom:12px;}
-.trace-word{font-family:'Noto Serif SC',serif;font-size:1.6rem;color:var(--ink);margin-bottom:1px;}
-.trace-py{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--red);margin-bottom:1px;}
-.trace-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.95rem;color:var(--muted);}
-.trace-char-info{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:6px 0 8px;}
-#hw-target{display:inline-block;margin:0 auto;}
-.trace-controls{display:flex;gap:7px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+/* Shared button style — used by HSK drill end-button and elsewhere */
 .tr-btn{padding:7px 15px;border:1.5px solid var(--border);border-radius:20px;font-family:'DM Mono',monospace;font-size:0.63rem;cursor:pointer;background:transparent;color:var(--muted);transition:all 0.18s;}
 .tr-btn:hover{border-color:var(--gold);color:var(--gold);}
 .tr-btn.ink{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 .tr-btn.ink:hover{background:var(--red);border-color:var(--red);}
-.trace-hint{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:1px;}
-.trace-complete{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.1rem;color:var(--green);margin-top:8px;min-height:1.4em;}
 /* HSK BOOK */
 .hsk-prog-wrap{width:100%;margin-bottom:14px;}
 .hsk-prog-label{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;}
@@ -213,66 +234,53 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 </style>
 </head>
 <body>
- 
+
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
   <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24</div>
 </div>
- 
+
 <div class="tabrow">
-  <button class="tab on" onclick="switchTab('quiz',this)">📝 Quiz</button>
-  <button class="tab" onclick="switchTab('chars',this)">🔍 Characters</button>
-  <button class="tab" onclick="switchTab('trace',this)">✍️ Trace</button>
-  <button class="tab" onclick="switchTab('hsk',this)">📚 HSK Book</button>
+  <button class="tab on" onclick="switchTab('quiz',this)">📝 Vocab</button>
+  <button class="tab" onclick="switchTab('grammar',this)">📖 Grammar</button>
+  <button class="tab" onclick="switchTab('hsk',this)">🀄 HSK</button>
 </div>
- 
+
 <!-- ══════════════════════════════════════════════════════
      TAB 1: QUIZ
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-quiz">
- 
+
 <div class="slabel">Lesson</div>
-<div class="prow" id="lessonRow">
-  <button class="pill on" onclick="setLesson('all',this)">All</button>
-  <button class="pill" onclick="setLesson('3.07',this)">3.07</button>
-  <button class="pill" onclick="setLesson('3.14',this)">3.14</button>
-  <button class="pill" onclick="setLesson('3.21',this)">3.21</button>
-  <button class="pill" onclick="setLesson('3.28',this)">3.28</button>
-  <button class="pill" onclick="setLesson('4.03',this)">4.03</button>
-  <button class="pill" onclick="setLesson('4.18',this)">4.18</button>
-  <button class="pill" onclick="setLesson('4.24',this)">4.24</button>
+<div class="prow" id="lessonShortcuts" style="margin-bottom:4px">
+  <button class="pill" id="lShortLatest" onclick="setLatestLessons(2,this)">Latest 2</button>
+  <button class="pill" id="lShortLatest3" onclick="setLatestLessons(3,this)">Latest 3</button>
+  <button class="pill on" id="lShortAll" onclick="setAllLessons(this)">All</button>
 </div>
- 
+<div class="prow" id="lessonRow">
+  <button class="pill" data-lesson="3.07" onclick="toggleLesson('3.07',this)">3.07</button>
+  <button class="pill" data-lesson="3.14" onclick="toggleLesson('3.14',this)">3.14</button>
+  <button class="pill" data-lesson="3.21" onclick="toggleLesson('3.21',this)">3.21</button>
+  <button class="pill" data-lesson="3.28" onclick="toggleLesson('3.28',this)">3.28</button>
+  <button class="pill" data-lesson="4.03" onclick="toggleLesson('4.03',this)">4.03</button>
+  <button class="pill" data-lesson="4.18" onclick="toggleLesson('4.18',this)">4.18</button>
+  <button class="pill" data-lesson="4.24" onclick="toggleLesson('4.24',this)">4.24</button>
+</div>
+
 <div class="slabel" style="margin-top:6px">Mode</div>
 <div class="prow" id="modeRow">
-  <button class="pill on" onclick="setMode('mcq-en2zh',this)">English → Chinese</button>
-  <button class="pill" onclick="setMode('mcq-zh2en',this)">Chinese → English</button>
+  <button class="pill on" onclick="setMode('mcq',this)">Multiple choice</button>
   <button class="pill" onclick="setMode('type',this)">Type it out</button>
   <button class="pill" onclick="setMode('mixed',this)">Mixed</button>
-  <button class="pill sent" onclick="setMode('sentences',this)">📖 Sentences</button>
-  <button class="pill fire" id="weakBtn" onclick="setMode('weak',this)">🔥 Weak words <span class="wbadge" id="weakBadge"></span></button>
 </div>
- 
-<div class="sent-opts" id="sentOpts" style="display:none">
-  <div class="slabel" style="margin-top:4px">Sentence direction</div>
-  <div class="prow" id="sentDirRow">
-    <button class="pill sent on" onclick="setSentDir('en2zh',this)">English → Chinese</button>
-    <button class="pill sent" onclick="setSentDir('zh2en',this)">汉字 → English</button>
-    <button class="pill sent" onclick="setSentDir('py2en',this)">Pinyin → English</button>
-  </div>
-  <div class="slabel" style="margin-top:6px">Format</div>
-  <div class="prow" id="sentFmtRow">
-    <button class="pill sent on" onclick="setSentFormat('mcq',this)">Multiple choice</button>
-    <button class="pill sent" onclick="setSentFormat('type',this)">Type it out</button>
-  </div>
+
+<div class="slabel" style="margin-top:6px">Direction</div>
+<div class="prow" id="dirRow">
+  <button class="pill sent on" onclick="setVocabDir('en2py',this)">English → Pinyin</button>
+  <button class="pill sent" onclick="setVocabDir('py2en',this)">Pinyin → English</button>
 </div>
- 
-<div class="wpanel" id="weakPanel">
-  <div class="wpanel-title">🔥 Words you keep getting wrong</div>
-  <div class="wlist" id="weakList"></div>
-</div>
- 
+
 <div class="card" id="quizCard">
   <div class="flame" id="flame">🔥</div>
   <div class="stag" id="stag">sentence</div>
@@ -292,14 +300,14 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <div class="mn-box" id="mnBox"><div class="mn-lbl">Memory hook</div><div class="mn-txt" id="mnTxt"></div></div>
   <div class="opts" id="opts"></div>
   <div class="typewrap" id="typewrap">
-    <input class="typeinput" id="typeinput" placeholder="pinyin or 汉字..." autocomplete="off" spellcheck="false"/>
-    <div class="typehint">Pinyin (tones optional) or Chinese characters — both accepted</div>
+    <input class="typeinput" id="typeinput" placeholder="pinyin..." autocomplete="off" spellcheck="false"/>
+    <div class="typehint" id="typehint">Pinyin only — tones optional</div>
     <button class="submbtn" id="submbtn">Check →</button>
   </div>
   <div class="srev" id="srev">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:3px">
       <div class="srev-zh" id="srevZh" style="margin-bottom:0"></div>
-      <button class="speak-btn" id="qSpeakBtn" onclick="speak($('srevZh').textContent)" title="Hear pronunciation">🔊</button>
+      <button class="speak-btn" id="qSpeakBtn" data-zh="" onclick="speak(this.dataset.zh)" title="Hear pronunciation">🔊</button>
     </div>
     <div class="srev-py" id="srevPy"></div>
     <div class="srev-en" id="srevEn"></div>
@@ -308,7 +316,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <div class="fb" id="fb"></div>
   <button class="nextbtn" id="nextbtn">Next →</button>
 </div>
- 
+
 <div class="scorescreen" id="scorescreen">
   <h2>Session complete</h2>
   <div class="bigscore" id="bigscore"></div>
@@ -319,14 +327,142 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="msect" id="msect"></div>
 </div>
- 
+
 </div><!-- end tab-quiz -->
- 
+
 <!-- ══════════════════════════════════════════════════════
-     TAB 2: CHARACTERS
+     TAB 2: GRAMMAR — Pinyin reference (initials, finals, 7 rules)
+══════════════════════════════════════════════════════ -->
+<div class="tabcontent" id="tab-grammar" style="display:none">
+
+<div class="py-hdr">
+  <div class="py-hdr-zh">汉语拼音</div>
+  <div class="py-hdr-en">Pinyin reference · Andrew's 中文课堂</div>
+</div>
+
+<details class="py-sec" open>
+  <summary>Initials 声母</summary>
+  <div class="py-body">
+    <div class="py-chartrow"><span>b</span><span>p</span><span>m</span><span>f</span></div>
+    <div class="py-chartrow"><span>d</span><span>t</span><span>n</span><span>l</span></div>
+    <div class="py-chartrow"><span>g</span><span>k</span><span>h</span></div>
+    <div class="py-chartrow"><span>j</span><span>q</span><span>x</span></div>
+    <div class="py-chartrow"><span>zh</span><span>ch</span><span>sh</span><span>r</span></div>
+    <div class="py-chartrow"><span>z</span><span>c</span><span>s</span></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Finals 韵母</summary>
+  <div class="py-body">
+    <div class="py-finals">
+      <div class="py-fcol"><span>i</span><span>u</span><span>ü</span><span>er</span></div>
+      <div class="py-fcol"><span>a</span><span>ia</span><span>ua</span></div>
+      <div class="py-fcol"><span>o</span><span>uo</span></div>
+      <div class="py-fcol"><span>e</span><span>ie</span><span>üe</span></div>
+      <div class="py-fcol"><span>ai</span><span>uai</span></div>
+      <div class="py-fcol"><span>ei</span><span>uei (ui)</span></div>
+      <div class="py-fcol"><span>ao</span><span>iao</span></div>
+      <div class="py-fcol"><span>ou</span><span>iou (iu)</span></div>
+      <div class="py-fcol"><span>an</span><span>ian</span><span>uan</span><span>üan</span></div>
+      <div class="py-fcol"><span>en</span><span>in</span><span>uen (un)</span><span>ün</span></div>
+      <div class="py-fcol"><span>ang</span><span>iang</span><span>uang</span></div>
+      <div class="py-fcol"><span>eng</span><span>ing</span><span>ueng</span></div>
+      <div class="py-fcol"><span>ong</span><span>iong</span></div>
+    </div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 1 · Tone 3 + Tone 3 → Tone 2 + Tone 3</summary>
+  <div class="py-body">
+    <div class="py-formula">When two third-tone syllables collide, the first one rises to second tone.</div>
+    <div class="py-ex"><span class="py-ex-py">nǐ hǎo</span><span class="py-ex-arrow">→ sounds like</span><span class="py-ex-said">ní hǎo</span><span class="py-ex-zh">你好</span><button class="speak-btn py-speak" onclick="speak('你好')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">shuǐ guǒ</span><span class="py-ex-arrow">→</span><span class="py-ex-said">shuí guǒ</span><span class="py-ex-zh">水果 · fruit</span><button class="speak-btn py-speak" onclick="speak('水果')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">dǎ sǎo</span><span class="py-ex-arrow">→</span><span class="py-ex-said">dá sǎo</span><span class="py-ex-zh">打扫 · clean up</span><button class="speak-btn py-speak" onclick="speak('打扫')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">xǐ zǎo</span><span class="py-ex-arrow">→</span><span class="py-ex-said">xí zǎo</span><span class="py-ex-zh">洗澡 · take a shower</span><button class="speak-btn py-speak" onclick="speak('洗澡')">🔊</button></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 2 · Shortened finals</summary>
+  <div class="py-body">
+    <div class="py-formula">Some written finals are abbreviations — these are how they actually sound.</div>
+    <div class="py-shortrow"><span class="py-short-from">ui</span><span class="py-ex-arrow">=</span><span class="py-short-to">u + ei</span><span class="py-ex-zh">hui · shui · rui</span></div>
+    <div class="py-shortrow"><span class="py-short-from">iu</span><span class="py-ex-arrow">=</span><span class="py-short-to">i + ou</span><span class="py-ex-zh">xiu · jiu · qiu</span></div>
+    <div class="py-shortrow"><span class="py-short-from">un</span><span class="py-ex-arrow">=</span><span class="py-short-to">u + en</span><span class="py-ex-zh">kun · sun · cun · shun · chun · gun</span></div>
+    <div class="py-shortrow"><span class="py-short-from">üan</span><span class="py-ex-arrow">=</span><span class="py-short-to">ü + ian</span><span class="py-ex-zh">xuan · quan · juan</span></div>
+    <div class="py-shortrow"><span class="py-short-from">üe</span><span class="py-ex-arrow">=</span><span class="py-short-to">ü + ie</span><span class="py-ex-zh">jue · nüe · que</span></div>
+    <div class="py-shortrow"><span class="py-short-from">ün</span><span class="py-ex-arrow">=</span><span class="py-short-to">ü + in</span><span class="py-ex-zh">qun · xun · jun</span></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 3 · Hidden dots for ü (after j q x)</summary>
+  <div class="py-body">
+    <div class="py-formula">After <b>j q x</b>, the dots above ü are dropped — but it's still ü.</div>
+    <div class="py-shortrow"><span class="py-short-from">j q x + ü</span><span class="py-ex-arrow">→</span><span class="py-short-to">ju · qu · xu</span></div>
+    <div class="py-shortrow"><span class="py-short-from">j q x + üe</span><span class="py-ex-arrow">→</span><span class="py-short-to">jue · que · xue</span></div>
+    <div class="py-shortrow"><span class="py-short-from">j q x + üan</span><span class="py-ex-arrow">→</span><span class="py-short-to">juan · quan · xuan</span></div>
+    <div class="py-shortrow"><span class="py-short-from">j q x + ün</span><span class="py-ex-arrow">→</span><span class="py-short-to">jun · qun · xun</span></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 4 · Silent "y" + hidden dots ü</summary>
+  <div class="py-body">
+    <div class="py-formula">When ü starts a syllable, it's written with a silent <b>y</b> and the dots are dropped.</div>
+    <div class="py-shortrow"><span class="py-short-from">yu</span><span class="py-ex-arrow">=</span><span class="py-short-to">ü</span></div>
+    <div class="py-shortrow"><span class="py-short-from">yue</span><span class="py-ex-arrow">=</span><span class="py-short-to">üe</span></div>
+    <div class="py-shortrow"><span class="py-short-from">yun</span><span class="py-ex-arrow">=</span><span class="py-short-to">ün</span></div>
+    <div class="py-shortrow"><span class="py-short-from">yuan</span><span class="py-ex-arrow">=</span><span class="py-short-to">üan</span></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 5 · 不 sandhi</summary>
+  <div class="py-body">
+    <div class="py-formula">不 is tone 4 by default. Before another tone-4 syllable it shifts to tone 2.</div>
+    <div class="py-formula" style="font-style:normal"><b>tone 4 + tone 4 → tone 2 + tone 4</b></div>
+    <div class="py-ex"><span class="py-ex-py">bú shì</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">不是</span><button class="speak-btn py-speak" onclick="speak('不是')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">bú huì</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">不会</span><button class="speak-btn py-speak" onclick="speak('不会')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">bú rè</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">不热</span><button class="speak-btn py-speak" onclick="speak('不热')">🔊</button></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 6 · Three pronunciations of 一</summary>
+  <div class="py-body">
+    <div class="py-formula"><b>yī</b> when 一 stands alone or ends a word.</div>
+    <div class="py-ex"><span class="py-ex-py">xīng qī yī</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">星期一 · Monday</span><button class="speak-btn py-speak" onclick="speak('星期一')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">dì yī</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">第一 · the first</span><button class="speak-btn py-speak" onclick="speak('第一')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">wǔ shí yī</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">五十一 · 51</span><button class="speak-btn py-speak" onclick="speak('五十一')">🔊</button></div>
+    <div class="py-formula" style="margin-top:10px"><b>yí</b> before tone 4.</div>
+    <div class="py-ex"><span class="py-ex-py">yí dìng</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一定 · definitely</span><button class="speak-btn py-speak" onclick="speak('一定')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">yí wàn</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一万 · ten thousand</span><button class="speak-btn py-speak" onclick="speak('一万')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">yí kuài</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一块 · one piece</span><button class="speak-btn py-speak" onclick="speak('一块')">🔊</button></div>
+    <div class="py-formula" style="margin-top:10px"><b>yì</b> before tones 1, 2, or 3.</div>
+    <div class="py-ex"><span class="py-ex-py">yì qǐ</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一起 · together</span><button class="speak-btn py-speak" onclick="speak('一起')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">yì diǎn</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一点 · a little</span><button class="speak-btn py-speak" onclick="speak('一点')">🔊</button></div>
+    <div class="py-ex"><span class="py-ex-py">yì tiān</span><span class="py-ex-arrow">·</span><span class="py-ex-zh">一天 · one day</span><button class="speak-btn py-speak" onclick="speak('一天')">🔊</button></div>
+  </div>
+</details>
+
+<details class="py-sec">
+  <summary>Rule 7 · z c s zh ch sh r + i (silent "i")</summary>
+  <div class="py-body">
+    <div class="py-formula">After these initials the "i" isn't pronounced like "ee" — it's a kind of held buzz on the consonant.</div>
+    <div class="py-shortrow"><span class="py-short-from">z c s r zh ch sh + i</span><span class="py-ex-arrow">→</span><span class="py-short-to">zi · ci · si · ri · zhi · chi · shi</span></div>
+  </div>
+</details>
+
+</div><!-- end tab-grammar -->
+
+<!-- ══════════════════════════════════════════════════════
+     [hidden] CHARACTERS — moved into HSK tab at runtime
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-chars" style="display:none">
- 
+
 <div class="cs-front" id="csFront" onclick="revealCS()">
   <div class="pbar-row">
     <div class="pbar-txt" id="csProg">1 / 67</div>
@@ -346,7 +482,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="cs-btn knew" onclick="assessCS(true)">✓ Knew it</button>
   <button class="cs-btn missed" onclick="assessCS(false)">✗ Missed it</button>
 </div>
- 
+
 <div class="cs-end" id="csEnd" style="display:none">
   <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--red);margin-bottom:6px">Session done</div>
   <div class="bigscore" id="csScore"></div>
@@ -357,68 +493,35 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="msect" id="csMissedList"></div>
 </div>
- 
+
 </div><!-- end tab-chars -->
- 
+
 <!-- ══════════════════════════════════════════════════════
-     TAB 3: TRACE
-══════════════════════════════════════════════════════ -->
-<div class="tabcontent" id="tab-trace" style="display:none">
- 
-<div class="slabel">Source</div>
-<div class="prow">
-  <button class="pill teal on" id="tSrcClass" onclick="toggleTraceClass(this)">My class vocab</button>
-</div>
-<div class="slabel" style="margin-top:4px">Add HSK 1 lessons</div>
-<div class="prow" id="tHSKPills" style="flex-wrap:wrap;gap:6px"></div>
- 
-<div class="slabel" style="margin-top:4px">Mode</div>
-<div class="prow">
-  <button class="pill on" id="tModeAnim" onclick="setTraceMode('animate',this)">▶ Watch strokes</button>
-  <button class="pill" id="tModeQuiz" onclick="setTraceMode('quiz',this)">✍️ Trace it</button>
-</div>
- 
-<div class="trace-card" id="traceCard">
-  <div class="pbar-row">
-    <div class="pbar-txt" id="traceProg">1 / 67</div>
-    <div class="ltag" id="traceLtag" style="margin-bottom:0"></div>
-  </div>
-  <div class="pbwrap"><div class="pb" id="tracePb"></div></div>
-  <div style="display:flex;align-items:center;justify-content:center;gap:10px">
-    <div class="trace-word" id="traceWord"></div>
-    <button class="speak-btn" onclick="speak($('traceWord').textContent)" title="Hear pronunciation">🔊</button>
-  </div>
-  <div class="trace-py" id="tracePy"></div>
-  <div class="trace-en" id="traceEn"></div>
-  <div class="trace-char-info" id="traceCharInfo"></div>
-  <div id="hw-target"></div>
-  <div class="trace-complete" id="traceComplete"></div>
-  <div class="trace-controls" id="traceAnimCtrls">
-    <button class="tr-btn" onclick="replayTrace()">↺ Replay</button>
-    <button class="tr-btn" onclick="prevTraceWord()">← Prev</button>
-    <button class="tr-btn ink" onclick="nextTraceChar()">Next →</button>
-  </div>
-  <div class="trace-controls" id="traceQuizCtrls" style="display:none">
-    <button class="tr-btn" onclick="retryTrace()">↺ Retry</button>
-    <button class="tr-btn" onclick="prevTraceWord()">← Prev</button>
-    <button class="tr-btn ink" onclick="nextTraceChar()">Skip →</button>
-  </div>
-  <div class="trace-hint" id="traceHint"></div>
-</div>
- 
-</div><!-- end tab-trace -->
- 
-<!-- ══════════════════════════════════════════════════════
-     TAB 4: HSK BOOK
+     TAB 3: HSK (Lessons · Flashcards · Sentences)
 ══════════════════════════════════════════════════════ -->
 <div class="tabcontent" id="tab-hsk" style="display:none">
- 
+
+<div class="prow" id="hskSubRow" style="margin-bottom:8px">
+  <button class="pill on" id="hskSubQuiz" onclick="showHSKSub('quiz',this)">📚 Lessons</button>
+  <button class="pill" id="hskSubBrowse" onclick="showHSKSub('browse',this)">🔍 Flashcards</button>
+  <button class="pill" id="hskSubSent" onclick="showHSKSub('sent',this)">📖 Sentences</button>
+</div>
+
+<div id="hskSub-sent" style="display:none">
+  <div class="card" style="text-align:center;padding:30px 20px">
+    <div style="font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);font-size:1rem;line-height:1.5">
+      HSK sentences will appear here as you bring textbook examples for the lessons you've drilled.
+    </div>
+  </div>
+</div>
+
+<div id="hskSub-quiz">
 <button class="hsk-review-due" id="hskReviewDueBtn" onclick="startHSKDueReview()">
   📅 Review due cards
   <span class="hsk-due-badge" id="hskDueBadge" style="display:none">0</span>
   <span class="hsk-due-sub">across all studied lessons</span>
 </button>
- 
+
 <div class="hsk-prog-wrap">
   <div class="hsk-prog-label">
     <span>HSK 1 Progress</span>
@@ -426,9 +529,9 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   </div>
   <div class="hsk-pbwrap"><div class="hsk-pb" id="hskPb"></div></div>
 </div>
- 
+
 <div class="hsk-grid" id="hskGrid"></div>
- 
+
 <div class="hsk-detail" id="hskDetail" style="display:none">
   <div class="hsk-detail-hdr">
     <button class="hsk-back" onclick="closeHSKDetail()">← Back</button>
@@ -440,7 +543,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="hsk-action-btn blue" onclick="startHSKDrill()">Flash drill →</button>
   </div>
 </div>
- 
+
 <div class="hsk-drill" id="hskDrill" style="display:none">
   <div class="pbar-row">
     <div class="pbar-txt" id="hskDrillProg"></div>
@@ -462,7 +565,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     </div>
   </div>
 </div>
- 
+
 <div class="hsk-drill-end" id="hskDrillEnd" style="display:none">
   <div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--green);margin-bottom:6px">Drill complete</div>
   <div class="bigscore" id="hskDrillScore"></div>
@@ -473,9 +576,11 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
     <button class="sbtn t" style="margin-top:8px" onclick="backFromHSKDrill()">← Back to lesson</button>
   </div>
 </div>
- 
+
+</div><!-- end hskSub-quiz -->
+
 </div><!-- end tab-hsk -->
- 
+
 <script>
 // ════════════════════════════════════════════════════════
 // DATA
@@ -579,7 +684,7 @@ const VOCAB = [
 {zh:"爸爸",py:"bà ba",en:"father / dad",lesson:"4.24",mn:"爸 = 父 (the father radical — a hand holding a rod of authority) + 巴 (phonetic bā). 'Ba/pa' sounds are universal early words for father. Doubled for affection: bà ba."},
 {zh:"波兰",py:"bō lán",en:"Poland",lesson:"4.24",mn:"Phonetic borrowing from Polska. 波 = wave (水 water + phonetic) — bō. 兰 = orchid — lán. Waves of orchids = Poland. bō lán ≈ Polska spoken with a Chinese accent."},
 ];
- 
+
 const SENTENCES = [
 {zh:"你今天好吗？",py:"Nǐ jīn tiān hǎo ma?",en:"Are you doing well today?",lesson:"3.14",dir:"zh2en",note:"吗 at the end turns any statement into a yes/no question."},
 {zh:"我今天很好。你呢？",py:"Wǒ jīn tiān hěn hǎo. Nǐ ne?",en:"I'm very well today. What about you?",lesson:"3.14",dir:"zh2en",note:"你呢 = 'you then?' — a quick way to bounce the question back."},
@@ -637,7 +742,7 @@ const SENTENCES = [
 {zh:"你今天下午想做什么？",py:"Nǐ jīn tiān xià wǔ xiǎng zuò shén me?",en:"What do you want to do this afternoon?",lesson:"4.24",dir:"en2zh",note:"Time phrase (今天下午) first, then 想做什么. No 了 — this is about future intention, not past completion."},
 {zh:"我今天下午想爬山。",py:"Wǒ jīn tiān xià wǔ xiǎng pá shān.",en:"I want to go hiking this afternoon.",lesson:"4.24",dir:"en2zh",note:"爬山 = climb mountain / hike (from 3.28). 想 + verb is the standard 'want to do' pattern."},
 ];
- 
+
 const HSK1_LESSONS = [
 {num:1,zhTitle:"你好",enTitle:"Hello",words:[
 {zh:"你",py:"nǐ",en:"you",note:"亻 person + 尔 (phonetic) — the person standing before you"},
@@ -819,25 +924,54 @@ const HSK1_LESSONS = [
 {zh:"听",py:"tīng",en:"to listen",note:"口 mouth + 斤 axe — listening as precisely as an axe cuts: to listen"},
 {zh:"飞机",py:"fēi jī",en:"airplane",note:"飞 = a bird in flight with wings spread (pictograph). 机 = 木 wood + 几 machine — flying machine: airplane"}]},
 ];
- 
+
 // ════════════════════════════════════════════════════════
 // TAB SWITCHING
 // ════════════════════════════════════════════════════════
 function switchTab(tab,btn){
-  ['quiz','chars','trace','hsk'].forEach(t=>{
+  ['quiz','grammar','hsk'].forEach(t=>{
     const el=document.getElementById('tab-'+t);
-    el.style.display=(t===tab)?'block':'none';
+    if(el)el.style.display=(t===tab)?'block':'none';
   });
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  if(tab==='chars')initCharStudy();
-  if(tab==='trace')initTrace();
-  if(tab==='hsk')renderHSKBook();
+  if(tab==='quiz'){startQuiz();}
+  // tab==='grammar' is now a static reference page — no init needed
+  if(tab==='hsk'){renderHSKBook();showHSKSub(hskSub);}
 }
- 
+
+// HSK sub-tab state — Lessons · Flashcards · Sentences
+let hskSub='quiz';
+const HSK_SUB_IDS={quiz:'hskSub-quiz',browse:'tab-chars',sent:'hskSub-sent'};
+const HSK_SUB_BTNS={quiz:'hskSubQuiz',browse:'hskSubBrowse',sent:'hskSubSent'};
+function showHSKSub(name,btn){
+  hskSub=name;
+  document.querySelectorAll('#hskSubRow .pill').forEach(b=>b.classList.remove('on'));
+  const activeBtn=btn||document.getElementById(HSK_SUB_BTNS[name]);
+  if(activeBtn)activeBtn.classList.add('on');
+  Object.values(HSK_SUB_IDS).forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.display='none';
+  });
+  const target=document.getElementById(HSK_SUB_IDS[name]);
+  if(target)target.style.display='block';
+  if(name==='browse')initCharStudy();
+  if(name==='quiz')renderHSKBook();
+}
+// Move the Characters block into the HSK tab so it lives as a sub-view.
+(function relocateHSKSubs(){
+  const hskTab=document.getElementById('tab-hsk');
+  if(!hskTab)return;
+  const el=document.getElementById('tab-chars');
+  if(el && el.parentNode!==hskTab){
+    hskTab.appendChild(el);
+    el.style.display='none';
+  }
+})();
+
 // show tab-quiz by default
 document.getElementById('tab-quiz').style.display='block';
- 
+
 // ════════════════════════════════════════════════════════
 // QUIZ LOGIC
 // ════════════════════════════════════════════════════════
@@ -853,16 +987,23 @@ function speak(zh){
   u.lang='zh-CN';u.rate=0.85;
   speechSynthesis.speak(u);
 }
-function filtVocab(){return lessonFilter==='all'?VOCAB:VOCAB.filter(v=>v.lesson===lessonFilter);}
-function filtSent(){return lessonFilter==='all'?SENTENCES:SENTENCES.filter(s=>s.lesson===lessonFilter);}
+// Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24'];
+// lessonFilter is a Set of lesson codes; empty = all.
+const lessonFilter=new Set();
+function filtVocab(){
+  if(lessonFilter.size===0)return VOCAB;
+  return VOCAB.filter(v=>lessonFilter.has(v.lesson));
+}
 function getMisses(w){return(weakMap[w.zh]||{}).misses||0;}
- 
-let mode='mcq-en2zh',lessonFilter='all',questions=[],current=0;
-let sentDir='en2zh',sentFormat='mcq'; // sentence mode toggles: en2zh | zh2en | py2en  ×  mcq | type
+function getHits(w){return(weakMap[w.zh]||{}).hits||0;}
+
+let mode='mcq',questions=[],current=0;
+let vocabDir='en2py'; // en2py | py2en — direction for Vocab quiz
 let scoreC=0,scoreW=0,answered=false,sessionMissed=[];
 let weakMap={};
 try{weakMap=JSON.parse(localStorage.getItem('cn_weak_v2')||'{}');}catch(e){}
- 
+
 function saveWeak(){try{localStorage.setItem('cn_weak_v2',JSON.stringify(weakMap));}catch(e){}}
 function recordResult(word,correct){
   if(!weakMap[word.zh])weakMap[word.zh]={misses:0,hits:0};
@@ -873,48 +1014,95 @@ function recordResult(word,correct){
 }
 function weakVocab(){return VOCAB.filter(v=>getMisses(v)>=2).sort((a,b)=>getMisses(b)-getMisses(a));}
 function updateWeakUI(){
-  const wv=weakVocab();
-  const badge=$('weakBadge');
-  badge.style.display=wv.length>0?'inline-block':'none';
-  badge.textContent=wv.length;
-  const panel=$('weakPanel');
-  if(wv.length===0){panel.style.display='none';return;}
-  panel.style.display='block';
-  $('weakList').innerHTML=wv.map(w=>{
-    const n=getMisses(w),cls=n>=5?'cc3':n>=3?'cc2':'cc1';
-    return`<div class="wchip"><span class="wchip-zh">${w.zh}</span><span class="wchip-py">${w.py}</span><span class="cc ${cls}">×${n}</span></div>`;
-  }).join('');
+  // Weak panel was removed from the Vocab tab — keep this function as a no-op
+  // shim so legacy callers don't blow up. Pass (b) will replace per-mode "weak"
+  // surfacing with weighted sampling across every Vocab session.
+  const drillBtn=$('drillBtn');
+  if(drillBtn)drillBtn.style.display=weakVocab().length>0?'inline-block':'none';
 }
-function setLesson(l,btn){lessonFilter=l;document.querySelectorAll('#lessonRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');startQuiz();}
+function refreshLessonPills(){
+  document.querySelectorAll('#lessonRow .pill').forEach(b=>{
+    const l=b.dataset.lesson;
+    b.classList.toggle('on',lessonFilter.has(l));
+  });
+  // Shortcut highlight
+  ['lShortLatest','lShortLatest3','lShortAll'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.classList.remove('on');
+  });
+  if(lessonFilter.size===0){
+    document.getElementById('lShortAll').classList.add('on');
+  } else {
+    const last2=new Set(LESSON_ORDER.slice(-2));
+    const last3=new Set(LESSON_ORDER.slice(-3));
+    const sameAs=s=>s.size===lessonFilter.size && [...s].every(x=>lessonFilter.has(x));
+    if(sameAs(last2))document.getElementById('lShortLatest').classList.add('on');
+    else if(sameAs(last3))document.getElementById('lShortLatest3').classList.add('on');
+  }
+}
+function toggleLesson(l,btn){
+  if(lessonFilter.has(l))lessonFilter.delete(l);
+  else lessonFilter.add(l);
+  refreshLessonPills();
+  startQuiz();
+}
+function setAllLessons(btn){lessonFilter.clear();refreshLessonPills();startQuiz();}
+function setLatestLessons(n,btn){
+  lessonFilter.clear();
+  LESSON_ORDER.slice(-n).forEach(l=>lessonFilter.add(l));
+  refreshLessonPills();
+  startQuiz();
+}
 function setMode(m,btn){
   mode=m;
   document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  $('sentOpts').style.display=(m==='sentences')?'block':'none';
+  if(btn)btn.classList.add('on');
   startQuiz();
 }
-function setSentDir(d,btn){sentDir=d;document.querySelectorAll('#sentDirRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(mode==='sentences')startQuiz();}
-function setSentFormat(f,btn){sentFormat=f;document.querySelectorAll('#sentFmtRow .pill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(mode==='sentences')startQuiz();}
-function drillWeak(){mode='weak';document.querySelectorAll('#modeRow .pill').forEach(b=>b.classList.remove('on'));$('weakBtn').classList.add('on');startQuiz();}
+function setVocabDir(d,btn){
+  vocabDir=d;
+  document.querySelectorAll('#dirRow .pill').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  startQuiz();
+}
+function drillWeak(){
+  // Triggered from end-of-session button — drill weakest words using current direction.
+  const wv=weakVocab().filter(v=>lessonFilter.size===0||lessonFilter.has(v.lesson));
+  if(!wv.length){startQuiz();return;}
+  const qm=mode==='type'?'type':(mode==='mixed'?(Math.random()<0.5?'mcq':'type'):'mcq');
+  questions=shuffle(wv).slice(0,10).map(w=>({type:'vocab',data:w,qm:qm}));
+  current=0;scoreC=0;scoreW=0;sessionMissed=[];
+  hide('scorescreen');show('quizCard');showQ();
+}
 function pickVMode(){
-  if(mode==='mixed'){const r=Math.random();return r<0.34?'mcq-en2zh':r<0.67?'mcq-zh2en':'type';}
-  if(mode==='weak')return Math.random()<0.5?'mcq-en2zh':'type';
-  return mode;
+  if(mode==='mixed')return Math.random()<0.5?'mcq':'type';
+  return mode; // 'mcq' or 'type'
+}
+// Weighted sampling without replacement — words you miss come up more often.
+// weight = max(0.3, 1 + 2*recent_misses − 0.4*recent_hits)
+// New unseen words get the base weight of 1, so they still surface.
+function weightedSample(arr,n){
+  const pool=arr.slice();
+  const weights=pool.map(w=>{
+    const m=getMisses(w),h=getHits(w);
+    return Math.max(0.3, 1 + 2*m - 0.4*h);
+  });
+  const out=[];
+  const k=Math.min(n,pool.length);
+  for(let i=0;i<k;i++){
+    let total=0;for(const x of weights)total+=x;
+    let r=Math.random()*total;
+    let idx=0;
+    while(idx<weights.length-1 && r>=weights[idx]){r-=weights[idx];idx++;}
+    out.push(pool[idx]);
+    pool.splice(idx,1);
+    weights.splice(idx,1);
+  }
+  return out;
 }
 function startQuiz(){
-  let qs=[];
-  if(mode==='sentences'){qs=shuffle(filtSent()).slice(0,10).map(s=>({type:'sent',data:s}));}
-  else if(mode==='mixed'){
-    const vp=shuffle(filtVocab()).slice(0,7).map(w=>({type:'vocab',data:w,qm:pickVMode()}));
-    const sp=shuffle(filtSent()).slice(0,3).map(s=>({type:'sent',data:s}));
-    qs=shuffle([...vp,...sp]);
-  } else if(mode==='weak'){
-    const wv=weakVocab().filter(v=>lessonFilter==='all'||v.lesson===lessonFilter);
-    const pool=wv.length>0?wv:filtVocab();
-    qs=shuffle(pool).slice(0,10).map(w=>({type:'vocab',data:w,qm:pickVMode()}));
-  } else {
-    qs=shuffle(filtVocab()).slice(0,10).map(w=>({type:'vocab',data:w,qm:mode}));
-  }
+  const pool=filtVocab();
+  const picks=weightedSample(pool,10);
+  const qs=picks.map(w=>({type:'vocab',data:w,qm:pickVMode()}));
   questions=qs;current=0;scoreC=0;scoreW=0;sessionMissed=[];
   hide('scorescreen');show('quizCard');showQ();
 }
@@ -931,95 +1119,52 @@ function showQ(){
   $('flame').style.display='none';$('flame').className='flame';
   $('stag').style.display='none';
   $('opts').style.gridTemplateColumns='';
-  if(q.type==='sent')showSentQ(q.data);
-  else showVocabQ(q.data,q.qm);
+  showVocabQ(q.data,q.qm);
 }
 function showVocabQ(word,qm){
   $('ltag').textContent=word.lesson;
   const mc=getMisses(word);
   if(mc>=2){$('flame').style.display='block';$('flame').className='flame'+(mc>=4?' pulse':'');$('flame').title=`Missed ${mc} time${mc>1?'s':''}`;}
   const qmain=$('qmain'),qpy=$('qpy');
-  if(qm==='mcq-en2zh'){
-    $('qlabel').textContent='What is the Chinese for...';
-    qmain.textContent=word.en;qmain.className='qmain lat';qpy.textContent='';
-    buildMCQ(word,qm);
-  } else if(qm==='mcq-zh2en'){
-    $('qlabel').textContent='What does this mean?';
-    qmain.textContent=word.zh;qmain.className='qmain';qpy.textContent=word.py;
-    buildMCQ(word,qm);
-  } else {
-    $('qlabel').textContent='Type the Chinese for...';
-    qmain.textContent=word.en;qmain.className='qmain lat';qpy.textContent='';
+  // Pinyin-only — no 汉字 anywhere on the Vocab tab.
+  if(qm==='mcq'){
+    if(vocabDir==='en2py'){
+      $('qlabel').textContent='What is the pinyin for...';
+      qmain.textContent=word.en;qmain.className='qmain lat';qpy.textContent='';
+    } else {
+      $('qlabel').textContent='What does this mean?';
+      qmain.textContent=word.py;qmain.className='qmain lat';qmain.style.fontStyle='normal';qpy.textContent='';
+    }
+    buildMCQ(word);
+  } else { // type
+    if(vocabDir==='en2py'){
+      $('qlabel').textContent='Type the pinyin for...';
+      qmain.textContent=word.en;qmain.className='qmain lat';qpy.textContent='';
+    } else {
+      $('qlabel').textContent='Type the English for...';
+      qmain.textContent=word.py;qmain.className='qmain lat';qmain.style.fontStyle='normal';qpy.textContent='';
+    }
     showTypeInput(false);
   }
   if(word.mn){$('mnTxt').textContent=word.mn;show('mnBtn');}
 }
-function showSentQ(sent){
-  $('stag').style.display='block';
-  $('ltag').textContent=sent.lesson;
-  const qmain=$('qmain');$('qpy').textContent='';
-  qmain.style.fontStyle=''; // reset inline override from prior py2en render
-  // Prompt display based on direction
-  if(sentDir==='en2zh'){
-    $('qlabel').textContent=sentFormat==='mcq'?'Pick the Chinese translation':'Translate into Chinese (pinyin or characters)';
-    qmain.textContent=sent.en;qmain.className='qmain sen';
-  } else if(sentDir==='zh2en'){
-    $('qlabel').textContent=sentFormat==='mcq'?'Pick the English translation':'Translate into English';
-    qmain.textContent=sent.zh;qmain.className='qmain szh';
-  } else { // py2en
-    $('qlabel').textContent=sentFormat==='mcq'?'Pick the English translation':'Translate into English';
-    qmain.textContent=sent.py;qmain.className='qmain sen';
-    qmain.style.fontStyle='normal'; // pinyin reads better upright
-  }
-  // Format: MCQ or type
-  if(sentFormat==='mcq'){
-    buildSentMCQ(sent);
-  } else {
-    showTypeInput(true);
-    const inp=$('typeinput');
-    const hint=document.querySelector('#typewrap .typehint');
-    if(sentDir==='en2zh'){
-      if(hint)hint.textContent='Pinyin (tones optional) or Chinese characters — both accepted';
-    } else {
-      // English target — switch input to a Latin-friendly style
-      inp.placeholder='Type the English translation...';
-      inp.classList.remove('sent');
-      inp.classList.add('engtype');
-      if(hint)hint.textContent='Loose match — punctuation, "the/a/an" and capitalisation ignored';
-    }
-  }
-}
-function buildMCQ(word,qm){
+function buildMCQ(word){
   const dis=shuffle(VOCAB.filter(v=>v.zh!==word.zh)).slice(0,3);
   const all=shuffle([word,...dis]);
   const grid=$('opts');grid.innerHTML='';
   grid.style.gridTemplateColumns='1fr 1fr';grid.style.display='grid';
   all.forEach(o=>{
     const btn=document.createElement('button');btn.className='opt';
-    if(qm==='mcq-en2zh'){btn.innerHTML=`<span style="font-family:'Noto Serif SC',serif">${o.zh}</span><span class="opt-py">${o.py}</span>`;}
-    else{btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;";btn.textContent=o.en;}
-    btn.addEventListener('click',()=>checkMCQ(btn,o.zh===word.zh,word,qm));
-    grid.appendChild(btn);
-  });
-}
-function buildSentMCQ(sent){
-  const dis=shuffle(SENTENCES.filter(s=>s.zh!==sent.zh)).slice(0,3);
-  const all=shuffle([sent,...dis]);
-  const grid=$('opts');grid.innerHTML='';
-  grid.style.gridTemplateColumns='1fr';grid.style.display='grid';
-  all.forEach(o=>{
-    const btn=document.createElement('button');btn.className='opt';
-    if(sentDir==='en2zh'){
-      // Show Chinese characters as the option
-      btn.style.cssText="font-family:'Noto Serif SC',serif;font-size:1.05rem;line-height:1.45;text-align:left;";
-      btn.textContent=o.zh;
+    if(vocabDir==='en2py'){
+      // Show pinyin as the answer
+      btn.style.cssText="font-family:'DM Mono',monospace;font-size:0.95rem;color:var(--ink);";
+      btn.textContent=o.py;
     } else {
-      // zh2en or py2en — show English as the option
-      btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;line-height:1.4;text-align:left;";
+      // Show English as the answer
+      btn.style.cssText="font-family:'Crimson Pro',serif;font-size:1rem;font-style:italic;";
       btn.textContent=o.en;
     }
-    if(o.zh===sent.zh)btn.dataset.correct='1';
-    btn.addEventListener('click',()=>checkSentMCQ(btn,o.zh===sent.zh,sent));
+    btn.addEventListener('click',()=>checkMCQ(btn,o.zh===word.zh,word));
     grid.appendChild(btn);
   });
 }
@@ -1031,30 +1176,31 @@ function normEn(s){
     .replace(/^(the |a |an )/,'')
     .trim();
 }
-function checkMCQ(clicked,correct,word,qm){
+function checkMCQ(clicked,correct,word){
   if(answered)return;answered=true;
   document.querySelectorAll('.opt').forEach(btn=>{
     btn.disabled=true;
-    const bz=btn.querySelector('span')?.textContent;
-    const be=btn.textContent.trim();
-    if(qm==='mcq-en2zh'?bz===word.zh:be===word.en)btn.classList.add('ok');
+    const txt=btn.textContent.trim();
+    const target=vocabDir==='en2py'?word.py:word.en;
+    if(txt===target)btn.classList.add('ok');
   });
   if(!correct)clicked.classList.add('no');
   recordResult(word,correct);
   if(!correct&&word.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
   finishVocab(correct,word);
 }
-function checkSentMCQ(clicked,correct,sent){
-  if(answered)return;answered=true;
-  document.querySelectorAll('.opt').forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==='1')btn.classList.add('ok');});
-  if(!correct)clicked.classList.add('no');
-  finishSent(correct,sent);
-}
 function showTypeInput(isSent){
   const wrap=$('typewrap');wrap.style.display='flex';
   const inp=$('typeinput');
-  inp.value='';inp.className='typeinput'+(isSent?' sent':'');
-  inp.placeholder=isSent?'Type Chinese here (pinyin or 汉字)...':'pinyin or 汉字...';
+  inp.value='';inp.className='typeinput';
+  const hint=$('typehint');
+  if(vocabDir==='py2en'){
+    inp.placeholder='Type the English...';
+    if(hint)hint.textContent='Loose match — punctuation and "the/a/an" ignored';
+  } else {
+    inp.placeholder='pinyin...';
+    if(hint)hint.textContent='Pinyin only — tones optional';
+  }
   inp.disabled=false;$('submbtn').disabled=false;
   setTimeout(()=>inp.focus(),60);
 }
@@ -1071,38 +1217,25 @@ function submitTyped(){
   const raw=$('typeinput').value.trim();
   if(!raw)return;
   answered=true;$('typeinput').disabled=true;$('submbtn').disabled=true;
-  if(q.type==='sent'){
-    const s=q.data;
-    let ok;
-    if(sentDir==='en2zh'){
-      ok=norm(raw)===norm(s.zh)||norm(raw)===norm(s.py);
-    } else {
-      // zh2en or py2en — accept loose English match
-      ok=normEn(raw)===normEn(s.en);
-    }
-    $('typeinput').className+=' '+(ok?'tok':'tno');
-    finishSent(ok,s);
-  } else {
-    const w=q.data,ok=raw===w.zh||norm(raw)===norm(w.py);
-    $('typeinput').className+=' '+(ok?'tok':'tno');
-    recordResult(w,ok);
-    if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
-    finishVocab(ok,w);
-  }
+  // Vocab tab only — Grammar tab has its own submit handler.
+  const w=q.data;
+  const ok=vocabDir==='py2en'?(normEn(raw)===normEn(w.en)):(norm(raw)===norm(w.py));
+  $('typeinput').className+=' '+(ok?'tok':'tno');
+  recordResult(w,ok);
+  if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
+  finishVocab(ok,w);
 }
 function finishVocab(ok,word){
-  if(ok){scoreC++;setFb(['✓ Correct!','✓ 对！','✓ Well done!','✓ Spot on!'][Math.floor(Math.random()*4)],'good');}
+  if(ok){scoreC++;setFb(['✓ Correct!','✓ Well done!','✓ Spot on!','✓ Nailed it!'][Math.floor(Math.random()*4)],'good');}
   else{scoreW++;setFb('✗ Not quite — see the answer below.','bad');}
-  $('srevZh').textContent=word.zh;$('srevPy').textContent=word.py;$('srevEn').textContent=word.en;
+  // Pinyin-only review on the Vocab tab — pinyin is the headline.
+  $('srevZh').textContent=word.py;
+  $('srevZh').style.fontFamily="'DM Mono',monospace";
+  $('srevZh').style.fontSize='1.45rem';
+  $('srevPy').textContent='';
+  $('srevEn').textContent=word.en;
+  $('qSpeakBtn').dataset.zh=word.zh; // speak the underlying Chinese pronunciation
   show('srev');
-  show('nextbtn');
-}
-function finishSent(ok,sent){
-  if(ok){scoreC++;setFb('✓ Correct!','good');}
-  else{scoreW++;setFb('✗ Not quite — see the answer below.','bad');}
-  $('srevZh').textContent=sent.zh;$('srevPy').textContent=sent.py;$('srevEn').textContent=sent.en;
-  show('srev');
-  if(sent.note){$('gnote').textContent='💡 '+sent.note;show('gnote');}
   show('nextbtn');
 }
 function setFb(msg,cls,bold){
@@ -1122,7 +1255,7 @@ function showScore(){
   ms.innerHTML=`<div class="mtitle">Vocab missed this session</div>`+
     sessionMissed.map(w=>{
       const mc=getMisses(w),col=mc>=4?'color:var(--red)':mc>=2?'color:var(--orange)':'color:var(--muted)';
-      return`<div class="mitem"><span class="mzh">${w.zh}</span><span><div class="mpy">${w.py}</div><div class="men">${w.en}</div></span><span class="mcnt" style="${col}">${mc>=2?'🔥 ×'+mc+' total':'×'+mc}</span></div>`;
+      return`<div class="mitem"><span class="mzh" style="font-family:'DM Mono',monospace;font-size:1.1rem">${w.py}</span><span><div class="men">${w.en}</div></span><span class="mcnt" style="${col}">${mc>=2?'🔥 ×'+mc+' total':'×'+mc}</span></div>`;
     }).join('');
 }
 $('mnBtn').addEventListener('click',function(){
@@ -1134,25 +1267,45 @@ $('nextbtn').addEventListener('click',nextQuestion);
 $('submbtn').addEventListener('click',submitTyped);
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter')return;
-  if(document.getElementById('tab-quiz').style.display==='none')return;
-  if(!answered){if($('typewrap').style.display==='flex')submitTyped();}
-  else{if($('nextbtn').style.display!=='none')nextQuestion();}
+  if(document.getElementById('tab-quiz').style.display!=='none'){
+    if(!answered){if($('typewrap').style.display==='flex')submitTyped();}
+    else{if($('nextbtn').style.display!=='none')nextQuestion();}
+  }
 });
- 
+
 // ════════════════════════════════════════════════════════
 // CHARACTER STUDY
 // ════════════════════════════════════════════════════════
 let csCards=[],csIdx=0,csMissed=[],csRevealed=false;
- 
+
 function initCharStudy(){
-  csCards=shuffle([...VOCAB]);
+  // Pull HSK 1 words from lessons David has marked as studied (hskProgress).
+  // No HSK is the only place 汉字 appear in this app — class vocab stays pinyin-only on the Vocab tab.
+  loadHSKProgress();
+  const cards=[];
+  HSK1_LESSONS.forEach(l=>{
+    if(hskProgress.has(l.num)){
+      l.words.forEach(w=>cards.push({zh:w.zh,py:w.py,en:w.en,mn:w.note||'',lesson:'L'+l.num}));
+    }
+  });
+  csCards=shuffle(cards);
   csIdx=0;csMissed=[];csRevealed=false;
   hide('csEnd');
   $('csFront').style.display='block';
   hide('csAssess');
+  if(csCards.length===0){
+    // No drilled lessons yet — show a friendly empty state on the front card.
+    $('csChar').textContent='—';
+    $('csTap').textContent='Mark some HSK lessons as studied to populate flashcards.';
+    $('csLtag').textContent='';
+    $('csProg').textContent='0 / 0';
+    $('csPb').style.width='0%';
+    hide('csRevealArea');
+    return;
+  }
   showCSCard();
 }
- 
+
 function showCSCard(){
   if(csIdx>=csCards.length){showCSEnd();return;}
   const w=csCards[csIdx];
@@ -1166,7 +1319,7 @@ function showCSCard(){
   hide('csAssess');
   hide('csMnBox');
 }
- 
+
 function revealCS(){
   if(csRevealed)return;
   csRevealed=true;
@@ -1178,14 +1331,14 @@ function revealCS(){
   $('csRevealArea').style.display='block';
   $('csAssess').style.display='flex';
 }
- 
+
 function assessCS(knew){
   if(!csRevealed)return;
   if(!knew)csMissed.push(csCards[csIdx]);
   csIdx++;
   showCSCard();
 }
- 
+
 function showCSEnd(){
   $('csFront').style.display='none';
   hide('csAssess');
@@ -1200,7 +1353,7 @@ function showCSEnd(){
     csMissed.map(w=>`<div class="mitem"><span class="mzh">${w.zh}</span><span><div class="mpy">${w.py}</div><div class="men">${w.en}</div></span></div>`).join('')
     :'';
 }
- 
+
 function drillMissedCS(){
   csCards=shuffle([...csMissed]);
   csIdx=0;csMissed=[];csRevealed=false;
@@ -1208,180 +1361,7 @@ function drillMissedCS(){
   $('csFront').style.display='block';
   showCSCard();
 }
- 
-// ════════════════════════════════════════════════════════
-// TRACE (HanziWriter)
-// ════════════════════════════════════════════════════════
-let traceWriter=null,traceWordIdx=0,traceCharIdx=0;
-let traceMode='animate';
-let traceIncludeClass=true;
-let traceHSKLessons=new Set();
-let traceList=[];
- 
-function buildTraceList(){
-  let list=[];
-  if(traceIncludeClass){
-    VOCAB.forEach(v=>list.push({...v,src:'class'}));
-  }
-  if(traceHSKLessons.size>0){
-    HSK1_LESSONS.forEach(lesson=>{
-      if(!traceHSKLessons.has(lesson.num))return;
-      lesson.words.forEach(w=>{
-        if(!list.find(v=>v.zh===w.zh)){
-          list.push({...w,lesson:`HSK L${lesson.num}`,src:'hsk'});
-        }
-      });
-    });
-  }
-  traceList=list;
-}
- 
-function toggleTraceClass(btn){
-  traceIncludeClass=!traceIncludeClass;
-  btn.classList.toggle('on',traceIncludeClass);
-  rebuildTrace();
-}
- 
-function toggleTraceHSKLesson(num,btn){
-  if(traceHSKLessons.has(num)) traceHSKLessons.delete(num);
-  else traceHSKLessons.add(num);
-  btn.classList.toggle('on',traceHSKLessons.has(num));
-  rebuildTrace();
-}
- 
-function rebuildTrace(){
-  buildTraceList();
-  traceWordIdx=0;traceCharIdx=0;
-  if(traceList.length) loadTraceChar();
-  else {
-    $('traceWord').textContent='—';
-    $('tracePy').textContent='';
-    $('traceEn').textContent='Select at least one source above';
-    $('traceProg').textContent='0 / 0';
-    $('tracePb').style.width='0%';
-    $('hw-target').innerHTML='';
-  }
-}
- 
-function setTraceMode(mode,btn){
-  traceMode=mode;
-  document.querySelectorAll('#tab-trace .pill:not(.teal)').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  loadTraceChar();
-}
- 
-function initTrace(){
-  // Build HSK lesson pills once
-  const container=document.getElementById('tHSKPills');
-  if(container && !container.children.length){
-    HSK1_LESSONS.forEach(lesson=>{
-      const btn=document.createElement('button');
-      btn.className='pill teal';
-      btn.textContent=`L${lesson.num}`;
-      btn.title=lesson.enTitle;
-      btn.onclick=()=>toggleTraceHSKLesson(lesson.num,btn);
-      if(traceHSKLessons.has(lesson.num))btn.classList.add('on');
-      container.appendChild(btn);
-    });
-  }
-  buildTraceList();
-  traceWordIdx=0;traceCharIdx=0;
-  loadTraceChar();
-}
- 
-function loadTraceChar(){
-  if(!traceList.length)return;
-  const word=traceList[traceWordIdx];
-  const chars=[...word.zh]; // spread to handle multi-byte chars
-  const char=chars[traceCharIdx];
- 
-  $('traceWord').textContent=word.zh;
-  $('tracePy').textContent=word.py;
-  $('traceEn').textContent=word.en;
-  $('traceLtag').textContent=word.lesson||'';
-  $('traceProg').textContent=`${traceWordIdx+1} / ${traceList.length}`;
-  $('tracePb').style.width=`${(traceWordIdx/traceList.length)*100}%`;
-  $('traceComplete').textContent='';
-  $('traceCharInfo').textContent=chars.length>1?`character ${traceCharIdx+1} of ${chars.length} · ${char}`:'';
- 
-  if(traceMode==='animate'){
-    $('traceAnimCtrls').style.display='flex';
-    $('traceQuizCtrls').style.display='none';
-    $('traceHint').textContent='Watch the stroke order, then tap Next to move on';
-  } else {
-    $('traceAnimCtrls').style.display='none';
-    $('traceQuizCtrls').style.display='flex';
-    $('traceHint').textContent='Draw each stroke in order — follow the grey guide';
-  }
- 
-  if(typeof HanziWriter==='undefined'){
-    $('hw-target').innerHTML=`<div style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:160px;color:rgba(154,124,42,0.15);border:1.5px solid var(--border);border-radius:4px">${char}</div>`;
-    return;
-  }
- 
-  $('hw-target').innerHTML='';
-  const size=Math.min(window.innerWidth-80,300);
-  traceWriter=HanziWriter.create('hw-target',char,{
-    width:size,height:size,padding:Math.round(size*0.06),
-    showOutline:true,
-    strokeColor:'#1c1209',
-    outlineColor:'rgba(154,124,42,0.22)',
-    drawingColor:'#b5291c',
-    highlightColor:'#1e6b3a',
-    strokeAnimationSpeed:1.5,
-    delayBetweenStrokes:380,
-    strokeFadeDuration:350,
-    drawingFadeDuration:200,
-    onLoadCharDataError:function(){
-      $('hw-target').innerHTML=`<div style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:${Math.round(size*0.6)}px;color:rgba(154,124,42,0.18);border:1.5px solid var(--border);border-radius:4px">${char}</div>`;
-    }
-  });
- 
-  if(traceMode==='animate'){
-    setTimeout(()=>traceWriter&&traceWriter.animateCharacter(),300);
-  } else {
-    setTimeout(()=>startHWQuiz(),300);
-  }
-}
- 
-function startHWQuiz(){
-  if(!traceWriter)return;
-  traceWriter.quiz({
-    onMistake:function(){},
-    onComplete:function(){
-      $('traceComplete').textContent='✓ 好！';
-      const word=traceList[traceWordIdx];
-      const chars=[...word.zh];
-      if(traceCharIdx<chars.length-1){
-        traceCharIdx++;
-        setTimeout(loadTraceChar,700);
-      } else {
-        setTimeout(nextTraceWord,1000);
-      }
-    }
-  });
-}
- 
-function replayTrace(){
-  if(traceWriter)traceWriter.animateCharacter();
-}
-function retryTrace(){
-  loadTraceChar();
-}
-function prevTraceWord(){
-  if(traceWordIdx>0){traceWordIdx--;traceCharIdx=0;loadTraceChar();}
-}
-function nextTraceChar(){
-  const word=traceList[traceWordIdx];
-  const chars=[...word.zh];
-  if(traceCharIdx<chars.length-1){traceCharIdx++;loadTraceChar();}
-  else{nextTraceWord();}
-}
-function nextTraceWord(){
-  if(traceWordIdx<traceList.length-1){traceWordIdx++;traceCharIdx=0;loadTraceChar();}
-  else{$('traceComplete').textContent='🎉 All done! Tap Prev to review.';}
-}
- 
+
 // ════════════════════════════════════════════════════════
 // HSK BOOK
 // ════════════════════════════════════════════════════════
@@ -1466,7 +1446,7 @@ function startHSKDueReview(){
   $('hskDrill').style.display='block';
   showHSKDrillCard();
 }
- 
+
 function loadHSKProgress(){
   try{
     const saved=JSON.parse(localStorage.getItem('cn_hsk_v1')||'null');
@@ -1479,11 +1459,11 @@ function loadHSKProgress(){
     }
   }catch(e){hskProgress=new Set([1,2,3]);}
 }
- 
+
 function saveHSKProgress(){
   localStorage.setItem('cn_hsk_v1',JSON.stringify([...hskProgress]));
 }
- 
+
 function getCatchupNums(){
   // The 3 lessons above max completed that aren't done yet
   const done=[...hskProgress].sort((a,b)=>a-b);
@@ -1494,18 +1474,18 @@ function getCatchupNums(){
   }
   return catchup;
 }
- 
+
 function renderHSKBook(){
   loadHSKProgress();
   loadHSKSRS();
   updateHSKDueBadge();
   hide('hskDetail');hide('hskDrill');
   $('hskGrid').style.display='grid';
- 
+
   const done=hskProgress.size;
   $('hskProgText').textContent=`${done} / 15 lessons`;
   $('hskPb').style.width=`${(done/15)*100}%`;
- 
+
   const catchup=getCatchupNums();
   $('hskGrid').innerHTML=HSK1_LESSONS.map(l=>{
     const isDone=hskProgress.has(l.num);
@@ -1519,20 +1499,20 @@ function renderHSKBook(){
     </div>`;
   }).join('');
 }
- 
+
 function openHSKLesson(num){
   hskCurrentLesson=HSK1_LESSONS.find(l=>l.num===num);
   $('hskGrid').style.display='none';
   hide('hskDrill');
   $('hskDetail').style.display='block';
   $('hskDetailTitle').textContent=`L${num}: ${hskCurrentLesson.zhTitle} · ${hskCurrentLesson.enTitle}`;
- 
+
   // Mark button state
   const isDone=hskProgress.has(num);
   const markBtn=$('hskMarkBtn');
   markBtn.textContent=isDone?'✓ Studied':'Mark as studied';
   markBtn.className='hsk-action-btn green'+(isDone?' active':'');
- 
+
   // Word grid
   $('hskDetailWords').innerHTML=hskCurrentLesson.words.map(w=>
     `<div class="hsk-witem">
@@ -1542,12 +1522,12 @@ function openHSKLesson(num){
     </div>`
   ).join('');
 }
- 
+
 function closeHSKDetail(){
   hide('hskDetail');
   $('hskGrid').style.display='grid';
 }
- 
+
 function toggleHSKLesson(){
   if(!hskCurrentLesson)return;
   const num=hskCurrentLesson.num;
@@ -1563,7 +1543,7 @@ function toggleHSKLesson(){
   $('hskProgText').textContent=`${hskProgress.size} / 15 lessons`;
   $('hskPb').style.width=`${(hskProgress.size/15)*100}%`;
 }
- 
+
 function startHSKDrill(cards){
   if(!hskCurrentLesson && !cards)return;
   loadHSKSRS();
@@ -1573,7 +1553,7 @@ function startHSKDrill(cards){
   $('hskDrill').style.display='block';
   showHSKDrillCard();
 }
- 
+
 function showHSKDrillCard(){
   if(hskDrillIdx>=hskDrillCards.length){endHSKDrill();return;}
   const w=hskDrillCards[hskDrillIdx];
@@ -1586,7 +1566,7 @@ function showHSKDrillCard(){
   // Pre-populate interval previews
   [0,1,2,3].forEach(r=>{ const el=$('hskInt'+r); if(el)el.textContent=hskIntervalPreview(w.zh,r); });
 }
- 
+
 function revealHSKDrill(){
   if(hskDrillRevealed)return;
   hskDrillRevealed=true;
@@ -1598,7 +1578,7 @@ function revealHSKDrill(){
   else{$('hskDrillNote').style.display='none';}
   $('hskDrillReveal').style.display='block';
 }
- 
+
 function hskRate(rating){
   if(!hskDrillRevealed)return;
   const w=hskDrillCards[hskDrillIdx];
@@ -1613,7 +1593,7 @@ function hskRate(rating){
   updateHSKDueBadge();
   showHSKDrillCard();
 }
- 
+
 function endHSKDrill(){
   hide('hskDrill');
   const total=hskDrillCards.length;
@@ -1627,21 +1607,21 @@ function endHSKDrill(){
   else{missedBtn.style.display='none';}
   $('hskDrillEnd').style.display='block';
 }
- 
+
 function drillHSKMissed(){
   hide('hskDrillEnd');
   const missed=[...new Set(hskDrillAgain)];
   hskDrillAgain=[];
   startHSKDrill(missed);
 }
- 
+
 function backFromHSKDrill(){
   hide('hskDrill');hide('hskDrillEnd');
   if(hskCurrentLesson)openHSKLesson(hskCurrentLesson.num);
   else renderHSKBook();
   updateHSKDueBadge();
 }
- 
+
 // ════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════
@@ -1652,4 +1632,3 @@ startQuiz();
 </script>
 </body>
 </html>
- 

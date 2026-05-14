@@ -238,7 +238,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09</div>
 </div>
 
 <div class="tabrow">
@@ -266,6 +266,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-lesson="4.03" onclick="toggleLesson('4.03',this)">4.03</button>
   <button class="pill" data-lesson="4.18" onclick="toggleLesson('4.18',this)">4.18</button>
   <button class="pill" data-lesson="4.24" onclick="toggleLesson('4.24',this)">4.24</button>
+  <button class="pill" data-lesson="5.09" onclick="toggleLesson('5.09',this)">5.09</button>
 </div>
 
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -683,6 +684,12 @@ const VOCAB = [
 {zh:"妈妈",py:"mā ma",en:"mother / mum",lesson:"4.24",mn:"妈 = 女 (woman) + 马 (horse, phonetic mā). 'Ma' is one of the first sounds babies make in every language — it means mother everywhere. Doubled for warmth: mā ma."},
 {zh:"爸爸",py:"bà ba",en:"father / dad",lesson:"4.24",mn:"爸 = 父 (the father radical — a hand holding a rod of authority) + 巴 (phonetic bā). 'Ba/pa' sounds are universal early words for father. Doubled for affection: bà ba."},
 {zh:"波兰",py:"bō lán",en:"Poland",lesson:"4.24",mn:"Phonetic borrowing from Polska. 波 = wave (水 water + phonetic) — bō. 兰 = orchid — lán. Waves of orchids = Poland. bō lán ≈ Polska spoken with a Chinese accent."},
+// 5.09
+{zh:"去",py:"qù",en:"to go",lesson:"5.09",mn:"土 (earth) on top + 厶 (a person bending forward, ready to set off) on the bottom. Boots on the soil, leaning out the door — TO GO. qù sounds like 'tsch!' — the noise you make hurrying someone out."},
+{zh:"饭馆儿",py:"fàn guǎn r",en:"restaurant",lesson:"5.09",mn:"饭 = cooked rice / meal (food radical 饣 on the left). 馆 = building / venue (also food radical — a building dedicated to food). 儿 is the Beijing 'r' diminutive that gets tacked onto everyday words. Meal-building-r = the local restaurant."},
+{zh:"超市",py:"chāo shì",en:"supermarket",lesson:"5.09",mn:"超 = exceed / super (走 walk radical — going beyond). 市 = market. Literally SUPER + MARKET — the Chinese borrowed the English idea wholesale."},
+{zh:"商场",py:"shāng chǎng",en:"mall / shopping centre",lesson:"5.09",mn:"商 = commerce / trade (the same 商 as 商店 shop). 场 = field / venue (土 earth radical — an open space). Commerce-field = a big open space full of shops = mall."},
+{zh:"买",py:"mǎi",en:"to buy",lesson:"5.09",mn:"Bottom is 头 (head) of 贝 (shell — ancient Chinese money). Top is a hook 乙 grabbing it. Hook-the-money = TO BUY. mǎi sounds like 'my' — claim it, it's MINE now. Compare 卖 mài (to sell) — same shape with 十 on top, money going OUT."},
 ];
 
 const SENTENCES = [
@@ -988,7 +995,7 @@ function speak(zh){
   speechSynthesis.speak(u);
 }
 // Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
-const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24'];
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09'];
 // lessonFilter is a Set of lesson codes; empty = all.
 const lessonFilter=new Set();
 function filtVocab(){

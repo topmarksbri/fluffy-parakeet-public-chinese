@@ -238,7 +238,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19</div>
 </div>
 
 <div class="tabrow">
@@ -267,6 +267,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-lesson="4.18" onclick="toggleLesson('4.18',this)">4.18</button>
   <button class="pill" data-lesson="4.24" onclick="toggleLesson('4.24',this)">4.24</button>
   <button class="pill" data-lesson="5.09" onclick="toggleLesson('5.09',this)">5.09</button>
+  <button class="pill" data-lesson="5.19" onclick="toggleLesson('5.19',this)">5.19</button>
 </div>
 
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -690,6 +691,16 @@ const VOCAB = [
 {zh:"超市",py:"chāo shì",en:"supermarket",lesson:"5.09",mn:"超 = exceed / super (走 walk radical — going beyond). 市 = market. Literally SUPER + MARKET — the Chinese borrowed the English idea wholesale."},
 {zh:"商场",py:"shāng chǎng",en:"mall / shopping centre",lesson:"5.09",mn:"商 = commerce / trade (the same 商 as 商店 shop). 场 = field / venue (土 earth radical — an open space). Commerce-field = a big open space full of shops = mall."},
 {zh:"买",py:"mǎi",en:"to buy",lesson:"5.09",mn:"Bottom is 头 (head) of 贝 (shell — ancient Chinese money). Top is a hook 乙 grabbing it. Hook-the-money = TO BUY. mǎi sounds like 'my' — claim it, it's MINE now. Compare 卖 mài (to sell) — same shape with 十 on top, money going OUT."},
+// 5.19
+{zh:"妻子",py:"qī zi",en:"wife",lesson:"5.19",mn:"妻 shows a woman (女) with a hand reaching for her from above — someone taken as a wife. 子 is the person suffix. Together: wife. Pair with 丈夫 (husband) when you meet it."},
+{zh:"还可以",py:"hái kě yǐ",en:"so-so / it's just okay",lesson:"5.19",mn:"还 = still/yet. 可以 = acceptable/can. 'Still just acceptable' = so-so. The classic non-committal Chinese response — not bad enough to complain, not good enough to praise."},
+{zh:"开车",py:"kāi chē",en:"to drive (a car)",lesson:"5.19",mn:"开 = to open / start (two hands lifting a bar from a gate — moving!). 车 = car/vehicle (a wheel and axle from above). Start the vehicle = to drive. kāi chē — you can hear the engine turning over."},
+{zh:"爷爷",py:"yé ye",en:"grandpa (paternal)",lesson:"5.19",mn:"爷 has 父 (father radical — a hand holding a rod) on top. Double it for the generation above dad: 爷爷 = paternal grandpa. The doubling makes it warm and familiar — same trick as 妈妈, 爸爸."},
+{zh:"奶奶",py:"nǎi nai",en:"grandma (paternal)",lesson:"5.19",mn:"奶 = 女 (woman) + phonetic. The same 奶 as in 牛奶 (milk) — the nurturing female figure. Doubled for warmth: nǎi nai = paternal grandma. Pair with 爷爷."},
+{zh:"哪儿",py:"nǎr",en:"where",lesson:"5.19",mn:"哪 (which) + 儿 (Beijing location suffix). 'Which place?' = where. The erhua 儿 is very natural in everyday speech — nǎr sounds just like 'nar?' You'll hear it constantly."},
+{zh:"在",py:"zài",en:"to be at (a place)",lesson:"5.19",mn:"土 (earth) + 才: something rooted firmly in the ground. 在 = to exist at a location. 你在哪儿？ Where are you? 我在家。 I'm at home. Used for both location (at) and ongoing action (在 + verb = -ing)."},
+{zh:"海边",py:"hǎi biān",en:"seaside / coast",lesson:"5.19",mn:"海 = water radical 氵 + 每 (every, phonetic) — the ever-present sea. 边 = side/edge (辶 movement + 方 direction). Sea-edge = seaside. hǎi biān — feel the salt air."},
+{zh:"猕猴桃",py:"mí hóu táo",en:"kiwi fruit",lesson:"5.19",mn:"猕猴 = macaque monkey (犭 animal radical). 桃 = peach (木 tree + 兆 phonetic). Literally 'macaque peach' — the kiwi vine was named after the hairy, brown monkey it resembles. Three syllables: mí hóu táo."},
 ];
 
 const SENTENCES = [
@@ -748,6 +759,14 @@ const SENTENCES = [
 {zh:"我昨天游泳了。",py:"Wǒ zuó tiān yóu yǒng le.",en:"I swam yesterday.",lesson:"4.24",dir:"en2zh",note:"了 can go at the end of the sentence (after the verb-object) for activity-completion. Means the swimming happened and is done."},
 {zh:"你今天下午想做什么？",py:"Nǐ jīn tiān xià wǔ xiǎng zuò shén me?",en:"What do you want to do this afternoon?",lesson:"4.24",dir:"en2zh",note:"Time phrase (今天下午) first, then 想做什么. No 了 — this is about future intention, not past completion."},
 {zh:"我今天下午想爬山。",py:"Wǒ jīn tiān xià wǔ xiǎng pá shān.",en:"I want to go hiking this afternoon.",lesson:"4.24",dir:"en2zh",note:"爬山 = climb mountain / hike (from 3.28). 想 + verb is the standard 'want to do' pattern."},
+// 5.19 — 在 (location/ongoing), 去 (direction), 哪儿 (where), time + 去/在 + place + action
+{zh:"你在哪儿？",py:"Nǐ zài nǎr?",en:"Where are you?",lesson:"5.19",dir:"zh2en",note:"在 + 哪儿 = 'to be at where?' = where are you? 在 anchors you to a place. Short, high-frequency — you'll hear this every day."},
+{zh:"我在饭馆儿。",py:"Wǒ zài fàn guǎn r.",en:"I'm in a restaurant.",lesson:"5.19",dir:"zh2en",note:"在 + place = to be at a place. No extra verb needed — 在 does the work of 'am at'."},
+{zh:"你在饭馆儿做什么？",py:"Nǐ zài fàn guǎn r zuò shén me?",en:"What are you doing in the restaurant?",lesson:"5.19",dir:"zh2en",note:"在 + place + verb: you're at a location, doing something. 做什么 = doing what? The 在 here shows ongoing action as well as location."},
+{zh:"我昨天在朋友家吃了晚饭。",py:"Wǒ zuó tiān zài péng yǒu jiā chī le wǎn fàn.",en:"Yesterday I ate dinner at a friend's house.",lesson:"5.19",dir:"zh2en",note:"Pattern: time (昨天) + 在 + place (朋友家) + verb+了 + object. 了 marks the completed action. Notice time comes first, then location, then action."},
+{zh:"我明天去海边游泳。",py:"Wǒ míng tiān qù hǎi biān yóu yǒng.",en:"Tomorrow I'm going swimming at the seaside.",lesson:"5.19",dir:"zh2en",note:"Pattern: time (明天) + 去 + destination (海边) + action (游泳). 去 = heading to a place to do something. No 了 — this is a future plan."},
+{zh:"你明天去哪儿吃晚饭？",py:"Nǐ míng tiān qù nǎr chī wǎn fàn?",en:"Where are you going for dinner tomorrow?",lesson:"5.19",dir:"zh2en",note:"去 + 哪儿 = going where? The action (吃晚饭) follows naturally after the destination question word."},
+{zh:"你去超市买什么？",py:"Nǐ qù chāo shì mǎi shén me?",en:"What are you going to the supermarket to buy?",lesson:"5.19",dir:"en2zh",note:"去 + place + verb = going to a place to do something. A very natural everyday pattern — no time word needed here, context is enough."},
 ];
 
 const HSK1_LESSONS = [
@@ -995,7 +1014,7 @@ function speak(zh){
   speechSynthesis.speak(u);
 }
 // Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
-const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09'];
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19'];
 // lessonFilter is a Set of lesson codes; empty = all.
 const lessonFilter=new Set();
 function filtVocab(){
@@ -1106,10 +1125,22 @@ function weightedSample(arr,n){
   }
   return out;
 }
+function filtSentences(){
+  if(lessonFilter.size===0)return SENTENCES;
+  return SENTENCES.filter(s=>lessonFilter.has(s.lesson));
+}
 function startQuiz(){
-  const pool=filtVocab();
-  const picks=weightedSample(pool,10);
-  const qs=picks.map(w=>({type:'vocab',data:w,qm:pickVMode()}));
+  const vocabPool=filtVocab();
+  const sentPool=filtSentences();
+  // Mix in up to 3 sentence questions per session when sentences are available.
+  const sentCount=Math.min(3,sentPool.length);
+  const vocabCount=Math.min(10-sentCount,vocabPool.length);
+  const vocabPicks=weightedSample(vocabPool,vocabCount);
+  const sentPicks=sentCount>0?shuffle(sentPool).slice(0,sentCount):[];
+  const qs=shuffle([
+    ...vocabPicks.map(w=>({type:'vocab',data:w,qm:pickVMode()})),
+    ...sentPicks.map(s=>({type:'sent',data:s,qm:pickVMode()}))
+  ]);
   questions=qs;current=0;scoreC=0;scoreW=0;sessionMissed=[];
   hide('scorescreen');show('quizCard');showQ();
 }
@@ -1126,7 +1157,8 @@ function showQ(){
   $('flame').style.display='none';$('flame').className='flame';
   $('stag').style.display='none';
   $('opts').style.gridTemplateColumns='';
-  showVocabQ(q.data,q.qm);
+  if(q.type==='sent')showSentQ(q.data,q.qm);
+  else showVocabQ(q.data,q.qm);
 }
 function showVocabQ(word,qm){
   $('ltag').textContent=word.lesson;
@@ -1224,13 +1256,20 @@ function submitTyped(){
   const raw=$('typeinput').value.trim();
   if(!raw)return;
   answered=true;$('typeinput').disabled=true;$('submbtn').disabled=true;
-  // Vocab tab only — Grammar tab has its own submit handler.
-  const w=q.data;
-  const ok=vocabDir==='py2en'?(normEn(raw)===normEn(w.en)):(norm(raw)===norm(w.py));
-  $('typeinput').className+=' '+(ok?'tok':'tno');
-  recordResult(w,ok);
-  if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
-  finishVocab(ok,w);
+  if(q.type==='sent'){
+    const s=q.data;
+    const ok=s.dir==='zh2en'?(normEn(raw)===normEn(s.en)):(norm(raw)===norm(s.py));
+    $('typeinput').className+=' '+(ok?'tok':'tno');
+    finishSent(ok,s);
+  } else {
+    // Vocab tab only — Grammar tab has its own submit handler.
+    const w=q.data;
+    const ok=vocabDir==='py2en'?(normEn(raw)===normEn(w.en)):(norm(raw)===norm(w.py));
+    $('typeinput').className+=' '+(ok?'tok':'tno');
+    recordResult(w,ok);
+    if(!ok&&w.mn){show('mnBox');$('mnBtn').textContent='💡 Hide memory hint';}
+    finishVocab(ok,w);
+  }
 }
 function finishVocab(ok,word){
   if(ok){scoreC++;setFb(['✓ Correct!','✓ Well done!','✓ Spot on!','✓ Nailed it!'][Math.floor(Math.random()*4)],'good');}
@@ -1242,6 +1281,84 @@ function finishVocab(ok,word){
   $('srevPy').textContent='';
   $('srevEn').textContent=word.en;
   $('qSpeakBtn').dataset.zh=word.zh; // speak the underlying Chinese pronunciation
+  show('srev');
+  show('nextbtn');
+}
+// ════════════════════════════════════════════════════════
+// SENTENCE QUIZ
+// ════════════════════════════════════════════════════════
+function showSentQ(sent,qm){
+  $('ltag').textContent=sent.lesson;
+  $('stag').style.display='block';
+  const qmain=$('qmain'),qpy=$('qpy');
+  if(sent.dir==='zh2en'){
+    $('qlabel').textContent='What does this sentence mean?';
+    qmain.className='qmain szh';
+    qmain.textContent=sent.zh;
+    qpy.textContent=sent.py;
+  } else {
+    $('qlabel').textContent='How do you say this in Chinese? (pinyin)';
+    qmain.className='qmain sen';
+    qmain.textContent=sent.en;
+    qpy.textContent='';
+  }
+  if(qm==='mcq')buildSentMCQ(sent);
+  else showSentTypeInput(sent);
+}
+function buildSentMCQ(sent){
+  const pool=SENTENCES.filter(s=>s.zh!==sent.zh&&s.dir===sent.dir);
+  const others=shuffle(pool).slice(0,3);
+  const all=shuffle([sent,...others]);
+  const grid=$('opts');grid.innerHTML='';
+  grid.style.gridTemplateColumns='1fr';grid.style.display='grid';
+  all.forEach(o=>{
+    const btn=document.createElement('button');btn.className='opt';
+    if(sent.dir==='zh2en'){
+      btn.style.cssText="font-family:'Crimson Pro',serif;font-style:italic;font-size:0.95rem;text-align:left;";
+      btn.textContent=o.en;
+    } else {
+      btn.style.cssText="font-family:'DM Mono',monospace;font-size:0.78rem;text-align:left;line-height:1.5;";
+      btn.textContent=o.py;
+    }
+    btn.addEventListener('click',()=>checkSentMCQ(btn,o.zh===sent.zh,sent));
+    grid.appendChild(btn);
+  });
+}
+function checkSentMCQ(clicked,correct,sent){
+  if(answered)return;answered=true;
+  const target=sent.dir==='zh2en'?sent.en:sent.py;
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.disabled=true;
+    if(btn.textContent.trim()===target.trim())btn.classList.add('ok');
+  });
+  if(!correct)clicked.classList.add('no');
+  finishSent(correct,sent);
+}
+function showSentTypeInput(sent){
+  const wrap=$('typewrap');wrap.style.display='flex';
+  const inp=$('typeinput');
+  inp.value='';inp.disabled=false;$('submbtn').disabled=false;
+  if(sent.dir==='zh2en'){
+    inp.className='typeinput engtype';
+    inp.placeholder='Type the English meaning...';
+    $('typehint').textContent='Loose match — punctuation and "the/a/an" ignored';
+  } else {
+    inp.className='typeinput sent';
+    inp.placeholder='Pinyin... (tones optional)';
+    $('typehint').textContent='Full sentence pinyin — tones optional';
+  }
+  setTimeout(()=>inp.focus(),60);
+}
+function finishSent(ok,sent){
+  if(ok){scoreC++;setFb(['✓ Correct!','✓ Excellent!','✓ Spot on!','✓ Nailed it!'][Math.floor(Math.random()*4)],'good');}
+  else{scoreW++;setFb('✗ Not quite — see below.','bad');}
+  $('srevZh').textContent=sent.zh;
+  $('srevZh').style.fontFamily="'Noto Serif SC',serif";
+  $('srevZh').style.fontSize='1.05rem';
+  $('srevPy').textContent=sent.py;
+  $('srevEn').textContent=sent.en;
+  $('qSpeakBtn').dataset.zh=sent.zh;
+  if(sent.note){$('gnote').textContent=sent.note;show('gnote');}
   show('srev');
   show('nextbtn');
 }

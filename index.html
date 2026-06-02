@@ -238,7 +238,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19 · 5.30</div>
 </div>
 
 <div class="tabrow">
@@ -268,6 +268,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-lesson="4.24" onclick="toggleLesson('4.24',this)">4.24</button>
   <button class="pill" data-lesson="5.09" onclick="toggleLesson('5.09',this)">5.09</button>
   <button class="pill" data-lesson="5.19" onclick="toggleLesson('5.19',this)">5.19</button>
+  <button class="pill" data-lesson="5.30" onclick="toggleLesson('5.30',this)">5.30</button>
 </div>
 
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -701,6 +702,10 @@ const VOCAB = [
 {zh:"在",py:"zài",en:"to be at (a place)",lesson:"5.19",mn:"土 (earth) + 才: something rooted firmly in the ground. 在 = to exist at a location. 你在哪儿？ Where are you? 我在家。 I'm at home. Used for both location (at) and ongoing action (在 + verb = -ing)."},
 {zh:"海边",py:"hǎi biān",en:"seaside / coast",lesson:"5.19",mn:"海 = water radical 氵 + 每 (every, phonetic) — the ever-present sea. 边 = side/edge (辶 movement + 方 direction). Sea-edge = seaside. hǎi biān — feel the salt air."},
 {zh:"猕猴桃",py:"mí hóu táo",en:"kiwi fruit",lesson:"5.19",mn:"猕猴 = macaque monkey (犭 animal radical). 桃 = peach (木 tree + 兆 phonetic). Literally 'macaque peach' — the kiwi vine was named after the hairy, brown monkey it resembles. Three syllables: mí hóu táo."},
+{zh:"看",py:"kàn",en:"to see / visit",lesson:"5.19",mn:"手 (hand) shading 目 (eye) — squinting into the distance to LOOK or SEE. When you visit someone, you go to see them: 看朋友 = visit a friend. Same character, two uses: see it and visit them."},
+// 5.30
+{zh:"麦片",py:"mài piàn",en:"cereal / oats",lesson:"5.30",mn:"麦 = wheat/grain (a stalk bending under its own weight). 片 = flat slice (half of a split log — a flat piece). Flat grain slices = cereal flakes. mài piàn — think 'my pan' of breakfast cereal."},
+{zh:"民宿",py:"mín sù",en:"homestay / guesthouse",lesson:"5.30",mn:"民 = the people (a person with a marking stroke — an ordinary citizen). 宿 = to lodge/stay the night (宀 roof + 人 person + 一 bed — a person sleeping under a roof). People's lodging = homestay. A local's home, not a hotel."},
 ];
 
 const SENTENCES = [
@@ -949,6 +954,21 @@ const HSK1_LESSONS = [
 {zh:"高兴",py:"gāo xìng",en:"happy / pleased",note:"高 = tall building with raised roof (high). 兴 = four hands raising something together: excited, happy"},
 {zh:"听",py:"tīng",en:"to listen",note:"口 mouth + 斤 axe — listening as precisely as an axe cuts: to listen"},
 {zh:"飞机",py:"fēi jī",en:"airplane",note:"飞 = a bird in flight with wings spread (pictograph). 机 = 木 wood + 几 machine — flying machine: airplane"}]},
+{num:16,zhTitle:"数字",enTitle:"Numbers (Homework)",words:[
+{zh:"零",py:"líng",en:"zero / 0",note:"雨 rain + 令 (phonetic) — raindrops falling one by one, nothing yet accumulated: zero"},
+{zh:"一",py:"yī",en:"one / 1",note:"A single horizontal stroke — one line = one. The simplest number: 一"},
+{zh:"二",py:"èr",en:"two / 2",note:"Two horizontal strokes stacked — one on top of another: two"},
+{zh:"三",py:"sān",en:"three / 3",note:"Three horizontal strokes — count them: one, two, three"},
+{zh:"四",py:"sì",en:"four / 4",note:"A box with two strokes inside — like four walls with something inside. sì sounds like 'sir'"},
+{zh:"五",py:"wǔ",en:"five / 5",note:"An old tally mark — the stroke through the middle marks the fifth count: five"},
+{zh:"六",py:"liù",en:"six / 6",note:"亠 (top hat) + 八 (divide/eight-shape below) — a capped figure with legs apart: six"},
+{zh:"七",py:"qī",en:"seven / 7",note:"Looks like the number 7 itself — a horizontal stroke with a hook down. qī = seven"},
+{zh:"八",py:"bā",en:"eight / 8",note:"Two strokes spreading apart — like arms opening wide. 八 is lucky in China (sounds like 发 fā = prosperity)"},
+{zh:"九",py:"jiǔ",en:"nine / 9",note:"A fist with the thumb extended — nine fingers counted out. jiǔ also means 'long time': 9 is long-lasting"},
+{zh:"十",py:"shí",en:"ten / 10",note:"A cross + — ten fingers spread across both hands. The crossroads of counting: ten"},
+{zh:"百",py:"bǎi",en:"hundred / 100",note:"白 white (bright/clear) + 一 one on top — one bright complete hundred: 百"},
+{zh:"千",py:"qiān",en:"thousand / 1000",note:"亻 person + 十 ten — a person multiplied ten times ten: thousand"},
+{zh:"万",py:"wàn",en:"ten thousand / 10,000",note:"A scorpion character (old meaning) — in China 万 (10,000) replaces where English uses 'ten thousand'. Key unit for big numbers"}]},
 ];
 
 // ════════════════════════════════════════════════════════
@@ -1014,7 +1034,7 @@ function speak(zh){
   speechSynthesis.speak(u);
 }
 // Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
-const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19'];
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19','5.30'];
 // lessonFilter is a Set of lesson codes; empty = all.
 const lessonFilter=new Set();
 function filtVocab(){

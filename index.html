@@ -20,6 +20,21 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 .tabcontent{width:100%;max-width:500px;}
 
+/* Glossary tab */
+.gl-search{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;background:var(--paper);color:var(--ink);font-family:'Crimson Pro',serif;font-size:0.95rem;margin-bottom:10px;}
+.gl-search:focus{outline:none;border-color:var(--gold);}
+.gl-count{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin:2px 2px 8px;}
+.gl-item{background:var(--soft);border-radius:6px;padding:10px 12px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;}
+.gl-item:hover{background:var(--gold-dim);}
+.gl-row{display:flex;align-items:baseline;gap:10px;}
+.gl-zh{font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--ink);white-space:nowrap;}
+.gl-py{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--red);white-space:nowrap;}
+.gl-en{font-family:'Crimson Pro',serif;font-style:italic;font-size:0.82rem;color:var(--muted);margin-left:auto;text-align:right;}
+.gl-lesson{font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--gold);letter-spacing:0.5px;margin-top:2px;}
+.gl-mn{display:none;margin-top:7px;padding-top:7px;border-top:1px solid var(--border);font-family:'Crimson Pro',serif;font-size:0.82rem;color:var(--ink);line-height:1.45;}
+.gl-mn.show{display:block;}
+.gl-empty{font-family:'Crimson Pro',serif;font-style:italic;color:var(--muted);text-align:center;padding:30px 10px;}
+
 /* Pinyin reference (Grammar tab) */
 .py-hdr{text-align:center;margin-bottom:14px;}
 .py-hdr-zh{font-family:'Noto Serif SC',serif;font-size:1.5rem;color:var(--red);letter-spacing:2px;}
@@ -238,13 +253,14 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19 · 5.30</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19 · 5.30 · 6.06</div>
 </div>
 
 <div class="tabrow">
   <button class="tab on" onclick="switchTab('quiz',this)">📝 Vocab</button>
   <button class="tab" onclick="switchTab('grammar',this)">📖 Grammar</button>
   <button class="tab" onclick="switchTab('hsk',this)">🀄 HSK</button>
+  <button class="tab" onclick="switchTab('glossary',this)">📓 Glossary</button>
 </div>
 
 <!-- ══════════════════════════════════════════════════════
@@ -269,6 +285,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-lesson="5.09" onclick="toggleLesson('5.09',this)">5.09</button>
   <button class="pill" data-lesson="5.19" onclick="toggleLesson('5.19',this)">5.19</button>
   <button class="pill" data-lesson="5.30" onclick="toggleLesson('5.30',this)">5.30</button>
+  <button class="pill" data-lesson="6.06" onclick="toggleLesson('6.06',this)">6.06</button>
 </div>
 
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -584,6 +601,34 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 
 </div><!-- end tab-hsk -->
 
+<!-- ══════════════════════════════════════════════════════
+     TAB 4: GLOSSARY — searchable reference over full VOCAB
+══════════════════════════════════════════════════════ -->
+<div class="tabcontent" id="tab-glossary" style="display:none">
+
+<input type="text" id="glSearch" class="gl-search" placeholder="Search character, pinyin, or English…" autocomplete="off" spellcheck="false" oninput="renderGlossary()"/>
+
+<div class="slabel">Lesson</div>
+<div class="prow" id="glLessonRow">
+  <button class="pill on" data-gl-lesson="" onclick="setGlossaryLesson('',this)">All</button>
+  <button class="pill" data-gl-lesson="3.07" onclick="setGlossaryLesson('3.07',this)">3.07</button>
+  <button class="pill" data-gl-lesson="3.14" onclick="setGlossaryLesson('3.14',this)">3.14</button>
+  <button class="pill" data-gl-lesson="3.21" onclick="setGlossaryLesson('3.21',this)">3.21</button>
+  <button class="pill" data-gl-lesson="3.28" onclick="setGlossaryLesson('3.28',this)">3.28</button>
+  <button class="pill" data-gl-lesson="4.03" onclick="setGlossaryLesson('4.03',this)">4.03</button>
+  <button class="pill" data-gl-lesson="4.18" onclick="setGlossaryLesson('4.18',this)">4.18</button>
+  <button class="pill" data-gl-lesson="4.24" onclick="setGlossaryLesson('4.24',this)">4.24</button>
+  <button class="pill" data-gl-lesson="5.09" onclick="setGlossaryLesson('5.09',this)">5.09</button>
+  <button class="pill" data-gl-lesson="5.19" onclick="setGlossaryLesson('5.19',this)">5.19</button>
+  <button class="pill" data-gl-lesson="5.30" onclick="setGlossaryLesson('5.30',this)">5.30</button>
+  <button class="pill" data-gl-lesson="6.06" onclick="setGlossaryLesson('6.06',this)">6.06</button>
+</div>
+
+<div class="gl-count" id="glCount"></div>
+<div id="glList"></div>
+
+</div><!-- end tab-glossary -->
+
 <script>
 // ════════════════════════════════════════════════════════
 // DATA
@@ -706,6 +751,21 @@ const VOCAB = [
 // 5.30
 {zh:"麦片",py:"mài piàn",en:"cereal / oats",lesson:"5.30",mn:"麦 = wheat/grain (a stalk bending under its own weight). 片 = flat slice (half of a split log — a flat piece). Flat grain slices = cereal flakes. mài piàn — think 'my pan' of breakfast cereal."},
 {zh:"民宿",py:"mín sù",en:"homestay / guesthouse",lesson:"5.30",mn:"民 = the people (a person with a marking stroke — an ordinary citizen). 宿 = to lodge/stay the night (宀 roof + 人 person + 一 bed — a person sleeping under a roof). People's lodging = homestay. A local's home, not a hotel."},
+// 6.06
+{zh:"有点儿",py:"yǒu diǎn r",en:"a bit / somewhat (+ adj)",lesson:"6.06",mn:"有 (have) + 点 (a dot, a little bit) + 儿 (suffix). You 'have a little dot' of something — just a touch. 有点儿 sits before an adjective to soften it: 有点儿忙 = a bit busy."},
+{zh:"意面",py:"yì miàn",en:"pasta",lesson:"6.06",mn:"意 = idea/meaning (心 heart at the bottom — thoughts from the heart). 面 = noodles/flour (from 面条). The 'foreign idea' of noodles — Italy's take on 面条."},
+{zh:"牛肉意面",py:"niú ròu yì miàn",en:"beef pasta",lesson:"6.06",mn:"牛肉 (beef, from 4.03) + 意面 (pasta). Stack two words you already know: beef + pasta = beef pasta. The longest words are just building blocks."},
+{zh:"红酒",py:"hóng jiǔ",en:"red wine",lesson:"6.06",mn:"红 = red (silk radical 纟 — crimson-dyed silk). 酒 = alcohol (from 啤酒/葡萄酒). Red + alcohol = red wine — the everyday word, more casual than 葡萄酒."},
+{zh:"土耳其",py:"tǔ ěr qí",en:"Turkey",lesson:"6.06",mn:"土 (earth) + 耳 (ear) + 其 (that, phonetic). Pure sound-borrowing for 'Turkey'. Picture an earth-toned Turkish carpet woven with an ear-shaped pattern — tǔ ěr qí."},
+{zh:"照顾",py:"zhào gu",en:"to look after",lesson:"6.06",mn:"照 = to shine / illuminate (光 light radical) — shining a light on someone, watching over them. 顾 = to attend to (页 head — turning to check on someone). Light + attention = to look after."},
+{zh:"宝宝",py:"bǎo bao",en:"baby",lesson:"6.06",mn:"宝 = treasure (roof 宀 over jade 王 and shells 贝 — precious things kept safe indoors). Doubled for warmth, just like 妈妈/爸爸: bǎo bao = baby, your little treasure."},
+{zh:"喂",py:"wèi",en:"to feed",lesson:"6.06",mn:"口 (mouth) + 畏 (the same component as 喂 'hello?' on the phone). Here the mouth is on the receiving end — bringing food to someone's mouth = to feed. Same character, two contexts: a call, or a meal."},
+{zh:"裤子",py:"kù zi",en:"pants / trousers",lesson:"6.06",mn:"裤 has the clothing radical 衤 (a robe with sleeves) + 库 (storehouse, phonetic kù). 子 is the small-thing suffix. Clothing + storehouse = trousers, the storehouse for your legs."},
+{zh:"两",py:"liǎng",en:"two (for amounts)",lesson:"6.06",mn:"两 looks like a pair of scales balancing two equal weights — two matching things. Swap in for 二 whenever you're counting with a measure word: 两个, 两杯, 两本."},
+{zh:"个",py:"gè",en:"measure word (general / most common)",lesson:"6.06",mn:"亻 (person) + a single stroke — one person standing alone. The all-purpose measure word, the one you reach for when you don't know the specific one: 一个苹果, 几个人."},
+{zh:"杯",py:"bēi",en:"measure word — cup / glass",lesson:"6.06",mn:"木 (wood) + 不 (phonetic bēi) — originally a wooden cup. Now the measure word for drinks: 一杯茶 = a cup of tea, 两杯啤酒 = two glasses of beer."},
+{zh:"本",py:"běn",en:"measure word — for books",lesson:"6.06",mn:"木 (tree) with a stroke marking the root — the base, the origin. By extension, a bound 'volume': the measure word for books — 一本书 = one book."},
+{zh:"零",py:"líng",en:"zero",lesson:"6.06",mn:"雨 (rain) over 令 (command, phonetic líng). Raindrops falling one by one — nothing has accumulated yet: zero. The digit 0 you'll meet in phone numbers and prices."},
 ];
 
 const SENTENCES = [
@@ -772,6 +832,17 @@ const SENTENCES = [
 {zh:"我明天去海边游泳。",py:"Wǒ míng tiān qù hǎi biān yóu yǒng.",en:"Tomorrow I'm going swimming at the seaside.",lesson:"5.19",dir:"zh2en",note:"Pattern: time (明天) + 去 + destination (海边) + action (游泳). 去 = heading to a place to do something. No 了 — this is a future plan."},
 {zh:"你明天去哪儿吃晚饭？",py:"Nǐ míng tiān qù nǎr chī wǎn fàn?",en:"Where are you going for dinner tomorrow?",lesson:"5.19",dir:"zh2en",note:"去 + 哪儿 = going where? The action (吃晚饭) follows naturally after the destination question word."},
 {zh:"你去超市买什么？",py:"Nǐ qù chāo shì mǎi shén me?",en:"What are you going to the supermarket to buy?",lesson:"5.19",dir:"en2zh",note:"去 + place + verb = going to a place to do something. A very natural everyday pattern — no time word needed here, context is enough."},
+// 6.06 — 几 + measure word + noun (how many), 有点儿 + adj, measure words 个/杯/本/两
+{zh:"你有几个苹果？我有四个苹果。",py:"Nǐ yǒu jǐ ge píng guǒ? Wǒ yǒu sì ge píng guǒ.",en:"How many apples do you have? I have four apples.",lesson:"6.06",dir:"zh2en",note:"几 + measure word + noun = 'how many' (under 10). The answer mirrors the question — just swap 几 for the actual number, keeping the measure word."},
+{zh:"你有几个香蕉？我有两个香蕉。",py:"Nǐ yǒu jǐ ge xiāng jiāo? Wǒ yǒu liǎng ge xiāng jiāo.",en:"How many bananas do you have? I have two bananas.",lesson:"6.06",dir:"zh2en",note:"两 replaces 二 when counting things with a measure word — 两个, never 二个."},
+{zh:"你今天喝了几杯茶？",py:"Nǐ jīn tiān hē le jǐ bēi chá?",en:"How many cups of tea did you drink today?",lesson:"6.06",dir:"zh2en",note:"杯 is the measure word for drinks served in cups or glasses. 几杯 = how many cups?"},
+{zh:"我今天喝了一杯茶。",py:"Wǒ jīn tiān hē le yì bēi chá.",en:"I drank a cup of tea today.",lesson:"6.06",dir:"zh2en",note:"Number + measure word + noun: 一杯茶 = one cup of tea. 了 right after the verb marks the completed action."},
+{zh:"我今天有点儿忙。",py:"Wǒ jīn tiān yǒu diǎn r máng.",en:"I'm a bit busy today.",lesson:"6.06",dir:"zh2en",note:"有点儿 + adjective softens it to 'a bit ___'. It always goes before the adjective — never 忙有点儿."},
+{zh:"你今天怎么样？还不错，不忙。",py:"Nǐ jīn tiān zěn me yàng? Hái bú cuò, bù máng.",en:"How's your day going? Not bad, not busy.",lesson:"6.06",dir:"zh2en",note:"怎么样 / 还不错 are the everyday check-in pair from 4.24 — a natural opener before getting into the detail of your day."},
+{zh:"你有几个汉语老师？",py:"Nǐ yǒu jǐ ge hàn yǔ lǎo shī?",en:"How many Chinese teachers do you have?",lesson:"6.06",dir:"en2zh",note:"几 + 个 + noun works for people too, not just objects — the pattern doesn't change."},
+{zh:"我想吃牛肉意面。",py:"Wǒ xiǎng chī niú ròu yì miàn.",en:"I want to eat beef pasta.",lesson:"6.06",dir:"en2zh",note:"想 + verb + object — the 'want to do' pattern from 4.24, now dressed up with new food vocab."},
+{zh:"你想喝红酒还是可乐？",py:"Nǐ xiǎng hē hóng jiǔ hái shi kě lè?",en:"Do you want to drink red wine or coke?",lesson:"6.06",dir:"en2zh",note:"还是 = 'or' inside a question, offering a choice between A and B: A 还是 B?"},
+{zh:"妈妈在家照顾宝宝。",py:"Mā ma zài jiā zhào gu bǎo bao.",en:"Mum is at home looking after the baby.",lesson:"6.06",dir:"en2zh",note:"在 + place + verb shows ongoing action at a location (from 5.19): 在家照顾 = at home, looking after."},
 ];
 
 const HSK1_LESSONS = [
@@ -975,7 +1046,7 @@ const HSK1_LESSONS = [
 // TAB SWITCHING
 // ════════════════════════════════════════════════════════
 function switchTab(tab,btn){
-  ['quiz','grammar','hsk'].forEach(t=>{
+  ['quiz','grammar','hsk','glossary'].forEach(t=>{
     const el=document.getElementById('tab-'+t);
     if(el)el.style.display=(t===tab)?'block':'none';
   });
@@ -984,6 +1055,54 @@ function switchTab(tab,btn){
   if(tab==='quiz'){startQuiz();}
   // tab==='grammar' is now a static reference page — no init needed
   if(tab==='hsk'){renderHSKBook();showHSKSub(hskSub);}
+  if(tab==='glossary'){renderGlossary();}
+}
+
+// ── Glossary — searchable, lesson-filterable reference over full VOCAB ──
+let glossaryLesson='';
+function setGlossaryLesson(lesson,btn){
+  glossaryLesson=lesson;
+  document.querySelectorAll('#glLessonRow .pill').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  renderGlossary();
+}
+function toggleGlMn(el){
+  const mn=el.querySelector('.gl-mn');
+  if(mn)mn.classList.toggle('show');
+}
+function renderGlossary(){
+  const list=$('glList');
+  if(!list)return;
+  const qRaw=($('glSearch')?$('glSearch').value:'').trim().toLowerCase();
+  let words=glossaryLesson?VOCAB.filter(v=>v.lesson===glossaryLesson):VOCAB;
+  if(qRaw){
+    words=words.filter(v=>
+      v.zh.toLowerCase().includes(qRaw)||
+      v.py.toLowerCase().includes(qRaw)||
+      v.en.toLowerCase().includes(qRaw)
+    );
+  }
+  $('glCount').textContent=`${words.length} word${words.length===1?'':'s'}${glossaryLesson?' · lesson '+glossaryLesson:' · all lessons'}`;
+  if(!words.length){
+    list.innerHTML='<div class="gl-empty">No words match — try a different search or lesson.</div>';
+    return;
+  }
+  list.innerHTML='';
+  words.forEach(w=>{
+    const item=document.createElement('div');
+    item.className='gl-item';
+    item.innerHTML=`
+      <div class="gl-row">
+        <span class="gl-zh">${w.zh}</span>
+        <span class="gl-py">${w.py}</span>
+        <span class="gl-en">${w.en}</span>
+      </div>
+      <div class="gl-lesson">${w.lesson}${w.mn?' · tap for memory hook':''}</div>
+      ${w.mn?`<div class="gl-mn">${w.mn}</div>`:''}
+    `;
+    if(w.mn)item.addEventListener('click',()=>toggleGlMn(item));
+    list.appendChild(item);
+  });
 }
 
 // HSK sub-tab state — Lessons · Flashcards · Sentences
@@ -1034,7 +1153,7 @@ function speak(zh){
   speechSynthesis.speak(u);
 }
 // Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
-const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19','5.30'];
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19','5.30','6.06'];
 // lessonFilter is a Set of lesson codes; empty = all.
 const lessonFilter=new Set();
 function filtVocab(){
@@ -1149,6 +1268,32 @@ function filtSentences(){
   if(lessonFilter.size===0)return SENTENCES;
   return SENTENCES.filter(s=>lessonFilter.has(s.lesson));
 }
+// Recently-shown sentence tracker — stops the same handful of sentences
+// resurfacing every session. Sentences not seen recently are picked first;
+// once most of the (filtered) pool has been seen, the history recycles.
+let sentHistory=[];
+try{sentHistory=JSON.parse(localStorage.getItem('cn_sent_hist_v1')||'[]');}catch(e){}
+function saveSentHistory(){try{localStorage.setItem('cn_sent_hist_v1',JSON.stringify(sentHistory));}catch(e){}}
+function pickSentences(pool,n){
+  if(n<=0||!pool.length)return[];
+  const fresh=pool.filter(s=>!sentHistory.includes(s.zh));
+  const seen=pool.filter(s=>sentHistory.includes(s.zh));
+  let picks;
+  if(fresh.length>=n){
+    picks=shuffle(fresh).slice(0,n);
+  }else{
+    picks=shuffle([...fresh,...shuffle(seen).slice(0,n-fresh.length)]);
+  }
+  picks.forEach(s=>{
+    sentHistory=sentHistory.filter(z=>z!==s.zh);
+    sentHistory.push(s.zh);
+  });
+  // Cap history at ~70% of the pool so older sentences cycle back into rotation.
+  const cap=Math.max(8,Math.floor(pool.length*0.7));
+  if(sentHistory.length>cap)sentHistory=sentHistory.slice(sentHistory.length-cap);
+  saveSentHistory();
+  return picks;
+}
 function startQuiz(){
   const vocabPool=filtVocab();
   const sentPool=filtSentences();
@@ -1156,7 +1301,7 @@ function startQuiz(){
   const sentCount=Math.min(3,sentPool.length);
   const vocabCount=Math.min(10-sentCount,vocabPool.length);
   const vocabPicks=weightedSample(vocabPool,vocabCount);
-  const sentPicks=sentCount>0?shuffle(sentPool).slice(0,sentCount):[];
+  const sentPicks=pickSentences(sentPool,sentCount);
   const qs=shuffle([
     ...vocabPicks.map(w=>({type:'vocab',data:w,qm:pickVMode()})),
     ...sentPicks.map(s=>({type:'sent',data:s,qm:pickVMode()}))

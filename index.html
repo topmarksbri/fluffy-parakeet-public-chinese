@@ -253,7 +253,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
 <div class="hdr">
   <div class="hdr-zh">中文练习</div>
   <div class="hdr-en">David's Chinese</div>
-  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19 · 5.30 · 6.06</div>
+  <div class="hdr-sub">3.07 · 3.14 · 3.21 · 3.28 · 4.03 · 4.18 · 4.24 · 5.09 · 5.19 · 5.30 · 6.06 · 6.14</div>
 </div>
 
 <div class="tabrow">
@@ -286,6 +286,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-lesson="5.19" onclick="toggleLesson('5.19',this)">5.19</button>
   <button class="pill" data-lesson="5.30" onclick="toggleLesson('5.30',this)">5.30</button>
   <button class="pill" data-lesson="6.06" onclick="toggleLesson('6.06',this)">6.06</button>
+  <button class="pill" data-lesson="6.14" onclick="toggleLesson('6.14',this)">6.14</button>
 </div>
 
 <div class="slabel" style="margin-top:6px">Mode</div>
@@ -622,6 +623,7 @@ body{background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex
   <button class="pill" data-gl-lesson="5.19" onclick="setGlossaryLesson('5.19',this)">5.19</button>
   <button class="pill" data-gl-lesson="5.30" onclick="setGlossaryLesson('5.30',this)">5.30</button>
   <button class="pill" data-gl-lesson="6.06" onclick="setGlossaryLesson('6.06',this)">6.06</button>
+  <button class="pill" data-gl-lesson="6.14" onclick="setGlossaryLesson('6.14',this)">6.14</button>
 </div>
 
 <div class="gl-count" id="glCount"></div>
@@ -643,6 +645,20 @@ const VOCAB = [
 {zh:"中国",py:"zhōng guó",en:"China / Chinese",lesson:"3.07",mn:"中 is literally an arrow through the middle of a box — the MIDDLE. 国 = country. China = the Middle Kingdom."},
 {zh:"人",py:"rén",en:"people / person",lesson:"3.07",mn:"Two strokes — one leg leaning on the other. It's a stick person walking. The simplest picture of a human."},
 {zh:"再见",py:"zài jiàn",en:"bye / goodbye",lesson:"3.07",mn:"再 means 'again', 见 means 'to see'. Goodbye = 'see again' — just like au revoir in French."},
+// Numbers
+{zh:"一",py:"yī",en:"one",lesson:"3.07",mn:"一 is literally one horizontal stroke — the simplest possible number. Tone changes: yī → yí before 4th tones, yì before 1st/2nd/3rd."},
+{zh:"二",py:"èr",en:"two",lesson:"3.07",mn:"Two horizontal strokes stacked — two lines = two. Simple and logical. Used for the number itself (二楼 = 2nd floor); use 两 when counting things with a measure word."},
+{zh:"三",py:"sān",en:"three",lesson:"3.07",mn:"Three horizontal strokes — the pattern continues. 一, 二, 三 are the most direct pictographs in Chinese: the number of lines IS the number."},
+{zh:"四",py:"sì",en:"four",lesson:"3.07",mn:"A box with two strokes inside. Considered unlucky in China because 四 sounds like 死 (sǐ = death) — 4th floors are often skipped in buildings."},
+{zh:"五",py:"wǔ",en:"five",lesson:"3.07",mn:"五 = the number that bridges heaven (above) and earth (below) in Chinese philosophy. Five elements, five directions, five flavours. A culturally rich number."},
+{zh:"六",py:"liù",en:"six",lesson:"3.07",mn:"A man with a hat and legs spread wide — counting out on his fingers. 六 is considered lucky: 六六大顺 means 'everything goes smoothly'."},
+{zh:"七",py:"qī",en:"seven",lesson:"3.07",mn:"Looks like a cross with a hook. 七 is also considered slightly unlucky (sounds a bit like 气 qì = anger) but is mostly neutral."},
+{zh:"八",py:"bā",en:"eight",lesson:"3.07",mn:"Two strokes spreading outward — like arms opening wide. 八 is the luckiest number in China: its Cantonese pronunciation sounds like 發 (to prosper). The 2008 Olympics opened on 08/08/08."},
+{zh:"九",py:"jiǔ",en:"nine",lesson:"3.07",mn:"A hook bending back on itself. 九 sounds like 久 (jiǔ = long time) — so it's associated with longevity and eternity. Very auspicious."},
+{zh:"十",py:"shí",en:"ten",lesson:"3.07",mn:"A cross — a vertical stroke through a horizontal one. Ten = completion of one cycle. 十全十美 = 'ten out of ten beauty' = perfection."},
+{zh:"百",py:"bǎi",en:"hundred",lesson:"3.07",mn:"一 (one) on top of 白 (white/sun). One sun overhead = the sky filled = a hundred, a multitude. 百 + any number = hundreds: 三百 = 300."},
+{zh:"千",py:"qiān",en:"thousand",lesson:"3.07",mn:"人 (person) with a horizontal stroke through the middle — a person standing tall, stretching to reach a thousand. 三千 = 3,000. Note: 一千 not 一百十 for 1000."},
+{zh:"万",py:"wàn",en:"ten thousand",lesson:"3.07",mn:"The Chinese unit system groups in 万 (10,000) not millions. 一万 = 10,000. 十万 = 100,000. 一百万 = 1,000,000. Key to reading Chinese prices and populations."},
 // 3.14
 {zh:"下午",py:"xià wǔ",en:"afternoon",lesson:"3.14",mn:"下 is an arrow pointing DOWN — the sun going down from its peak. 午 is noon. 下午 = after-noon, sun heading downward."},
 {zh:"早上",py:"zǎo shang",en:"morning",lesson:"3.14",mn:"早 has 日 (sun) on top of 十 — the sun barely above the horizon. 上 means 'up'. Morning = sun just coming up."},
@@ -766,6 +782,19 @@ const VOCAB = [
 {zh:"杯",py:"bēi",en:"measure word — cup / glass",lesson:"6.06",mn:"木 (wood) + 不 (phonetic bēi) — originally a wooden cup. Now the measure word for drinks: 一杯茶 = a cup of tea, 两杯啤酒 = two glasses of beer."},
 {zh:"本",py:"běn",en:"measure word — for books",lesson:"6.06",mn:"木 (tree) with a stroke marking the root — the base, the origin. By extension, a bound 'volume': the measure word for books — 一本书 = one book."},
 {zh:"零",py:"líng",en:"zero",lesson:"6.06",mn:"雨 (rain) over 令 (command, phonetic líng). Raindrops falling one by one — nothing has accumulated yet: zero. The digit 0 you'll meet in phone numbers and prices."},
+// 6.14
+{zh:"汉堡",py:"hàn bǎo",en:"burger",lesson:"6.14",mn:"汉 = Han (the same 汉 as 汉语). 堡 = fort/castle (土 earth + 保 protect — a mound of earth protecting a settlement). Han + fort sounds out 'ham-burg-er': a burger is just a edible little fortress."},
+{zh:"炸鸡",py:"zhá jī",en:"fried chicken",lesson:"6.14",mn:"炸 = to deep-fry (火 fire radical + 乍 sudden — fire suddenly applied). 鸡 = chicken (from 鸡蛋/鸡肉). Fire + chicken = fried chicken."},
+{zh:"炸鸡翅",py:"zhá jī chì",en:"fried chicken wings",lesson:"6.14",mn:"炸鸡 (fried chicken, just above) + 翅 (wing — 羽 feather radical + 支 support, the feathered limb that holds up flight). Fried chicken + wing = fried chicken wings."},
+{zh:"薯条",py:"shǔ tiáo",en:"fries / chips",lesson:"6.14",mn:"薯 = potato (艹 plant radical + 者 person — a plant dug up by hand). 条 = strip (木 wood + a long thin shape). Potato cut into strips = fries."},
+{zh:"麦当劳",py:"mài dāng láo",en:"McDonald's",lesson:"6.14",mn:"麦 = wheat (the grain in the bun) + 当 = to serve as + 劳 = labour/toil. Pure sound-borrowing for 'McDonald's' — picture golden wheat fields outside a hard-working fast-food joint: mài dāng láo."},
+{zh:"芬达",py:"fēn dá",en:"Fanta",lesson:"6.14",mn:"芬 = fragrance (艹 grass + 分 share — a scent spreading out). 达 = to reach/arrive (辶 walk + 大 big — striding to a destination). A fragrant fizz that 'arrives' with a punch: Fanta, by sound."},
+{zh:"但是",py:"dàn shì",en:"but / however",lesson:"6.14",mn:"但 = but/only (亻person + 旦 dawn — at dawn, only one thing is true). 是 = to be (from 是, 3.07). 'It is, but...' — 但是 opens the contrast clause."},
+{zh:"东西",py:"dōng xi",en:"things / stuff",lesson:"6.14",mn:"东 = east (sun 日 rising through a tree) + 西 = west (a bird settling into its nest at sunset). Goods once traded between east and west markets — now just 'things/stuff' in general."},
+{zh:"贵",py:"guì",en:"expensive",lesson:"6.14",mn:"中 (middle, simplified at top) over 贝 (cowrie shell — the money radical, from 红酒/葡萄酒 context). Sitting in the middle of money = costly = expensive."},
+{zh:"知道",py:"zhī dào",en:"to know",lesson:"6.14",mn:"知 = 矢 arrow + 口 mouth — speech as sharp and precise as an arrow hitting its mark (knowledge). 道 = 辶 walk + 首 head — the path one's mind follows. Sharp insight + the path = to know."},
+{zh:"这个电影",py:"zhè ge diàn yǐng",en:"this movie",lesson:"6.14",mn:"这个 (this, from 这个 + measure word) + 电影 (电 electricity + 影 shadow — electric shadows on a screen = movie). Stack the pieces: this + movie."},
+{zh:"还没",py:"hái méi",en:"haven't yet",lesson:"6.14",mn:"还 = still/yet (from 还不错). 没 = not have, the negative for completed actions (from 没有). Still + not-yet-done = 'haven't yet'."},
 ];
 
 const SENTENCES = [
@@ -843,6 +872,15 @@ const SENTENCES = [
 {zh:"我想吃牛肉意面。",py:"Wǒ xiǎng chī niú ròu yì miàn.",en:"I want to eat beef pasta.",lesson:"6.06",dir:"en2zh",note:"想 + verb + object — the 'want to do' pattern from 4.24, now dressed up with new food vocab."},
 {zh:"你想喝红酒还是可乐？",py:"Nǐ xiǎng hē hóng jiǔ hái shi kě lè?",en:"Do you want to drink red wine or coke?",lesson:"6.06",dir:"en2zh",note:"还是 = 'or' inside a question, offering a choice between A and B: A 还是 B?"},
 {zh:"妈妈在家照顾宝宝。",py:"Mā ma zài jiā zhào gu bǎo bao.",en:"Mum is at home looking after the baby.",lesson:"6.06",dir:"en2zh",note:"在 + place + verb shows ongoing action at a location (from 5.19): 在家照顾 = at home, looking after."},
+// 6.14 — ask ages with 几岁/多大, new food + connector vocab
+{zh:"你的两个女儿今年几岁了？",py:"Nǐ de liǎng ge nǚ ér jīn nián jǐ suì le?",en:"How old are your two daughters this year?",lesson:"6.14",dir:"zh2en",note:"几岁 asks a small age (under 10) — use it for children. 多大 is the all-ages version, for adults."},
+{zh:"她们今年七岁了。",py:"Tā men jīn nián qī suì le.",en:"They are seven years old this year.",lesson:"6.14",dir:"zh2en",note:"Age + 了 — 了 here marks a current state being reported, not a completed action."},
+{zh:"你多大了？我三十岁了。",py:"Nǐ duō dà le? Wǒ sān shí suì le.",en:"How old are you? I'm thirty.",lesson:"6.14",dir:"zh2en",note:"多大 is the general way to ask anyone's age, not just small children — swap in 几岁 only when you know the answer is under 10."},
+{zh:"我妻子三十四岁了。",py:"Wǒ qī zi sān shí sì suì le.",en:"My wife is thirty-four.",lesson:"6.14",dir:"zh2en",note:"岁 (years old) can be dropped after a clear age number in casual speech, but it's safest to keep it while you're still learning."},
+{zh:"我想吃炸鸡和薯条。",py:"Wǒ xiǎng chī zhá jī hé shǔ tiáo.",en:"I want to eat fried chicken and fries.",lesson:"6.14",dir:"en2zh",note:"想 + verb + object, the 'want to do' pattern from 4.24 — now with fast-food vocab."},
+{zh:"这个汉堡很贵，但是很好吃。",py:"Zhè ge hàn bǎo hěn guì, dàn shì hěn hǎo chī.",en:"This burger is expensive, but it's delicious.",lesson:"6.14",dir:"en2zh",note:"但是 joins two contrasting clauses — 'X, but Y'. It sits at the start of the second clause, not in the middle of one."},
+{zh:"你知道麦当劳在哪儿吗？",py:"Nǐ zhī dào Mài dāng láo zài nǎr ma?",en:"Do you know where McDonald's is?",lesson:"6.14",dir:"en2zh",note:"知道 + a question clause = 'know [question]'. 在哪儿 = 'where is it' slots in as the thing being known."},
+{zh:"我还没看这个电影。",py:"Wǒ hái méi kàn zhè ge diàn yǐng.",en:"I haven't watched this movie yet.",lesson:"6.14",dir:"en2zh",note:"还没 + verb = 'haven't ___ yet' — the negative-yet companion to 了 for completed actions (from 4.18)."},
 ];
 
 const HSK1_LESSONS = [
@@ -1153,7 +1191,7 @@ function speak(zh){
   speechSynthesis.speak(u);
 }
 // Lesson order — used for "Latest N" shortcuts. Update when new lessons are added.
-const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19','5.30','6.06'];
+const LESSON_ORDER=['3.07','3.14','3.21','3.28','4.03','4.18','4.24','5.09','5.19','5.30','6.06','6.14'];
 // lessonFilter is a Set of lesson codes; empty = all.
 const lessonFilter=new Set();
 function filtVocab(){
@@ -1380,6 +1418,33 @@ function normEn(s){
     .replace(/^(the |a |an )/,'')
     .trim();
 }
+// Extended normaliser for sentence fuzzy-matching (synonyms + gerund→base)
+const GERUNDS={drinking:'drink',eating:'eat',going:'go',doing:'do',playing:'play',
+  watching:'watch',reading:'read',swimming:'swim',looking:'look',buying:'buy',
+  cooking:'cook',making:'make',having:'have',taking:'take',living:'live',
+  studying:'study',hiking:'hike',climbing:'climb',working:'work',running:'run',
+  sitting:'sit',walking:'walk',coming:'come',bringing:'bring',trying:'try',
+  asking:'ask',thinking:'think',leaving:'leave',staying:'stay'};
+function normEnSent(s){
+  return normEn(s)
+    .replace(/\bcoke\b/g,'cola')
+    .replace(/\bfilm\b/g,'movie')
+    .replace(/\bsoda\b/g,'cola')
+    .replace(/\b(\w+)\b/g,w=>GERUNDS[w]||w);
+}
+// Question words kept OUT of stop list — they're content words in meaning checks
+const SENT_STOP=new Set(['i','you','he','she','we','they','it','the','a','an',
+  'is','are','was','were','be','been','am','do','does','did','will','would',
+  'can','could','have','has','had','shall','should','may','might','to',
+  'at','in','on','for','of','and','or','but','not','so',
+  'that','this','these','those','some','any','all','no']);
+function sentOverlap(raw,answer){
+  const words=s=>normEnSent(s).split(' ').filter(w=>w.length>2&&!SENT_STOP.has(w));
+  const rw=new Set(words(raw));const aw=new Set(words(answer));
+  if(rw.size===0)return false;
+  let m=0;for(const w of rw){if(aw.has(w))m++;}
+  return m/Math.max(rw.size,aw.size)>=0.70;
+}
 function checkMCQ(clicked,correct,word){
   if(answered)return;answered=true;
   document.querySelectorAll('.opt').forEach(btn=>{
@@ -1423,7 +1488,7 @@ function submitTyped(){
   answered=true;$('typeinput').disabled=true;$('submbtn').disabled=true;
   if(q.type==='sent'){
     const s=q.data;
-    const ok=s.dir==='zh2en'?(normEn(raw)===normEn(s.en)):(norm(raw)===norm(s.py));
+    const ok=s.dir==='zh2en'?(normEnSent(raw)===normEnSent(s.en)||sentOverlap(raw,s.en)):(norm(raw)===norm(s.py));
     $('typeinput').className+=' '+(ok?'tok':'tno');
     finishSent(ok,s);
   } else {
